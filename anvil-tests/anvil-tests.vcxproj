@@ -224,6 +224,11 @@
   <ItemGroup>
     <Xml Include="UnitTestApp.rd.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\lua\lua.vcxproj">
+      <Project>{d0e2aafc-53e7-4f0c-96aa-719af7b05abe}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
