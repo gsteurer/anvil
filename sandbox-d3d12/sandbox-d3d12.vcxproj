@@ -285,6 +285,9 @@
     <ProjectReference Include="..\lua\lua.vcxproj">
       <Project>{d0e2aafc-53e7-4f0c-96aa-719af7b05abe}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\sqlite\sqlite.vcxproj">
+      <Project>{91ad6808-f10e-422a-a260-ed96e2f3db59}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

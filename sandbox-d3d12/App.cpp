@@ -6,6 +6,7 @@ extern "C" {
 #include "../lua/lua/lua.h"
 #include "../lua/lua/lualib.h"
 #include "../lua/lua/lauxlib.h"
+#include "../sqlite/sqlite/bld/sqlite3.h"
 }
 
 #include <ppltasks.h>
@@ -32,8 +33,12 @@ int main(Platform::Array<Platform::String^>^)
 {
 	lua_State* state = luaL_newstate();
 	lua_close(state);
+	
+	sqlite3* db;
+	sqlite3_open("expenses.db", &db);
 	auto direct3DApplicationSource = ref new Direct3DApplicationSource();
 	CoreApplication::Run(direct3DApplicationSource);
+	sqlite3_close(db);
 	return 0;
 }
 
