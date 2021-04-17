@@ -35,7 +35,11 @@ nmake /f ..\Makefile.msc sqlite3.c TOP=..\..\sqlite
 
 #### Frustrations
 
-* The Microsoft CppUnitTest is, in practice, worthless because you're limited to one assert per test. In other words, someone's ego prescribes how I should write my tests. Don't use it. 
+* The Microsoft CppUnitTest is, in practice, worthless because you're limited to one assert per test. It seems like some sneering time wasting pedantic dipshit at microsoft thinks tests should be written this way.  
 #### Links
+https://docs.microsoft.com/en-us/windows/uwp/files/file-access-permissions
 https://github.com/google/googletest/blob/master/docs/primer.md
 https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html
+
+#### SDK Includes
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0
