@@ -9,7 +9,9 @@ sqlite - requires tcl installation
 must wrap include in `extern c`
 sqlite requires
 
-SQLITE_OS_WINRT=1
+cd sqlite\sqlite
+mkdir bld
+nmake /f ..\Makefile.msc TOP=..\ FOR_WINRT=1
 
 ```
 
