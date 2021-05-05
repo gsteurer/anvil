@@ -35,6 +35,10 @@ nmake /f ..\Makefile.msc sqlite3.c TOP=..\..\sqlite
 * right click target project > add > references 
 * build 
 
+WINRT requires c++ 17
+Right click Project > C++ > Language
+https://docs.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/troubleshooting
+
 #### Frustrations
 
 * The Microsoft CppUnitTest is, in practice, worthless because you're limited to one assert per test. It seems like some sneering time wasting pedantic dipshit at microsoft thinks tests should be written this way.  

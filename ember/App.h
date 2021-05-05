@@ -3,6 +3,11 @@
 #include "pch.h"
 // --- #include "Common\DeviceResources.h"
 #include "emberMain.h"
+#include <ppl.h>
+#include <winrt/Windows.Gaming.Input.h>
+//#include <winrt/Windows.Networking.Sockets.h>
+//#include <sstream>
+#include "collection.h"
 
 namespace ember
 {
@@ -18,6 +23,7 @@ namespace ember
 		virtual void Load(Platform::String^ entryPoint);
 		virtual void Run();
 		virtual void Uninitialize();
+
 
 	protected:
 		// Application lifecycle event handlers.
@@ -35,6 +41,10 @@ namespace ember
 		void OnOrientationChanged(Windows::Graphics::Display::DisplayInformation^ sender, Platform::Object^ args);
 		void OnDisplayContentsInvalidated(Windows::Graphics::Display::DisplayInformation^ sender, Platform::Object^ args);
 
+		void App::OnGamepadAdded(Platform::Object^ sender, Windows::Gaming::Input::Gamepad^ args);
+		void App::OnGamepadRemoved(Platform::Object^ sender, Windows::Gaming::Input::Gamepad^ args);
+		
+
 	private:
 		// Private accessor for m_deviceResources, protects against device removed errors.
 		// --- std::shared_ptr<DX::DeviceResources> GetDeviceResources();
@@ -43,6 +53,9 @@ namespace ember
 		std::unique_ptr<emberMain> m_main;
 		bool m_windowClosed;
 		bool m_windowVisible;
+		Platform::Collections::Vector<Windows::Gaming::Input::Gamepad^>^ m_gamepads;
+		Windows::Networking::Sockets::StreamSocket m_streamSocket;
+
 	};
 }
 

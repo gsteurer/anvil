@@ -14,8 +14,12 @@ using namespace Windows::UI::Input;
 using namespace Windows::System;
 using namespace Windows::Foundation;
 using namespace Windows::Graphics::Display;
-
 using Microsoft::WRL::ComPtr;
+
+namespace Input = Windows::Gaming::Input;
+namespace Collections = Platform::Collections;
+
+static critical_section m_lock{};
 
 // The DirectX 12 Application template is documented at https://go.microsoft.com/fwlink/?LinkID=613670&clcid=0x409
 
@@ -37,6 +41,7 @@ App::App() :
 	m_windowClosed(false),
 	m_windowVisible(true)
 {
+
 }
 
 // The first method called when the IFrameworkView is being created.
@@ -52,6 +57,18 @@ void App::Initialize(CoreApplicationView^ applicationView)
 
 	CoreApplication::Resuming +=
 		ref new EventHandler<Platform::Object^>(this, &App::OnResuming);
+
+	Input::Gamepad::GamepadAdded +=
+		ref new EventHandler<Input::Gamepad^>(this, &App::OnGamepadAdded);
+
+	//https://docs.microsoft.com/en-us/windows/uwp/networking/sockets
+	//https://stackoverflow.com/questions/1577161/passing-a-structure-through-sockets-in-c
+	auto hostname = ref new Windows::Networking::HostName("127.0.0.1");
+
+	this->m_streamSocket.ConnectAsync(hostname, L"7878");
+	OutputDebugString(L"\n@@@ test\n");
+
+
 }
 
 // Called when the CoreWindow object is created (or re-created).
@@ -200,6 +217,20 @@ void App::OnDisplayContentsInvalidated(DisplayInformation^ sender, Object^ args)
 {
 	// --- GetDeviceResources()->ValidateDevice();
 }
+
+// https://docs.microsoft.com/en-us/windows/uwp/gaming/input-practices-for-games
+void App::OnGamepadAdded(Platform::Object^ sender, Input::Gamepad^ args)
+{
+	critical_section::scoped_lock lock{ m_lock };
+
+	auto it = std::find(begin(m_gamepads), end(m_gamepads), args);
+}
+
+void App::OnGamepadRemoved(Platform::Object^ sender, Input::Gamepad^ args)
+{
+
+}
+
 
 /* ---
 std::shared_ptr<DX::DeviceResources> App::GetDeviceResources()
