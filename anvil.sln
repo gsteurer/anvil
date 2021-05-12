@@ -22,6 +22,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqlite", "sqlite\sqlite.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ember", "ember\ember.vcxproj", "{52A7BBF8-60A0-44F1-A3FF-328E10DE033C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glm", "glm\glm.vcxproj", "{C7C83165-B9C3-48EC-829A-B83685D9A431}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -146,6 +148,18 @@ Global
 		{52A7BBF8-60A0-44F1-A3FF-328E10DE033C}.Release|x86.ActiveCfg = Release|Win32
 		{52A7BBF8-60A0-44F1-A3FF-328E10DE033C}.Release|x86.Build.0 = Release|Win32
 		{52A7BBF8-60A0-44F1-A3FF-328E10DE033C}.Release|x86.Deploy.0 = Release|Win32
+		{C7C83165-B9C3-48EC-829A-B83685D9A431}.Debug|ARM.ActiveCfg = Debug|Win32
+		{C7C83165-B9C3-48EC-829A-B83685D9A431}.Debug|ARM64.ActiveCfg = Debug|Win32
+		{C7C83165-B9C3-48EC-829A-B83685D9A431}.Debug|x64.ActiveCfg = Debug|x64
+		{C7C83165-B9C3-48EC-829A-B83685D9A431}.Debug|x64.Build.0 = Debug|x64
+		{C7C83165-B9C3-48EC-829A-B83685D9A431}.Debug|x86.ActiveCfg = Debug|Win32
+		{C7C83165-B9C3-48EC-829A-B83685D9A431}.Debug|x86.Build.0 = Debug|Win32
+		{C7C83165-B9C3-48EC-829A-B83685D9A431}.Release|ARM.ActiveCfg = Release|Win32
+		{C7C83165-B9C3-48EC-829A-B83685D9A431}.Release|ARM64.ActiveCfg = Release|Win32
+		{C7C83165-B9C3-48EC-829A-B83685D9A431}.Release|x64.ActiveCfg = Release|x64
+		{C7C83165-B9C3-48EC-829A-B83685D9A431}.Release|x64.Build.0 = Release|x64
+		{C7C83165-B9C3-48EC-829A-B83685D9A431}.Release|x86.ActiveCfg = Release|Win32
+		{C7C83165-B9C3-48EC-829A-B83685D9A431}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

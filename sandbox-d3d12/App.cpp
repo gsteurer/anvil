@@ -3,11 +3,13 @@
 
 #include "../anvil/include/ads/graph.h"
 extern "C" {
-#include "../lua/lua/lua.h"
-#include "../lua/lua/lualib.h"
-#include "../lua/lua/lauxlib.h"
-#include "../sqlite/sqlite/bld/sqlite3.h"
+#include "lua/lua.h"
+#include "lua/lualib.h"
+#include "lua/lauxlib.h"
+#include "sqlite3.h"
 }
+#include "glm/glm.hpp"
+#include "glm/ext/matrix_clip_space.hpp"
 
 #include <ppltasks.h>
 
@@ -38,6 +40,7 @@ int main(Platform::Array<Platform::String^>^)
 	sqlite3_open("expenses.db", &db);
 	auto direct3DApplicationSource = ref new Direct3DApplicationSource();
 	CoreApplication::Run(direct3DApplicationSource);
+	glm::mat4 Projection = glm::perspective(glm::pi<float>() * 0.25f, 4.0f / 3.0f, 0.1f, 100.f);
 	sqlite3_close(db);
 	return 0;
 }
