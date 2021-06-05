@@ -29,9 +29,11 @@ class Graph {
 public:
 	Graph() {}
 	~Graph() {
+		/*
 		for (auto& it = this->verticies.begin(i); it != this->verticies.end(i); ++it) {
 			delete it->second;
 		}
+		*/
 	}
 	bool Add(GraphIdentifier id) {
 		if (this->Get(id) == NULL) {
@@ -52,11 +54,13 @@ public:
 		return this->verticies[id];
 	}
 	void Connect(GraphIdentifier lhs, GraphIdentifier rhs) {
+		/*
 		lhsVert = this->Get(lhs);
 		rhsVert = this->Get(rhs);
 		if (lhsVert != NULL && rhsVert != NULL) {
 			lhsVert->
 		}
+		*/
 	}
 	std::unordered_map<GraphIdentifier, GraphVertex<T>*> verticies;
 

@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../anvil/include/ads/graph.h"
+#include "ads/graph.h"
 
 TEST(GraphTest, GetNonexistantVertex) {
 	Graph<int>* g = new Graph<int>();
