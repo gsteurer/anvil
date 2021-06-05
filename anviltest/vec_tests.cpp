@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "math/vec.h"
 #include "math/util.h"
+#include <limits>
 
 TEST(EqTest, FloatEquality) {
     EXPECT_TRUE(eq(0.0, 0.0));
@@ -10,6 +11,8 @@ TEST(EqTest, FloatEquality) {
     EXPECT_FALSE(eq(0.0, 0.1));
     EXPECT_FALSE(eq(0.1, 0.0));
     EXPECT_TRUE(eq(0.0000000001, 0.0000000001));
+    EXPECT_TRUE(eq(std::numeric_limits<float>::max(), std::numeric_limits<float>::max()));
+    
 }
 
 TEST(Vec4fTest, Ctor) {
@@ -66,4 +69,9 @@ TEST(Vec4fTest, Cross) {
     EXPECT_TRUE(eq(expected.x, 1.0));
     EXPECT_TRUE(eq(expected.y, -2.0));
     EXPECT_TRUE(eq(expected.z, 1.0));
+}
+
+TEST(Vec4fTest, Str) {
+    Vec4f v1(1.0, 2.0, 3.0, 0.0);
+    EXPECT_EQ(std::string("(1.0, 2.0, 3.0, 0.0)"), str(v1,1));
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 struct Vec3f {
     Vec3f(): x(0.0f), y(0.0f), z(0.0f) {};
@@ -20,33 +21,33 @@ struct Vec4f {
     float w;
 };
 
-bool point(Vec4f vec);
+bool point(const Vec4f& vec);
 
-bool vector(Vec4f vec);
+bool vector(const Vec4f& vec);
 
-bool eq(Vec4f lhs, Vec4f rhs);
+bool eq(const Vec4f& lhs, const Vec4f& rhs);
+bool ne(const Vec4f& lhs, const Vec4f& rhs);
 
-Vec4f add(Vec4f lhs, Vec4f rhs);
+Vec4f add(const Vec4f& lhs, const Vec4f& rhs);
 
-Vec4f sub(Vec4f lhs, Vec4f rhs);
+Vec4f sub(const Vec4f& lhs, const Vec4f& rhs);
 
-Vec4f mul(float scale, Vec4f vec);
-Vec4f mul(Vec4f vec, float scale );
+Vec4f mul(float scale, const Vec4f& vec);
+Vec4f mul(const Vec4f& vec, float scale );
 
-Vec4f div(float scale, Vec4f vec);
-Vec4f div(Vec4f vec, float scale );
+Vec4f div(float scale, const Vec4f& vec);
+Vec4f div(const Vec4f& vec, float scale );
 
-float mag(Vec4f vec);
+float mag(const Vec4f& vec);
 
-Vec4f norm(Vec4f vec);
+Vec4f norm(const Vec4f& vec);
 
-float dot(Vec4f lhs, Vec4f rhs);
+float dot(const Vec4f& lhs, const Vec4f& rhs);
 
-Vec4f cross(Vec4f lhs, Vec4f rhs);
+Vec4f cross(const Vec4f& lhs, const Vec4f& rhs);
 
-Vec4f operator+(const Vec4f lhs, const Vec4f rhs); 
-Vec4f operator-(const Vec4f lhs, const Vec4f rhs);
-bool operator==(const Vec4f lhs, const Vec4f rhs);
+Vec4f operator+(const Vec4f& lhs, const Vec4f& rhs); 
+Vec4f operator-(const Vec4f& lhs, const Vec4f& rhs);
+bool operator==(const Vec4f& lhs, const Vec4f& rhs);
 
-
-
+std::string str(const Vec4f& vec, unsigned int precision = 1);
