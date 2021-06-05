@@ -123,3 +123,22 @@ TEST(Mat4x4fTest, Identity) {
     auto expected = Mat4x4f(data);
     EXPECT_EQ(test * id, expected);
 }
+
+TEST(Mat4x4fTest, Transpose) {
+    float data[16] = {
+        0.0, 9.0, 3.0, 0.0,
+        9.0, 8.0, 0.0, 8.0,
+        1.0, 8.0, 5.0, 3.0,
+        0.0, 0.0, 5.0, 8.0};
+    float transposeData[16] = {
+        0.0, 9.0, 1.0, 0.0,
+        9.0, 8.0, 8.0, 0.0,
+        3.0, 0.0, 5.0, 5.0,
+        0.0, 8.0, 3.0, 8.0};
+    auto test = Mat4x4f(data);
+    auto expected = Mat4x4f(transposeData);
+    EXPECT_EQ(str(transpose(test)), str(expected));
+    EXPECT_EQ(transpose(test), expected);
+    auto id = Identity();
+    EXPECT_EQ(transpose(id), Identity());
+}

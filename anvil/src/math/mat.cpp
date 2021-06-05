@@ -86,6 +86,18 @@ Vec4f mul(const Mat4x4f& mat, const Vec4f& vec) {
     return Vec4f(r[0], r[1], r[2], r[3]);
 }
 
+Mat4x4f transpose(const Mat4x4f& mat) {
+    Mat4x4f A(mat);
+    for (int n = 0; n <= 2; n++) {
+        for (int m = n + 1; m <= 3; m++) {
+            float tmp = A(n, m);
+            A(n, m) = A(m, n);
+            A(m, n) = tmp;
+        }
+    }
+    return A;
+}
+
 bool operator==(const Mat4x4f& lhs, const Mat4x4f& rhs) {
     return eq(lhs, rhs);
 }

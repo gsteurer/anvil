@@ -23,6 +23,7 @@ Mat4x4f Identity();
 bool eq(const Mat4x4f& lhs, const Mat4x4f& rhs);
 Mat4x4f mul(const Mat4x4f& lhs, const Mat4x4f& rhs);
 Vec4f mul(const Mat4x4f& mat, const Vec4f& vec);
+Mat4x4f transpose(const Mat4x4f& mat);
 std::string str(const Mat4x4f& m, unsigned int precision = 1);
 
 bool operator==(const Mat4x4f& lhs, const Mat4x4f& rhs);
