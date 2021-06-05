@@ -11,7 +11,7 @@ Mat4x4f NewTestMatrix() {
     return m;
 }
 
-TEST(MatTest, Ctor) {
+TEST(Mat4x4fTest, Ctor) {
     auto m = NewTestMatrix();
     auto expected = NewTestMatrix();
     auto id = Identity();
@@ -21,7 +21,7 @@ TEST(MatTest, Ctor) {
     EXPECT_NE(test, id);
 }
 
-TEST(MatTest, Cmp) {
+TEST(Mat4x4fTest, Cmp) {
     auto m = Mat4x4f();
     m(0, 0) = 1.0;
     m(1, 1) = 1.0;
@@ -42,7 +42,7 @@ TEST(MatTest, Cmp) {
     }
 }
 
-TEST(MatTest, Assignment) {
+TEST(Mat4x4fTest, Assignment) {
     Mat4x4f m;
     for (int idx = 0; idx < 16; idx++) {
         EXPECT_FLOAT_EQ(m.e[idx], 0.0);
@@ -54,13 +54,13 @@ TEST(MatTest, Assignment) {
     EXPECT_FLOAT_EQ(i(0, 0), 1.0);
 }
 
-TEST(MatTest, Str) {
+TEST(Mat4x4fTest, Str) {
     auto m = NewTestMatrix();
     const char* expected = "[\n\t1.0,2.0,3.0,4.0\n\t5.0,6.0,7.0,8.0\n\t9.0,10.0,11.0,12.0\n\t13.0,14.0,15.0,16.0\n]";
     EXPECT_EQ(std::string(expected), str(m, 1));
 }
 
-TEST(MatTest, Mul) {
+TEST(Mat4x4fTest, Mul) {
     float adata[16] = {
         1.0, 2.0, 3.0, 4.0,
         5.0, 6.0, 7.0, 8.0,
@@ -90,4 +90,36 @@ TEST(MatTest, Mul) {
     }
 
     EXPECT_EQ(a * b, e);
+}
+
+TEST(Mat4x4fTest, MulVec) {
+    float data[16] = {
+        1.0, 2.0, 3.0, 4.0,
+        2.0, 4.0, 4.0, 2.0,
+        8.0, 6.0, 4.0, 1.0,
+        0.0, 0.0, 0.0, 1.0};
+    Mat4x4f m(data);
+    Vec4f v(1.0, 2.0, 3.0, 1.0);
+    auto result = mul(m, v);
+    Vec4f expected(18.0, 24.0, 33.0, 1.0);
+    EXPECT_FLOAT_EQ(result.x, expected.x);
+    EXPECT_FLOAT_EQ(result.y, expected.y);
+    EXPECT_FLOAT_EQ(result.z, expected.z);
+    EXPECT_FLOAT_EQ(result.w, expected.w);
+    EXPECT_EQ(result, expected);
+}
+
+TEST(Mat4x4fTest, Identity) {
+    auto id = Identity();
+    auto a = Vec4f(1.0, 2.0, 3.0, 4.0);
+    EXPECT_EQ(id * a, Vec4f(1.0, 2.0, 3.0, 4.0));
+
+    float data[16] = {
+        1.0, 2.0, 3.0, 4.0,
+        5.0, 6.0, 7.0, 8.0,
+        9.0, 8.0, 7.0, 6.0,
+        5.0, 4.0, 3.0, 2.0};
+    auto test = Mat4x4f(data);
+    auto expected = Mat4x4f(data);
+    EXPECT_EQ(test * id, expected);
 }

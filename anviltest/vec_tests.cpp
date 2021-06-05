@@ -56,6 +56,7 @@ TEST(Vec4fTest, Dot) {
     Vec4f v2(2.0, 3.0, 4.0, 0.0);
     float d = dot(v1, v2);
     EXPECT_FLOAT_EQ(d, 20.0);
+    EXPECT_FLOAT_EQ(dot(Vec4f(1.0, 2.0, 3.0, 4.0), Vec4f(1.0, 2.0, 3.0, 1.0)), 18.0);
 }
 
 TEST(Vec4fTest, Cross) {

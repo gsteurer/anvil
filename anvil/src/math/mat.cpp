@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "math/util.h"
+#include "math/vec.h"
 
 Mat4x4f::Mat4x4f() {
     for (int idx = 0; idx < 16; idx++) {
@@ -76,6 +77,15 @@ Mat4x4f mul(const Mat4x4f& lhs, const Mat4x4f& rhs) {
     return m;
 }
 
+Vec4f mul(const Mat4x4f& mat, const Vec4f& vec) {
+    float r[4];
+    for (int row = 0; row < 4; row++) {
+        Vec4f a(mat(row, 0), mat(row, 1), mat(row, 2), mat(row, 3));
+        r[row] = dot(a, vec);
+    }
+    return Vec4f(r[0], r[1], r[2], r[3]);
+}
+
 bool operator==(const Mat4x4f& lhs, const Mat4x4f& rhs) {
     return eq(lhs, rhs);
 }
@@ -86,6 +96,10 @@ bool operator!=(const Mat4x4f& lhs, const Mat4x4f& rhs) {
 
 Mat4x4f operator*(const Mat4x4f& lhs, const Mat4x4f& rhs) {
     return mul(lhs, rhs);
+}
+
+Vec4f operator*(const Mat4x4f& mat, const Vec4f& vec) {
+    return mul(mat, vec);
 }
 
 std::string str(const Mat4x4f& m, unsigned int precision) {

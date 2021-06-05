@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 
+#include "math/vec.h"
+
 struct Mat2x2f {
     float e[4];
 };
@@ -20,8 +22,10 @@ struct Mat4x4f {
 Mat4x4f Identity();
 bool eq(const Mat4x4f& lhs, const Mat4x4f& rhs);
 Mat4x4f mul(const Mat4x4f& lhs, const Mat4x4f& rhs);
+Vec4f mul(const Mat4x4f& mat, const Vec4f& vec);
 std::string str(const Mat4x4f& m, unsigned int precision = 1);
 
 bool operator==(const Mat4x4f& lhs, const Mat4x4f& rhs);
 bool operator!=(const Mat4x4f& lhs, const Mat4x4f& rhs);
 Mat4x4f operator*(const Mat4x4f& lhs, const Mat4x4f& rhs);
+Vec4f operator*(const Mat4x4f& mat, const Vec4f& vec);

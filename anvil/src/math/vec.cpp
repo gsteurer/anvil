@@ -77,7 +77,7 @@ float dot(const Vec4f& lhs, const Vec4f& rhs) {
     return (lhs.x * rhs.x) +
            (lhs.y * rhs.y) +
            (lhs.z * rhs.z) +
-           (lhs.w + rhs.w);
+           (lhs.w * rhs.w);
 }
 
 Vec4f cross(const Vec4f& lhs, const Vec4f& rhs) {
