@@ -1,6 +1,6 @@
 INCLUDES=-I../anvil/include -I../../googletest/googletest/include
-LIB_LOCATIONS=-L../../googletest/build/lib
-TEST_LIBS=-lgtest -lgtest_main -lpthread
+LIB_LOCATIONS=-L../../googletest/build/lib -L../anvil/lib
+TEST_LIBS=-lgtest -lgtest_main -lpthread -lanvil
 
 #https://stackoverflow.com/questions/7815400/how-do-i-make-makefile-to-recompile-only-changed-files
 
@@ -16,19 +16,10 @@ default:
 dirs:
 	mkdir -p .obj bin
 
-mat.o:
-	$(CC) $(CFLAGS) -c -o .obj/$@ ../anvil/src/math/mat.cpp
-
-vec.o:
-	$(CC) $(CFLAGS) -c -o .obj/$@ ../anvil/src/math/vec.cpp
-
-util.o:
-	$(CC) $(CFLAGS) -c -o .obj/$@ ../anvil/src/math/util.cpp
-
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c -o .obj/$@ $<
 
-tests: $(OBJ_FILES) mat.o vec.o util.o
+tests: $(OBJ_FILES)
 	$(CC) $(CFLAGS) $(LIB_LOCATIONS) $(TEST_LIBS) .obj/*.o -o bin/tests 
 
 clean:
