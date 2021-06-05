@@ -13,27 +13,39 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\math\mat.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="include\math\util.h">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="include\math\vec.h">
+    <ClInclude Include="include\math\mat2x2f.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\mat3x3f.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\mat4x4f.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\vec2f.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\vec3f.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\vec4f.h">
       <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\math\mat.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="src\math\util.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="src\math\vec.cpp">
+    <ClCompile Include="src\math\mat4x4f.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\vec4f.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
