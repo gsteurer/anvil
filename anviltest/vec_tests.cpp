@@ -2,7 +2,7 @@
 
 #include "gtest/gtest.h"
 #include "math/util.h"
-#include "math/vec.h"
+#include "math/vec4f.h"
 
 TEST(EqTest, FloatEquality) {
     EXPECT_TRUE(eq(0.0, 0.0));

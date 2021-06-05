@@ -1,14 +1,10 @@
 #pragma once
 #include <string>
 
-#include "math/vec.h"
-
-struct Mat2x2f {
-    float e[4];
-};
+#include "math/vec4f.h"
 
 struct Mat4x4f {
-    float e[16];
+    float m_elements[16];
     Mat4x4f();
     Mat4x4f(float* data);
     Mat4x4f(const Mat4x4f& m);

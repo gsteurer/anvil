@@ -1,57 +1,57 @@
-#include "math/mat.h"
+#include "math/mat4x4f.h"
 
 #include <cstring>
 #include <iomanip>
 #include <sstream>
 
 #include "math/util.h"
-#include "math/vec.h"
+#include "math/vec4f.h"
 
 Mat4x4f::Mat4x4f() {
     for (int idx = 0; idx < 16; idx++) {
-        e[idx] = 0.0;
+        m_elements[idx] = 0.0;
     }
 }
 
 Mat4x4f::Mat4x4f(const Mat4x4f& m) {
     for (int idx = 0; idx < 16; idx++) {
-        e[idx] = m.e[idx];
+        m_elements[idx] = m.m_elements[idx];
     }
 }
 
 Mat4x4f::Mat4x4f(float* data) {
     for (int idx = 0; idx < 16; idx++) {
-        e[idx] = data[idx];
+        m_elements[idx] = data[idx];
     }
 }
 
 Mat4x4f Identity() {
     Mat4x4f m;
-    m.e[0] = 1.0;
-    m.e[5] = 1.0;
-    m.e[10] = 1.0;
-    m.e[15] = 1.0;
+    m.m_elements[0] = 1.0;
+    m.m_elements[5] = 1.0;
+    m.m_elements[10] = 1.0;
+    m.m_elements[15] = 1.0;
     return m;
 }
 
 float& Mat4x4f::operator[](unsigned int idx) {
-    return this->e[idx];
+    return this->m_elements[idx];
 }
 
 const float Mat4x4f::operator[](unsigned int idx) const {
-    return this->e[idx];
+    return this->m_elements[idx];
 }
 
 float& Mat4x4f::operator()(unsigned int row, unsigned int col) {
-    return this->e[(4 * row) + col];
+    return this->m_elements[(4 * row) + col];
 }
 
 float Mat4x4f::operator()(unsigned int row, unsigned int col) const {
-    return this->e[(4 * row) + col];
+    return this->m_elements[(4 * row) + col];
 }
 
 Mat4x4f& Mat4x4f::operator=(const Mat4x4f& m) {
-    std::memcpy(this->e, m.e, sizeof(float) * 16);
+    std::memcpy(this->m_elements, m.m_elements, sizeof(float) * 16);
     return *this;
 }
 

@@ -12,16 +12,16 @@ default:
 dirs:
 	mkdir -p .obj lib
 
-mat.o: 
-	$(CC) $(CFLAGS) -c -o .obj/$@ src/math/mat.cpp
+mat4x4f.o: 
+	$(CC) $(CFLAGS) -c -o .obj/$@ src/math/mat4x4f.cpp
 
 util.o: 
 	$(CC) $(CFLAGS) -c -o .obj/$@ src/math/util.cpp
 
-vec.o: 
-	$(CC) $(CFLAGS) -c -o .obj/$@ src/math/vec.cpp
+vec4f.o: 
+	$(CC) $(CFLAGS) -c -o .obj/$@ src/math/vec4f.cpp
 
-lib: mat.o util.o vec.o
+lib: mat4x4f.o util.o vec4f.o
 	ar rvs lib/libanvil.a .obj/*.o
 
 clean:

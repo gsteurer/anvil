@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
-#include "math/mat.h"
+#include "math/mat4x4f.h"
 #include "math/util.h"
-#include "math/vec.h"
+#include "math/vec4f.h"
 
 Mat4x4f NewTestMatrix() {
     Mat4x4f m;
@@ -45,7 +45,7 @@ TEST(Mat4x4fTest, Cmp) {
 TEST(Mat4x4fTest, Assignment) {
     Mat4x4f m;
     for (int idx = 0; idx < 16; idx++) {
-        EXPECT_FLOAT_EQ(m.e[idx], 0.0);
+        EXPECT_FLOAT_EQ(m.m_elements[idx], 0.0);
     }
 
     m(0, 0) = 3.0;
