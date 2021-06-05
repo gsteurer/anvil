@@ -1,34 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{527fa346-d6c6-4de1-8357-0ead48964bee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include">
+      <UniqueIdentifier>{e425aa98-ba14-4100-b268-8f911c18728a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\ads\graph.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\math\mat.h">
+      <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="include\ads\map.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\math\util.h">
+      <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="include\ads\redblacktree.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="targetver.h">
+      <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="include\ads\slice.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\math\vec.h">
+      <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\README.md" />
+    <ClCompile Include="src\math\mat.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\util.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\vec.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

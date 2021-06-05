@@ -214,7 +214,7 @@
     <ClCompile>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)lua\;$(SolutionDir)sqlite\sqlite\bld\;$(SolutionDir)glm\glm\;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lua\;$(SolutionDir)sqlite\sqlite\bld\;$(SolutionDir)glm\glm\;$(ProjectDir);$(IntermediateOutputPath);$(SolutionDir)anvil\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -282,6 +282,9 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\anvil\anvil.vcxproj">
+      <Project>{21758951-5a6a-4393-bb99-6a1d5fe47e51}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\lua\lua.vcxproj">
       <Project>{d0e2aafc-53e7-4f0c-96aa-719af7b05abe}</Project>
     </ProjectReference>

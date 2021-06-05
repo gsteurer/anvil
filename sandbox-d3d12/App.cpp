@@ -1,7 +1,8 @@
 #include "pch.h"
 #include "App.h"
 
-#include "../anvil/include/ads/graph.h"
+#include "ads/graph.h"
+#include "math/mat.h"
 extern "C" {
 #include "lua/lua.h"
 #include "lua/lualib.h"
@@ -33,6 +34,7 @@ using Microsoft::WRL::ComPtr;
 [Platform::MTAThread]
 int main(Platform::Array<Platform::String^>^)
 {
+	Mat4x4f m = Identity();
 	lua_State* state = luaL_newstate();
 	lua_close(state);
 	
