@@ -16,10 +16,19 @@ default:
 dirs:
 	mkdir -p .obj bin
 
+mat.o:
+	$(CC) $(CFLAGS) -c -o .obj/$@ ../anvil/src/math/mat.cpp
+
+vec.o:
+	$(CC) $(CFLAGS) -c -o .obj/$@ ../anvil/src/math/vec.cpp
+
+util.o:
+	$(CC) $(CFLAGS) -c -o .obj/$@ ../anvil/src/math/util.cpp
+
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c -o .obj/$@ $<
 
-tests: $(OBJ_FILES)
+tests: $(OBJ_FILES) mat.o vec.o util.o
 	$(CC) $(CFLAGS) $(LIB_LOCATIONS) $(TEST_LIBS) .obj/*.o -o bin/tests 
 
 clean:

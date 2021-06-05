@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "math/vec.h"
-#include <cmath>
+#include "math/util.h"
 
 TEST(EqTest, FloatEquality) {
     EXPECT_TRUE(eq(0.0, 0.0));
