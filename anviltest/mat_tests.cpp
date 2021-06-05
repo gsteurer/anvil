@@ -28,23 +28,66 @@ TEST(MatTest, Cmp) {
     m(2, 2) = 1.0;
     m(3, 3) = 1.0;
     auto id = Identity();
-    EXPECT_TRUE(m == id);
+    EXPECT_EQ(m, id);
+    float data[16] = {
+        1.0, 2.0, 3.0, 4.0,
+        5.0, 6.0, 7.0, 8.0,
+        9.0, 8.0, 7.0, 6.0,
+        5.0, 4.0, 3.0, 2.0};
+    auto m2 = Mat4x4f(data);
+    for (int row = 0; row < 4; row++) {
+        for (int col = 0; col < 4; col++) {
+            EXPECT_FLOAT_EQ(m2(row, col), data[row * 4 + col]);
+        }
+    }
 }
 
 TEST(MatTest, Assignment) {
     Mat4x4f m;
     for (int idx = 0; idx < 16; idx++) {
-        EXPECT_TRUE(eq(m.e[idx], 0.0));
+        EXPECT_FLOAT_EQ(m.e[idx], 0.0);
     }
 
     m(0, 0) = 3.0;
 
     Mat4x4f i = Identity();
-    EXPECT_TRUE(eq(i(0, 0), 1.0));
+    EXPECT_FLOAT_EQ(i(0, 0), 1.0);
 }
 
 TEST(MatTest, Str) {
     auto m = NewTestMatrix();
-    const char* expected = "[\n\t1.0,5.0,9.0,13.0\n\t2.0,6.0,10.0,14.0\n\t3.0,7.0,11.0,15.0\n\t4.0,8.0,12.0,16.0\n]";
+    const char* expected = "[\n\t1.0,2.0,3.0,4.0\n\t5.0,6.0,7.0,8.0\n\t9.0,10.0,11.0,12.0\n\t13.0,14.0,15.0,16.0\n]";
     EXPECT_EQ(std::string(expected), str(m, 1));
+}
+
+TEST(MatTest, Mul) {
+    float adata[16] = {
+        1.0, 2.0, 3.0, 4.0,
+        5.0, 6.0, 7.0, 8.0,
+        9.0, 8.0, 7.0, 6.0,
+        5.0, 4.0, 3.0, 2.0};
+    float bdata[16] = {
+        -2.0, 1.0, 2.0, 3.0,
+        3.0, 2.0, 1.0, -1.0,
+        4.0, 3.0, 6.0, 5.0,
+        1.0, 2.0, 7.0, 8.0};
+    float edata[16] = {
+        20.0, 22.0, 50.0, 48.0,
+        44.0, 54.0, 114.0, 108.0,
+        40.0, 58.0, 110.0, 102.0,
+        16.0, 26.0, 46.0, 42.0};
+    Mat4x4f a(adata);
+    Mat4x4f b(bdata);
+    Mat4x4f e(edata);
+    auto r = a * b;
+
+    EXPECT_EQ(str(e), str(r));
+
+    for (int row = 0; row < 4; row++) {
+        for (int col = 0; col < 4; col++) {
+            EXPECT_FLOAT_EQ(r(row, col), e(row, col));
+        }
+    }
+
+    EXPECT_EQ(a * b, e);
 }

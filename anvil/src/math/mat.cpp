@@ -18,6 +18,12 @@ Mat4x4f::Mat4x4f(const Mat4x4f& m) {
     }
 }
 
+Mat4x4f::Mat4x4f(float* data) {
+    for (int idx = 0; idx < 16; idx++) {
+        e[idx] = data[idx];
+    }
+}
+
 Mat4x4f Identity() {
     Mat4x4f m;
     m.e[0] = 1.0;
@@ -36,24 +42,16 @@ const float Mat4x4f::operator[](unsigned int idx) const {
 }
 
 float& Mat4x4f::operator()(unsigned int row, unsigned int col) {
-    return this->e[(4 * col) + row];
+    return this->e[(4 * row) + col];
 }
 
 float Mat4x4f::operator()(unsigned int row, unsigned int col) const {
-    return this->e[(4 * col) + row];
+    return this->e[(4 * row) + col];
 }
 
 Mat4x4f& Mat4x4f::operator=(const Mat4x4f& m) {
     std::memcpy(this->e, m.e, sizeof(float) * 16);
     return *this;
-}
-
-bool Mat4x4f::operator==(const Mat4x4f& m) const {
-    return eq(*this, m);
-}
-
-bool Mat4x4f::operator!=(const Mat4x4f& m) const {
-    return !eq(*this, m);
 }
 
 bool eq(const Mat4x4f& lhs, const Mat4x4f& rhs) {
@@ -63,6 +61,31 @@ bool eq(const Mat4x4f& lhs, const Mat4x4f& rhs) {
         }
     }
     return true;
+}
+
+Mat4x4f mul(const Mat4x4f& lhs, const Mat4x4f& rhs) {
+    Mat4x4f m;
+    for (int row = 0; row < 4; row++) {
+        for (int col = 0; col < 4; col++) {
+            m(row, col) = (lhs(row, 0) * rhs(0, col)) +
+                          (lhs(row, 1) * rhs(1, col)) +
+                          (lhs(row, 2) * rhs(2, col)) +
+                          (lhs(row, 3) * rhs(3, col));
+        }
+    }
+    return m;
+}
+
+bool operator==(const Mat4x4f& lhs, const Mat4x4f& rhs) {
+    return eq(lhs, rhs);
+}
+
+bool operator!=(const Mat4x4f& lhs, const Mat4x4f& rhs) {
+    return !eq(lhs, rhs);
+}
+
+Mat4x4f operator*(const Mat4x4f& lhs, const Mat4x4f& rhs) {
+    return mul(lhs, rhs);
 }
 
 std::string str(const Mat4x4f& m, unsigned int precision) {
