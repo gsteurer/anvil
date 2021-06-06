@@ -86,18 +86,19 @@ Vec4f mul(const Mat4x4f& mat, const Vec4f& vec) {
     return Vec4f(r[0], r[1], r[2], r[3]);
 }
 
-Mat4x4f transpose(const Mat4x4f& mat) {
-    Mat4x4f A(mat);
-    for (int n = 0; n <= 2; n++) {
-        for (int m = n + 1; m <= 3; m++) {
-            float tmp = A(n, m);
-            A(n, m) = A(m, n);
-            A(m, n) = tmp;
-        }
-    }
-    return A;
+//row, col is top 0,0 of a 2x2 matrix
+float determinant2x2(const Mat4x4f& mat, unsigned int row, unsigned int col) {
+    float a = mat(row, col);
+    float b = mat(row, col + 1);
+    float c = mat(row + 1, col);
+    float d = mat(row + 1, col + 1);
+    return a * d - b * c;
 }
 
+/*
+float determinant3x3(const Mat4x4f& mat, unsigned int row, unsigned int col) {
+}
+*/
 bool operator==(const Mat4x4f& lhs, const Mat4x4f& rhs) {
     return eq(lhs, rhs);
 }

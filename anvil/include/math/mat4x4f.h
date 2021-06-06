@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 
+#include "math/mat2x2f.h"
 #include "math/vec4f.h"
 
 struct Mat4x4f {
@@ -19,9 +20,10 @@ Mat4x4f Identity();
 bool eq(const Mat4x4f& lhs, const Mat4x4f& rhs);
 Mat4x4f mul(const Mat4x4f& lhs, const Mat4x4f& rhs);
 Vec4f mul(const Mat4x4f& mat, const Vec4f& vec);
-Mat4x4f transpose(const Mat4x4f& mat);
 std::string str(const Mat4x4f& m, unsigned int precision = 1);
-
+float determinant2x2(const Mat4x4f& mat, unsigned int row, unsigned int col);
+float determinant3x3(const Mat4x4f& mat, unsigned int row, unsigned int col);
+Mat4x4f submatrix(const Mat4x4f& mat, unsigned int row, unsigned int col);
 bool operator==(const Mat4x4f& lhs, const Mat4x4f& rhs);
 bool operator!=(const Mat4x4f& lhs, const Mat4x4f& rhs);
 Mat4x4f operator*(const Mat4x4f& lhs, const Mat4x4f& rhs);

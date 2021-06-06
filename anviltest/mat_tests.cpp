@@ -1,4 +1,5 @@
 #include "gtest/gtest.h"
+#include "math/mat.h"
 #include "math/mat4x4f.h"
 #include "math/util.h"
 #include "math/vec4f.h"
@@ -137,8 +138,37 @@ TEST(Mat4x4fTest, Transpose) {
         0.0, 8.0, 3.0, 8.0};
     auto test = Mat4x4f(data);
     auto expected = Mat4x4f(transposeData);
-    EXPECT_EQ(str(transpose(test)), str(expected));
-    EXPECT_EQ(transpose(test), expected);
+    EXPECT_EQ(str(transpose<Mat4x4f>(test)), str(expected));
+    EXPECT_EQ(transpose<Mat4x4f>(test), expected);
     auto id = Identity();
-    EXPECT_EQ(transpose(id), Identity());
+    EXPECT_EQ(transpose<Mat4x4f>(id), Identity());
+}
+
+TEST(Mat4x4fTest, Determinant) {
+    float data[16] = {
+        1.0, 5.0, 0.0, 0.0,
+        -3.0, 2.0, 7.0, 0.0,
+        0.0, 6.0, -3.0, 0.0,
+        0.0, 0.0, 0.0, 0.0};
+    auto test = Mat4x4f(data);
+    EXPECT_FLOAT_EQ(determinant2x2(test, 0, 0), 17.0);
+    EXPECT_FLOAT_EQ(determinant2x2(test, 1, 1), -48.0);
+}
+
+TEST(Mat4x4fTest, Submatrix) {
+    float data[16] = {
+        -6.0, 1.0, 1.0, 6.0,
+        -8.0, 5.0, 8.0, 6.0,
+        -1.0, 0.0, 8.0, 2.0,
+        -7.0, 1.0, -1.0, 1.0};
+
+    float expectedData[16] = {
+        -6.0, 1.0, 6.0, 0.0,
+        -8.0, 8.0, 6.0, 0.0,
+        -7.0, -1.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 0.0};
+
+    Mat4x4f m(data);
+    Mat4x4f expected(expectedData);
+    EXPECT_EQ(str(submatrix<Mat4x4f>(m, 2, 1)), str(expected));
 }
