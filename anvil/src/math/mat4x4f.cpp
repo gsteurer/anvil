@@ -1,7 +1,6 @@
 #include "math/mat4x4f.h"
 
-#include <stdio.h>
-
+#include <cmath>
 #include <cstring>
 #include <iomanip>
 #include <sstream>
@@ -167,6 +166,16 @@ Mat4x4f inverse(const Mat4x4f& mat) {
     }
     Mat4x4f t = transpose(Mat4x4f(cofactors));
     return mul(t, 1.0 / d);
+}
+
+Mat4x4f round(const Mat4x4f& mat) {
+    Mat4x4f m;
+    for (int row = 0; row < 4; row++) {
+        for (int col = 0; col < 4; col++) {
+            m(row, col) = round(mat(row, col));
+        }
+    }
+    return m;
 }
 
 bool operator==(const Mat4x4f& lhs, const Mat4x4f& rhs) {

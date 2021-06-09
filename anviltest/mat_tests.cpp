@@ -254,3 +254,22 @@ TEST(Mat4x4fTest, Inverse) {
     EXPECT_FLOAT_EQ(cofactor4x4(test, 3, 2), 105.0);
     EXPECT_EQ(str(expected, 5), str(inverse(test), 5));
 }
+
+TEST(Mat4x4fTest, UndoMul) {
+    float dataA[16] = {
+        3.0, -9.0, 7.0, 3.0,
+        3.0, -8.0, 2.0, -9.0,
+        -4.0, 4.0, 4.0, 1.0,
+        -6.0, 5.0, -1.0, 1.0};
+    auto A = Mat4x4f(dataA);
+
+    float dataB[16] = {
+        8.0, 2.0, 2.0, 2.0,
+        3.0, -1.0, 7.0, 0.0,
+        7.0, 0.0, 5.0, 4.0,
+        6.0, -2.0, 0.0, 5.0};
+    auto B = Mat4x4f(dataB);
+    auto C = A * B;
+    EXPECT_EQ(A, round(C * inverse(B)));
+    EXPECT_EQ(str(A), str(C * inverse(B)));
+}

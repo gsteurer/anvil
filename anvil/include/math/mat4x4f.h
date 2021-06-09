@@ -32,6 +32,7 @@ float cofactor4x4(const Mat4x4f& mat, unsigned int row, unsigned int col);
 // if the determinant of a 4x4 matrix is 0, it is not invertible.
 bool invertible(const Mat4x4f& mat);
 Mat4x4f inverse(const Mat4x4f& mat);
+Mat4x4f round(const Mat4x4f& mat);
 bool operator==(const Mat4x4f& lhs, const Mat4x4f& rhs);
 bool operator!=(const Mat4x4f& lhs, const Mat4x4f& rhs);
 Mat4x4f operator*(const Mat4x4f& lhs, const Mat4x4f& rhs);
