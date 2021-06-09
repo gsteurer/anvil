@@ -1,9 +1,12 @@
 #include "math/mat4x4f.h"
 
+#include <stdio.h>
+
 #include <cstring>
 #include <iomanip>
 #include <sstream>
 
+#include "math/mat.h"
 #include "math/util.h"
 #include "math/vec4f.h"
 
@@ -86,6 +89,16 @@ Vec4f mul(const Mat4x4f& mat, const Vec4f& vec) {
     return Vec4f(r[0], r[1], r[2], r[3]);
 }
 
+Mat4x4f mul(const Mat4x4f& mat, float scale) {
+    Mat4x4f m;
+    for (int row = 0; row < 4; row++) {
+        for (int col = 0; col < 4; col++) {
+            m(row, col) = mat(row, col) * scale;
+        }
+    }
+    return m;
+}
+
 //row, col is top 0,0 of a 2x2 matrix
 float determinant2x2(const Mat4x4f& mat, unsigned int row, unsigned int col) {
     float a = mat(row, col);
@@ -95,10 +108,67 @@ float determinant2x2(const Mat4x4f& mat, unsigned int row, unsigned int col) {
     return a * d - b * c;
 }
 
-/*
-float determinant3x3(const Mat4x4f& mat, unsigned int row, unsigned int col) {
+float minor3x3(const Mat4x4f& mat, unsigned int row, unsigned int col) {
+    float data[4];
+    int idx = 0;
+    for (int r = 0; r < 3; r++) {
+        for (int c = 0; c < 3; c++) {
+            if (r != row && c != col) {
+                data[idx] = mat(r, c);
+                idx++;
+            }
+        }
+    }
+    return data[0] * data[3] - data[1] * data[2];
 }
-*/
+
+float cofactor3x3(const Mat4x4f& mat, unsigned int row, unsigned int col) {
+    return ((row + col) & 1) ? -1 * minor3x3(mat, row, col) : minor3x3(mat, row, col);
+}
+
+float determinant3x3(const Mat4x4f& mat, unsigned int row) {
+    float a = cofactor3x3(mat, row, 0);
+    float b = cofactor3x3(mat, row, 1);
+    float c = cofactor3x3(mat, row, 2);
+
+    return mat(row, 0) * a + mat(row, 1) * b + mat(row, 2) * c;
+}
+
+float minor4x4(const Mat4x4f& mat, unsigned int row, unsigned int col) {
+    Mat4x4f m = submatrix<Mat4x4f>(mat, row, col);
+    return determinant3x3(m);  // it doesnt matter which row we choose to calculate the determinant from
+}
+
+float cofactor4x4(const Mat4x4f& mat, unsigned int row, unsigned int col) {
+    return ((row + col) & 1) ? -1 * minor4x4(mat, row, col) : minor4x4(mat, row, col);
+}
+
+float determinant4x4(const Mat4x4f& mat, unsigned int row) {
+    float det = 0.0;
+    for (int c = 0; c < 4; c++) {
+        det = det + mat(row, c) * cofactor4x4(mat, row, c);
+    }
+    return det;
+}
+
+bool invertible(const Mat4x4f& mat) {
+    return !eq(determinant4x4(mat), 0.0);
+}
+Mat4x4f inverse(const Mat4x4f& mat) {
+    // create a matrix of cofactors
+    // transpose the cofactor matrix
+    // divide the transposed matrix by the determinant of the original
+    float d = determinant4x4(mat);
+    Mat4x4f cofactors;
+    for (int row = 0; row < 4; row++) {
+        for (int col = 0; col < 4; col++) {
+            cofactors(row, col) = cofactor4x4(mat, row, col);
+        }
+    }
+    Mat4x4f t = transpose(Mat4x4f(cofactors));
+    return mul(t, 1.0 / d);
+}
+
 bool operator==(const Mat4x4f& lhs, const Mat4x4f& rhs) {
     return eq(lhs, rhs);
 }

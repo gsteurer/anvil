@@ -172,3 +172,85 @@ TEST(Mat4x4fTest, Submatrix) {
     Mat4x4f expected(expectedData);
     EXPECT_EQ(str(submatrix<Mat4x4f>(m, 2, 1)), str(expected));
 }
+
+TEST(Mat4x4fTest, MinorAndCofactor) {
+    float data[16] = {
+        3.0, 5.0, 0.0, 0.0,
+        2.0, -1.0, -7.0, 0.0,
+        6.0, -1.0, 5.0, 0.0,
+        0.0, 0.0, 0.0, 0.0};
+    auto test = Mat4x4f(data);
+    EXPECT_FLOAT_EQ(minor3x3(test, 1, 0), 25.0);
+    EXPECT_FLOAT_EQ(cofactor3x3(test, 1, 0), -25.0);
+    EXPECT_FLOAT_EQ(minor3x3(test, 0, 0), -12.0);
+    EXPECT_FLOAT_EQ(cofactor3x3(test, 0, 0), -12.0);
+}
+
+TEST(Mat4x4fTest, Determinant3x3) {
+    float data[16] = {
+        1.0, 2.0, 6.0, 0.0,
+        -5.0, 8.0, -4.0, 0.0,
+        2.0, 6.0, 4.0, 0.0,
+        0.0, 0.0, 0.0, 0.0};
+    auto test = Mat4x4f(data);
+    EXPECT_FLOAT_EQ(cofactor3x3(test, 0, 0), 56.0);
+    EXPECT_FLOAT_EQ(cofactor3x3(test, 0, 1), 12.0);
+    EXPECT_FLOAT_EQ(cofactor3x3(test, 0, 2), -46.0);
+    EXPECT_FLOAT_EQ(determinant3x3(test), -196.0);
+    EXPECT_FLOAT_EQ(determinant3x3(test, 1), -196.0);
+    EXPECT_FLOAT_EQ(determinant3x3(test, 2), -196.0);
+}
+
+TEST(Mat4x4fTest, Determinant4x4) {
+    float data[16] = {
+        -2.0, -8.0, 3.0, 5.0,
+        -3.0, 1.0, 7.0, 3.0,
+        1.0, 2.0, -9.0, 6.0,
+        -6.0, 7.0, 7.0, -9.0};
+    auto test = Mat4x4f(data);
+
+    EXPECT_FLOAT_EQ(cofactor4x4(test, 0, 0), 690.0);
+    EXPECT_FLOAT_EQ(cofactor4x4(test, 0, 1), 447.0);
+    EXPECT_FLOAT_EQ(cofactor4x4(test, 0, 2), 210.0);
+    EXPECT_FLOAT_EQ(cofactor4x4(test, 0, 3), 51.0);
+    EXPECT_FLOAT_EQ(determinant4x4(test), -4071.0);
+    EXPECT_FLOAT_EQ(determinant4x4(test, 1), -4071.0);
+    EXPECT_FLOAT_EQ(determinant4x4(test, 2), -4071.0);
+    EXPECT_FLOAT_EQ(determinant4x4(test, 3), -4071.0);
+}
+
+TEST(Mat4x4fTest, Invertible) {
+    float data1[16] = {
+        6.0, 4.0, 4.0, 4.0,
+        5.0, 5.0, 7.0, 6.0,
+        4.0, -9.0, 3.0, -7.0,
+        9.0, 1.0, 7.0, -6.0};
+    auto test1 = Mat4x4f(data1);
+    float data2[16] = {
+        -4.0, 2.0, -2.0, -3.0,
+        9.0, 6.0, 2.0, 6.0,
+        0.0, -5.0, 1.0, -5.0,
+        0.0, 0.0, 0.0, 0.0};
+    auto test2 = Mat4x4f(data2);
+
+    EXPECT_TRUE(invertible(test1));
+    EXPECT_FALSE(invertible(test2));
+}
+
+TEST(Mat4x4fTest, Inverse) {
+    float data[16] = {
+        -5.0, 2.0, 6.0, -8.0,
+        1.0, -5.0, 1.0, 8.0,
+        7.0, 7.0, -6.0, -7.0,
+        1.0, -3.0, 7.0, 4.0};
+    auto test = Mat4x4f(data);
+    float expectedData[16] = {
+        0.21805, 0.45113, 0.24060, -0.04511,
+        -0.80827, -1.45677, -0.44361, 0.52068,
+        -0.07895, -0.22368, -0.05263, 0.19737,
+        -0.52256, -0.81391, -0.30075, 0.30639};
+    auto expected = Mat4x4f(expectedData);
+    EXPECT_FLOAT_EQ(determinant4x4(test), 532.0);
+    EXPECT_FLOAT_EQ(cofactor4x4(test, 3, 2), 105.0);
+    EXPECT_EQ(str(expected, 5), str(inverse(test), 5));
+}

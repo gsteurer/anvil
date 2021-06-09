@@ -22,8 +22,8 @@ struct matrix_attributes<Mat3x3f> {
 };
 
 template <typename T>
-Mat4x4f submatrix(const T& mat, unsigned int row, unsigned int col) {
-    Mat4x4f m;
+T submatrix(const T& mat, unsigned int row, unsigned int col) {
+    T m;
     float data[matrix_attributes<T>::rows * matrix_attributes<T>::cols];
     int idx = 0;
     for (int r = 0; r < matrix_attributes<T>::rows; r++) {
