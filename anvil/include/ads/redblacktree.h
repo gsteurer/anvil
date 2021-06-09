@@ -23,36 +23,35 @@ struct RBTree {
 
 template <typename T>
 void RBTree<T>::Insert(T item) {
-    RBNode<T> node = {
-        .color = BLACK,
-        .parent = m_sentinel,
-        .left = m_sentinel,
-        .right = m_sentinel,
-        .key = item,
-    };
+    RBNode<T>* node = new RBNode<T>();
+    node->color = RED;
+    node->parent = m_sentinel;
+    node->left = m_sentinel;
+    node->right = m_sentinel;
+    node->key = item;
     if (m_root != m_sentinel) {
-        rbInsert(this, &node);
+        rbInsert(this, node);
     } else {
-        m_root = &node;
+        node->color = BLACK;
+        m_root = node;
     }
 }
 
 template <typename T>
 RBTree<T>::RBTree() {
-    RBNode<T> sentinel = {
-        .color = BLACK,
-        .parent = nullptr,
-        .left = nullptr,
-        .right = nullptr,
-    };
+    RBNode<T>* node = new RBNode<T>();
+    node->color = BLACK;
+    node->parent = node;
+    node->left = node;
+    node->right = node;
 
-    m_sentinel = &sentinel;
-    m_root = &sentinel;
+    m_sentinel = node;
+    m_root = node;
 }
 
 template <typename T>
 void rbLeftRotate(RBTree<T>* tree, RBNode<T>* x) {
-    RBNode<T>* y = x;
+    RBNode<T>* y = x->right;
     x->right = y->left;
     if (y->left != tree->m_sentinel) {
         y->left->parent = x;
@@ -65,13 +64,13 @@ void rbLeftRotate(RBTree<T>* tree, RBNode<T>* x) {
     } else {
         x->parent->right = y;
     }
-    x->left = x;
+    y->left = x;
     x->parent = y;
 }
 
 template <typename T>
 void rbRightRotate(RBTree<T>* tree, RBNode<T>* x) {
-    RBNode<T>* y = x;
+    RBNode<T>* y = x->left;
     x->left = y->right;
     if (y->right != tree->m_sentinel) {
         y->right->parent = x;
@@ -84,7 +83,7 @@ void rbRightRotate(RBTree<T>* tree, RBNode<T>* x) {
     } else {
         x->parent->left = y;
     }
-    x->right = x;
+    y->right = x;
     x->parent = y;
 }
 

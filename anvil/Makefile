@@ -3,7 +3,7 @@ INCLUDES=-Iinclude
 #https://stackoverflow.com/questions/7815400/how-do-i-make-makefile-to-recompile-only-changed-files
 
 OBJDIR=-o .obj/$@
-CC=g++ -g -O0 -std=c++17
+CC=clang++ -g -O0 -std=c++17
 CFLAGS=-Wall $(INCLUDES)
 
 default:

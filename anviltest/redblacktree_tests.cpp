@@ -7,9 +7,12 @@ struct Foo {
     bool operator<(const Foo& foo) { return id < foo.id; };
     int id;
 };
+RBTree<Foo> _;
 
 TEST(RedBlackTreeTest, Ctor) {
     EXPECT_TRUE(true);
     RBTree<Foo> tree;
-    tree.Insert(Foo(1));
+    for (int idx = 0; idx < 100; idx++) {
+        tree.Insert(Foo(idx));
+    }
 }
