@@ -11,5 +11,5 @@ struct Foo {
 TEST(RedBlackTreeTest, Ctor) {
     EXPECT_TRUE(true);
     RBTree<Foo> tree;
-    //tree.Insert(Foo(1));
+    tree.Insert(Foo(1));
 }

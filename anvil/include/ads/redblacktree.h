@@ -30,7 +30,11 @@ void RBTree<T>::Insert(T item) {
         .right = m_sentinel,
         .key = item,
     };
-    rbInsert(this, &node);
+    if (m_root != m_sentinel) {
+        rbInsert(this, &node);
+    } else {
+        m_root = &node;
+    }
 }
 
 template <typename T>
@@ -41,15 +45,9 @@ RBTree<T>::RBTree() {
         .left = nullptr,
         .right = nullptr,
     };
-    RBNode<T> root = {
-        .color = BLACK,
-        .parent = &sentinel,
-        .left = &sentinel,
-        .right = &sentinel,
-    };
 
     m_sentinel = &sentinel;
-    m_root = &root;
+    m_root = &sentinel;
 }
 
 template <typename T>
