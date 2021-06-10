@@ -4,12 +4,13 @@
 
 #include "ads/redblacktree.h"
 #include "gtest/gtest.h"
+#include "option.h"
 
 struct Foo {
     Foo() : id(0) {}
     Foo(int id) : id(id) {}
     bool operator<(const Foo& foo) { return id < foo.id; };
-    bool operator==(const Foo& foo) { return id == foo.id; };
+    bool operator==(const Foo& foo) const { return id == foo.id; };
     bool operator!=(const Foo& foo) { return !(id == foo.id); };
     int id;
 };
@@ -29,16 +30,6 @@ template <typename T>
         return ::testing::AssertionFailure() << "expected tree->m_sentinel for right got " << tree->m_sentinel->right;
     }
     return ::testing::AssertionSuccess();
-}
-
-::testing::AssertionResult verifyInsert(RBTree<int>* tree, int item) {
-    int* result = tree->Search(item);
-    if (result != nullptr) {
-        if (*result == item) {
-            return ::testing::AssertionSuccess();
-        }
-    }
-    return ::testing::AssertionFailure() << item << " not found ";
 }
 
 template <typename T>
@@ -76,9 +67,12 @@ TEST(RedBlackTreeTest, Insert) {
     EXPECT_TRUE(verifySentinel(tree));
     tree->Insert(1);
     EXPECT_TRUE(verifySentinel(tree));
-    EXPECT_TRUE(verifyInsert(tree, 1));
+    Option<int> result = tree->Search(1);
+    EXPECT_EQ(result.value, 1);
     tree->Insert(2);
-    tree->Search(2);
+    result = tree->Search(2);
+    EXPECT_EQ(result.result, Option<int>::Some);
+    EXPECT_EQ(result.value, 2);
     node = tree->m_root;
     EXPECT_NE(node, sentinel);
     EXPECT_EQ(node->key, 1);
@@ -87,8 +81,6 @@ TEST(RedBlackTreeTest, Insert) {
     EXPECT_NE(node->right, sentinel);
 
     EXPECT_TRUE(verifySentinel(tree));
-    EXPECT_TRUE(verifyInsert(tree, 1));
-    EXPECT_TRUE(verifyInsert(tree, 2));
 }
 
 TEST(RedBlackTreeTest, InsertLarge) {
@@ -99,18 +91,17 @@ TEST(RedBlackTreeTest, InsertLarge) {
     for (int idx = 0; idx < size; idx++) {
         tree->Insert(Foo(idx + 1));
         EXPECT_TRUE(verifySentinel(tree));
-        Foo* result = tree->Search(Foo(idx + 1));
-        EXPECT_TRUE(result != nullptr);
-        EXPECT_EQ(result->id, idx + 1);
+        Option<Foo> result = tree->Search(Foo(idx + 1));
+        EXPECT_EQ(result.value.id, idx + 1);
     }
 
     for (int idx = 0; idx < size; idx++) {
-        Foo* result = tree->Search(Foo(idx + 1));
-        EXPECT_NE(result, nullptr);
-        if (result != nullptr) {
-            EXPECT_EQ(result->id, idx + 1);
-        }
+        Option<Foo> result = tree->Search(Foo(idx + 1));
+        EXPECT_EQ(result.result, Option<Foo>::Some);
+        EXPECT_EQ(result.value.id, idx + 1);
     }
     EXPECT_TRUE(tree->Height() <= 2 * (std::log(size + 1) / std::log(2)));
     checkRedBlackProperties(tree, tree->m_root);
+    EXPECT_EQ(tree->Min(), Foo(1));
+    EXPECT_EQ(tree->Max(), Foo(size));
 }
