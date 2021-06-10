@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#include <cmath>
+
 #include "ads/redblacktree.h"
 #include "gtest/gtest.h"
 
@@ -109,6 +111,6 @@ TEST(RedBlackTreeTest, InsertLarge) {
             EXPECT_EQ(result->id, idx + 1);
         }
     }
-
+    EXPECT_TRUE(tree->Height() <= 2 * (std::log(size + 1) / std::log(2)));
     checkRedBlackProperties(tree, tree->m_root);
 }

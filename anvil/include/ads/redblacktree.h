@@ -32,9 +32,29 @@ struct RBTree {
     RBTree();
     void Insert(T item);
     T* Search(T item);
+    unsigned int Height(RBNode<T>* node = nullptr);
     RBNode<T>* m_root;
     RBNode<T>* m_sentinel;
 };
+
+template <typename T>
+unsigned int RBTree<T>::Height(RBNode<T>* node) {
+    if (node == nullptr) {
+        node = m_root;
+    }
+    if (m_root == m_sentinel) {
+        return 0;
+    }
+    unsigned int l = 0;
+    unsigned int r = 0;
+    if (node->left != m_sentinel) {
+        l = Height(node->left);
+    }
+    if (node->right != m_sentinel) {
+        r = Height(node->right);
+    }
+    return (l > r ? l : r) + 1;
+}
 
 template <typename T>
 T* RBTree<T>::Search(T item) {
