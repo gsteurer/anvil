@@ -1,8 +1,22 @@
 #pragma once
-
+#include <string>
 enum Color { NONE = 0,
              BLACK = 1,
              RED = 2 };
+
+std::string str(Color c) {
+    switch (c) {
+        case BLACK:
+            return std::string("BLACK");
+            break;
+        case RED:
+            return std::string("RED");
+            break;
+        default:
+            return std::string("NONE");
+            break;
+    }
+}
 
 template <typename T>
 struct RBNode {
@@ -17,9 +31,25 @@ template <typename T>
 struct RBTree {
     RBTree();
     void Insert(T item);
+    T* Search(T item);
     RBNode<T>* m_root;
     RBNode<T>* m_sentinel;
 };
+
+template <typename T>
+T* RBTree<T>::Search(T item) {
+    RBNode<T>* node = m_root;
+    while (node != m_sentinel) {
+        if (node->key == item) {
+            return &node->key;
+        } else if (node->key < item) {
+            node = node->right;
+        } else {
+            node = node->left;
+        }
+    }
+    return nullptr;
+}
 
 template <typename T>
 void RBTree<T>::Insert(T item) {
@@ -150,4 +180,5 @@ void rbInsertFixup(RBTree<T>* tree, RBNode<T>* z) {
             }
         }
     }
+    tree->m_root->color = BLACK;
 }
