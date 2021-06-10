@@ -11,9 +11,9 @@ struct Foo {
     bool operator!=(const Foo& foo) { return !(id == foo.id); };
     int id;
 };
-RBTree<Foo> _;
 
-::testing::AssertionResult verifySentinel(RBTree<int>* tree) {
+template <typename T>
+::testing::AssertionResult verifySentinel(RBTree<T>* tree) {
     if (tree->m_sentinel->color != BLACK) {
         return ::testing::AssertionFailure() << "got " << str(tree->m_sentinel->color) << " expected " << str(BLACK);
     }
@@ -39,6 +39,33 @@ RBTree<Foo> _;
     return ::testing::AssertionFailure() << item << " not found ";
 }
 
+template <typename T>
+inline void checkRedBlackProperties(RBTree<T>* tree, RBNode<T>* node) {
+    // every node is red or black
+    ASSERT_TRUE(node->color == RED || node->color == BLACK);
+    // root is black
+    ASSERT_TRUE(tree->m_root->color == BLACK);
+    // every leaf is black
+    if (node->left == tree->m_sentinel) {
+        ASSERT_TRUE(node->left->color == BLACK);
+    }
+    if (node->right == tree->m_sentinel) {
+        ASSERT_TRUE(node->right->color == BLACK);
+    }
+    // if a node is red, both children are black
+    if (node->color == RED) {
+        ASSERT_TRUE(node->left->color == BLACK);
+        ASSERT_TRUE(node->right->color == BLACK);
+    }
+
+    if (node->left != tree->m_sentinel) {
+        checkRedBlackProperties(tree, node->left);
+    }
+    if (node->right != tree->m_sentinel) {
+        checkRedBlackProperties(tree, node->right);
+    }
+}
+
 TEST(RedBlackTreeTest, Insert) {
     EXPECT_TRUE(true);
     RBTree<int>* tree = new RBTree<int>();
@@ -62,23 +89,26 @@ TEST(RedBlackTreeTest, Insert) {
     EXPECT_TRUE(verifyInsert(tree, 2));
 }
 
-TEST(RedBlackTreeTest, Ctor) {
+TEST(RedBlackTreeTest, InsertLarge) {
     EXPECT_TRUE(true);
-    RBTree<int>* tree = new RBTree<int>();
-    int size = 1000;
+    RBTree<Foo>* tree = new RBTree<Foo>();
+    int size = 10000;
 
     for (int idx = 0; idx < size; idx++) {
-        tree->Insert(idx + 1);
+        tree->Insert(Foo(idx + 1));
         EXPECT_TRUE(verifySentinel(tree));
-        int* result = tree->Search(idx + 1);
+        Foo* result = tree->Search(Foo(idx + 1));
         EXPECT_TRUE(result != nullptr);
+        EXPECT_EQ(result->id, idx + 1);
     }
 
     for (int idx = 0; idx < size; idx++) {
-        int* result = tree->Search(idx + 1);
+        Foo* result = tree->Search(Foo(idx + 1));
         EXPECT_NE(result, nullptr);
         if (result != nullptr) {
-            EXPECT_EQ(*result, idx + 1);
+            EXPECT_EQ(result->id, idx + 1);
         }
     }
+
+    checkRedBlackProperties(tree, tree->m_root);
 }
