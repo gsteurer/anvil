@@ -17,6 +17,20 @@ void scramble(T& array, unsigned int size, unsigned int repeat_count = 1) {
 }
 
 template <typename T>
+void sort(T& array, unsigned int size) {
+}
+
+template <typename T, typename U>
+Option<unsigned int> search(T& array, unsigned int size, U item) {
+    for (unsigned int idx = 0; idx < size; idx++) {
+        if (array[idx] == item) {
+            return {.value = idx, .result = Option<unsigned int>::Some};
+        }
+    }
+    return {.result = Option<unsigned int>::None};
+}
+
+template <typename T>
 struct Slice {
     Slice();
     // length -> number of items in the Slice
@@ -97,12 +111,7 @@ void Slice<T>::Insert(T item) {
 
 template <typename T>
 Option<unsigned int> Slice<T>::IndexOf(T item) {
-    for (unsigned int idx = 0; idx < m_length; idx++) {
-        if (*m_data[idx] == item) {
-            return {.value = idx, .result = Option<unsigned int>::Some};
-        }
-    }
-    return {.result = Option<unsigned int>::None};
+    return search<Slice<T>, T>(*this, Length(), item);
 }
 
 template <typename T>
