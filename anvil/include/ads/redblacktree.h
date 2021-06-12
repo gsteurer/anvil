@@ -39,9 +39,34 @@ struct RBTree {
     unsigned int Height(RBNode<T>* node = nullptr);
     T Min();
     T Max();
+    unsigned int Size() const;
     RBNode<T>* m_root;
     RBNode<T>* m_sentinel;
+    unsigned int m_size;
 };
+
+template <typename T>
+RBTree<T>::RBTree() {
+    RBNode<T>* node = new RBNode<T>();
+    node->color = BLACK;
+    node->parent = node;
+    node->left = node;
+    node->right = node;
+
+    m_sentinel = node;
+    m_root = node;
+    m_size = 0;
+}
+
+template <typename T>
+T RBTree<T>::Min() {
+    return rbTreeMinimum(this->m_root, this->m_sentinel)->key;
+}
+
+template <typename T>
+T RBTree<T>::Max() {
+    return rbTreeMaximum(this->m_root, this->m_sentinel)->key;
+}
 
 template <typename T>
 unsigned int RBTree<T>::Height(RBNode<T>* node) {
@@ -63,13 +88,8 @@ unsigned int RBTree<T>::Height(RBNode<T>* node) {
 }
 
 template <typename T>
-T RBTree<T>::Min() {
-    return rbTreeMinimum(this->m_root, this->m_sentinel)->key;
-}
-
-template <typename T>
-T RBTree<T>::Max() {
-    return rbTreeMaximum(this->m_root, this->m_sentinel)->key;
+unsigned int RBTree<T>::Size() const {
+    return m_size;
 }
 
 template <typename T>
@@ -95,6 +115,7 @@ void RBTree<T>::Insert(T item) {
         node->color = BLACK;
         m_root = node;
     }
+    m_size++;
 }
 
 template <typename T>
@@ -102,19 +123,8 @@ void RBTree<T>::Delete(T item) {
     RBNode<T>* node = rbSearch(this, item);
     if (node != nullptr) {
         rbDelete(this, node);
+        m_size--;
     }
-}
-
-template <typename T>
-RBTree<T>::RBTree() {
-    RBNode<T>* node = new RBNode<T>();
-    node->color = BLACK;
-    node->parent = node;
-    node->left = node;
-    node->right = node;
-
-    m_sentinel = node;
-    m_root = node;
 }
 
 template <typename T>
@@ -259,7 +269,7 @@ inline void rbInsertFixup(RBTree<T>* tree, RBNode<T>* z) {
 template <typename T>
 inline void rbTransplant(RBTree<T>* tree, RBNode<T>* u, RBNode<T>* v) {
     if (u->parent == tree->m_sentinel) {
-        tree->root = v;
+        tree->m_root = v;
     } else if (u == u->parent->left) {
         u->parent->left = v;
     } else {
@@ -277,8 +287,48 @@ inline void rbDeleteFixup(RBTree<T>* tree, RBNode<T>* x) {
                 w->color = BLACK;
                 x->parent->color = RED;
                 rbLeftRotate(tree, x->parent);
+                w = x->parent->right;
+            }
+            if (w->left->color == BLACK && w->right->color == BLACK) {
+                w->color = RED;
+                x = x->parent;
+            } else {
+                if (w->right->color == BLACK) {
+                    w->left->color = BLACK;
+                    w->color = RED;
+                    rbRightRotate(tree, w);
+                    w = x->parent->right;
+                }
+                w->color = x->parent->color;
+                x->parent->color = BLACK;
+                w->right->color = BLACK;
+                rbLeftRotate(tree, x->parent);
+                x = tree->m_root;
             }
         } else {
+            RBNode<T>* w = x->parent->left;
+            if (w->color == RED) {
+                w->color = BLACK;
+                x->parent->color = RED;
+                rbRightRotate(tree, x->parent);
+                w = x->parent->left;
+            }
+            if (w->left->color == BLACK && w->right->color == BLACK) {
+                w->color = RED;
+                x = x->parent;
+            } else {
+                if (w->left->color == BLACK) {
+                    w->right->color = BLACK;
+                    w->color = RED;
+                    rbLeftRotate(tree, w);
+                    w = x->parent->left;
+                }
+                w->color = x->parent->color;
+                x->parent->color = BLACK;
+                w->left->color = BLACK;
+                rbRightRotate(tree, x->parent);
+                x = tree->m_root;
+            }
         }
     }
     x->color = BLACK;
@@ -306,7 +356,7 @@ inline void rbDelete(RBTree<T>* tree, RBNode<T>* z) {
             y->right = z->right;
             y->right->parent = y;
         }
-        rbTransplant(tree, z, y->right);
+        rbTransplant(tree, z, y);
         y->left = z->left;
         y->left->parent = y;
         y->color = z->color;
