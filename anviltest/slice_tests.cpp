@@ -58,3 +58,21 @@ TEST(SliceTests, Scramble) {
         EXPECT_EQ(test.IndexOf(idx + 1).result, Option<unsigned int>::Some);
     }
 }
+
+TEST(SliceTests, Sort) {
+    Slice<int> test;
+    int size = 1000;
+    EXPECT_EQ(test.Length(), 0);
+    for (unsigned int idx = 0; idx < size; idx++) {
+        test.Insert(idx + 1);
+    }
+
+    scramble(test, test.Length() - 1);
+    quicksort(test, 0, test.Length() - 1);
+
+    for (unsigned int idx = 0; idx < size; idx++) {
+        auto item = test.IndexOf(idx + 1);
+        EXPECT_EQ(item.result, Option<unsigned int>::Some);
+        EXPECT_EQ(item.value, idx);
+    }
+}

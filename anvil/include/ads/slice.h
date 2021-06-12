@@ -20,6 +20,33 @@ template <typename T>
 void sort(T& array, unsigned int size) {
 }
 
+template <typename T>
+void quicksort(T& array, int lo, int hi) {
+    if (lo < hi) {
+        int p = _partition(array, lo, hi);
+        quicksort(array, lo, p - 1);
+        quicksort(array, p + 1, hi);
+    }
+}
+
+template <typename T>
+int _partition(T& array, int lo, int hi) {
+    auto pivot = array[hi];
+    int i = lo;
+    for (int j = lo; j < hi; j++) {
+        if (array[j] < pivot) {
+            auto tmp = array[i];
+            array[i] = array[j];
+            array[j] = tmp;
+            i = i + 1;
+        }
+    }
+    auto tmp = array[i];
+    array[i] = array[hi];
+    array[hi] = tmp;
+    return i;
+}
+
 template <typename T, typename U>
 Option<unsigned int> search(T& array, unsigned int size, U item) {
     Option<unsigned int> result;
@@ -31,7 +58,7 @@ Option<unsigned int> search(T& array, unsigned int size, U item) {
         }
     }
     result.result = Option<unsigned int>::None;
-    return result; // {.result = Option<unsigned int>::None};
+    return result;  // {.result = Option<unsigned int>::None};
 }
 
 template <typename T>
