@@ -194,6 +194,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\ads\redblacktree.h" />
+    <ClInclude Include="include\ads\slice.h" />
     <ClInclude Include="include\math\mat2x2f.h" />
     <ClInclude Include="include\math\mat3x3f.h" />
     <ClInclude Include="include\math\mat4x4f.h" />
@@ -201,6 +203,7 @@
     <ClInclude Include="include\math\vec2f.h" />
     <ClInclude Include="include\math\vec3f.h" />
     <ClInclude Include="include\math\vec4f.h" />
+    <ClInclude Include="include\option.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>

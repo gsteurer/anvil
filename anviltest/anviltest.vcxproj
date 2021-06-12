@@ -43,6 +43,8 @@
   <ItemGroup>
     <ClCompile Include="graph_tests.cpp" />
     <ClCompile Include="mat_tests.cpp" />
+    <ClCompile Include="redblacktree_tests.cpp" />
+    <ClCompile Include="slice_tests.cpp" />
     <ClCompile Include="vec_tests.cpp" />
   </ItemGroup>
   <ItemDefinitionGroup />

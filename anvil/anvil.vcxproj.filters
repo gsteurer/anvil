@@ -11,30 +11,45 @@
     <Filter Include="Include">
       <UniqueIdentifier>{e425aa98-ba14-4100-b268-8f911c18728a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\math">
+      <UniqueIdentifier>{95608c78-5a82-4770-b52c-945d47a83710}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\ads">
+      <UniqueIdentifier>{69ef6af6-2926-4215-9159-379263b98655}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\math\util.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="include\math\mat2x2f.h">
-      <Filter>Include</Filter>
+      <Filter>Include\math</Filter>
     </ClInclude>
     <ClInclude Include="include\math\mat3x3f.h">
-      <Filter>Include</Filter>
+      <Filter>Include\math</Filter>
     </ClInclude>
     <ClInclude Include="include\math\mat4x4f.h">
-      <Filter>Include</Filter>
+      <Filter>Include\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\util.h">
+      <Filter>Include\math</Filter>
     </ClInclude>
     <ClInclude Include="include\math\vec2f.h">
-      <Filter>Include</Filter>
+      <Filter>Include\math</Filter>
     </ClInclude>
     <ClInclude Include="include\math\vec3f.h">
-      <Filter>Include</Filter>
+      <Filter>Include\math</Filter>
     </ClInclude>
     <ClInclude Include="include\math\vec4f.h">
+      <Filter>Include\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ads\redblacktree.h">
+      <Filter>Include\ads</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ads\slice.h">
+      <Filter>Include\ads</Filter>
+    </ClInclude>
+    <ClInclude Include="include\option.h">
       <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>

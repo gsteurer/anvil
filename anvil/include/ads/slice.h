@@ -22,12 +22,16 @@ void sort(T& array, unsigned int size) {
 
 template <typename T, typename U>
 Option<unsigned int> search(T& array, unsigned int size, U item) {
+    Option<unsigned int> result;
     for (unsigned int idx = 0; idx < size; idx++) {
         if (array[idx] == item) {
-            return {.value = idx, .result = Option<unsigned int>::Some};
+            result.result = Option<unsigned int>::Some;
+            result.value = idx;
+            return result;  // {.value = idx, .result = Option<unsigned int>::Some};
         }
     }
-    return {.result = Option<unsigned int>::None};
+    result.result = Option<unsigned int>::None;
+    return result; // {.result = Option<unsigned int>::None};
 }
 
 template <typename T>

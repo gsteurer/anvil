@@ -95,10 +95,14 @@ unsigned int RBTree<T>::Size() const {
 template <typename T>
 Option<T> RBTree<T>::Search(T item) {
     RBNode<T>* node = rbSearch(this, item);
+    Option<T> result;
     if (node != nullptr) {
-        return {.result = Option<T>::Some, .value = node->key};
+        result.result = Option<T>::Some;
+        result.value = node->key;
+        return result; // {.result = Option<T>::Some, .value = node->key};
     }
-    return {.result = Option<T>::None};
+    result.result = Option<T>::None;
+    return result; // {.result = Option<T>::None};
 }
 
 template <typename T>
