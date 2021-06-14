@@ -4,11 +4,11 @@
 #include "option.h"
 
 template <typename T>
-void scramble(T& array, unsigned int size, unsigned int repeat_count = 1) {
+void scramble(T& array, int size, int repeat_count = 1) {
     for (int count = 0; count < repeat_count; count++) {
         for (int idx = 0; idx < size; idx++) {
-            unsigned int jdx = std::rand() % size;
-            unsigned int kdx = std::rand() % size;
+            int jdx = std::rand() % size;
+            int kdx = std::rand() % size;
             auto tmp = array[jdx];
             array[jdx] = array[kdx];
             array[kdx] = tmp;
@@ -17,7 +17,7 @@ void scramble(T& array, unsigned int size, unsigned int repeat_count = 1) {
 }
 
 template <typename T>
-void sort(T& array, unsigned int size) {
+void sort(T& array, int size) {
     // quicksort usually performs better than heapsort because
     // heapsort will always swap every element in the array
     // https://stackoverflow.com/questions/2467751/quicksort-vs-heapsort
@@ -49,7 +49,7 @@ void _max_heapify(T& array, int heap_size, int idx) {
     if (left < heap_size && array[left] > array[largest]) {
         largest = left;
     }
-    if (right < heap_size and array[right] > array[largest]) {
+    if (right < heap_size && array[right] > array[largest]) {
         largest = right;
     }
     if (largest != idx) {
@@ -95,17 +95,17 @@ int _partition(T& array, int lo, int hi) {
 }
 
 template <typename T, typename U>
-Option<unsigned int> search(T& array, unsigned int size, U item) {
-    Option<unsigned int> result;
-    for (unsigned int idx = 0; idx < size; idx++) {
+Option<int> search(T& array, int size, U item) {
+    Option<int> result;
+    for (int idx = 0; idx < size; idx++) {
         if (array[idx] == item) {
-            result.result = Option<unsigned int>::Some;
+            result.result = Option<int>::Some;
             result.value = idx;
-            return result;  // {.value = idx, .result = Option<unsigned int>::Some};
+            return result;  // {.value = idx, .result = Option<int>::Some};
         }
     }
-    result.result = Option<unsigned int>::None;
-    return result;  // {.result = Option<unsigned int>::None};
+    result.result = Option<int>::None;
+    return result;  // {.result = Option<int>::None};
 }
 
 template <typename T>
@@ -113,29 +113,29 @@ struct Slice {
     Slice();
     // length -> number of items in the Slice
     // capacity -> total number of items the Slice can contain before it is resized
-    Slice(unsigned int length, unsigned int capacity);
+    Slice(int length, int capacity);
     void Insert(T);
-    T Remove(unsigned int index);
+    T Remove(int index);
     ~Slice();
-    const T operator[](unsigned int index) const;
-    T& operator[](unsigned int index);
-    unsigned int Length();
-    unsigned int Capacity();
-    Option<unsigned int> IndexOf(T item);
+    const T operator[](int index) const;
+    T& operator[](int index);
+    int Length();
+    int Capacity();
+    Option<int> IndexOf(T item);
 
    private:
-    unsigned int m_capacity;
-    unsigned int m_length;
+    int m_capacity;
+    int m_length;
     T** m_data;
 };
 
 template <typename T>
-unsigned int Slice<T>::Length() {
+int Slice<T>::Length() {
     return m_length;
 }
 
 template <typename T>
-unsigned int Slice<T>::Capacity() {
+int Slice<T>::Capacity() {
     return m_capacity;
 }
 
@@ -143,7 +143,7 @@ template <typename T>
 Slice<T>::Slice() : Slice(0, 16) {}
 
 template <typename T>
-Slice<T>::Slice(unsigned int length, unsigned int capacity) {
+Slice<T>::Slice(int length, int capacity) {
     m_capacity = capacity;
     m_length = 0;
     m_data = new T*[m_capacity];
@@ -163,12 +163,12 @@ Slice<T>::~Slice() {
 }
 
 template <typename T>
-const T Slice<T>::operator[](unsigned int index) const {
+const T Slice<T>::operator[](int index) const {
     return *(m_data[index]);
 }
 
 template <typename T>
-T& Slice<T>::operator[](unsigned int index) {
+T& Slice<T>::operator[](int index) {
     return *(m_data[index]);
 }
 
@@ -178,7 +178,7 @@ void Slice<T>::Insert(T item) {
         T** m_previous = m_data;
         m_data = new T*[m_capacity * 2];
         m_capacity = m_capacity * 2;
-        for (unsigned int idx = 0; idx < m_capacity; idx++) {
+        for (int idx = 0; idx < m_capacity; idx++) {
             idx < m_length ? m_data[idx] = m_previous[idx] : m_data[idx] = new T();
         }
         delete[] m_previous;
@@ -188,12 +188,12 @@ void Slice<T>::Insert(T item) {
 }
 
 template <typename T>
-Option<unsigned int> Slice<T>::IndexOf(T item) {
+Option<int> Slice<T>::IndexOf(T item) {
     return search<Slice<T>, T>(*this, Length(), item);
 }
 
 template <typename T>
-T Slice<T>::Remove(unsigned int index) {
+T Slice<T>::Remove(int index) {
 }
 
 template <typename T>

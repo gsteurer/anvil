@@ -165,7 +165,7 @@ Mat4x4f inverse(const Mat4x4f& mat) {
         }
     }
     Mat4x4f t = transpose(Mat4x4f(cofactors));
-    return mul(t, 1.0 / d);
+    return mul(t, 1.0f / d);
 }
 
 Mat4x4f round(const Mat4x4f& mat) {

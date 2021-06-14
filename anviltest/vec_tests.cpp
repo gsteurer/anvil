@@ -5,13 +5,13 @@
 #include "math/vec4f.h"
 
 TEST(EqTest, FloatEquality) {
-    EXPECT_TRUE(eq(0.0, 0.0));
-    EXPECT_TRUE(eq(-0.0, -0.0));
-    EXPECT_TRUE(eq(-0.0, 0.0));
-    EXPECT_TRUE(eq(0.0, -0.0));
-    EXPECT_FALSE(eq(0.0, 0.1));
-    EXPECT_FALSE(eq(0.1, 0.0));
-    EXPECT_TRUE(eq(0.0000000001, 0.0000000001));
+    EXPECT_TRUE(eq(0.0f, 0.0f));
+    EXPECT_TRUE(eq(-0.0f, -0.0f));
+    EXPECT_TRUE(eq(-0.0f, 0.0f));
+    EXPECT_TRUE(eq(0.0f, -0.0f));
+    EXPECT_FALSE(eq(0.0f, 0.1f));
+    EXPECT_FALSE(eq(0.1f, 0.0f));
+    EXPECT_TRUE(eq(0.0000000001f, 0.0000000001f));
     EXPECT_TRUE(eq(std::numeric_limits<float>::max(), std::numeric_limits<float>::max()));
 }
 
@@ -35,7 +35,7 @@ TEST(Vec4fTest, Vec4f) {
 TEST(Vec4fTest, Mag) {
     Vec4f v1(1.0, 2.0, 3.0, 0.0);
     Vec4f v2(-1.0, -2.0, -3.0, -0.0);
-    float expected = std::sqrt(14);
+    float expected = static_cast<float>(std::sqrt(14));
     EXPECT_FLOAT_EQ(mag(v1), expected);
     EXPECT_FLOAT_EQ(mag(v1), mag(v2));
 }
@@ -45,9 +45,9 @@ TEST(Vec4fTest, Norm) {
     Vec4f n = norm(v);
     float test = mag(n);
     EXPECT_FLOAT_EQ(test, 1.0);
-    EXPECT_FLOAT_EQ(n.x, 1.0 / std::sqrt(14));
-    EXPECT_FLOAT_EQ(n.y, 2.0 / std::sqrt(14));
-    EXPECT_FLOAT_EQ(n.z, 3.0 / std::sqrt(14));
+    EXPECT_FLOAT_EQ(n.x, 1.0f / static_cast<float>(std::sqrt(14)));
+    EXPECT_FLOAT_EQ(n.y, 2.0f / static_cast<float>(std::sqrt(14)));
+    EXPECT_FLOAT_EQ(n.z, 3.0f / static_cast<float>(std::sqrt(14)));
     EXPECT_FLOAT_EQ(n.w, 0.0);
 }
 

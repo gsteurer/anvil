@@ -15,12 +15,12 @@ TEST(SliceTests, InsertPrimitive) {
     Slice<int> test;
     int size = 100;
     EXPECT_EQ(test.Length(), 0);
-    for (unsigned int idx = 0; idx < size; idx++) {
+    for (int idx = 0; idx < size; idx++) {
         test.Insert(idx + 1);
         EXPECT_EQ(test.Length(), idx + 1);
     }
 
-    for (unsigned int idx = 0; idx < size; idx++) {
+    for (int idx = 0; idx < size; idx++) {
         EXPECT_EQ(test[idx], idx + 1);
     }
 }
@@ -29,13 +29,13 @@ TEST(SliceTests, Bracket) {
     Slice<int> test;
     int size = 100;
     EXPECT_EQ(test.Length(), 0);
-    for (unsigned int idx = 0; idx < size; idx++) {
+    for (int idx = 0; idx < size; idx++) {
         test.Insert(idx + 1);
         EXPECT_EQ(test.Length(), idx + 1);
     }
     EXPECT_EQ(test.Length(), size);
     EXPECT_LT(test.Length(), test.Capacity());
-    for (unsigned int idx = 0; idx < size; idx++) {
+    for (int idx = 0; idx < size; idx++) {
         EXPECT_EQ(test[idx], idx + 1);
     }
 
@@ -47,15 +47,15 @@ TEST(SliceTests, Scramble) {
     Slice<int> test;
     int size = 100;
     EXPECT_EQ(test.Length(), 0);
-    for (unsigned int idx = 0; idx < size; idx++) {
+    for (int idx = 0; idx < size; idx++) {
         test.Insert(idx + 1);
         EXPECT_EQ(test.Length(), idx + 1);
     }
 
     scramble(test, test.Length());
 
-    for (unsigned int idx = 0; idx < size; idx++) {
-        EXPECT_EQ(test.IndexOf(idx + 1).result, Option<unsigned int>::Some);
+    for (int idx = 0; idx < size; idx++) {
+        EXPECT_EQ(test.IndexOf(idx + 1).result, Option<int>::Some);
     }
 }
 
@@ -64,7 +64,7 @@ TEST(SliceTests, Quicksort) {
     Slice<int> expected;
     int size = 1000;
     EXPECT_EQ(test.Length(), 0);
-    for (unsigned int idx = 0; idx < size; idx++) {
+    for (int idx = 0; idx < size; idx++) {
         test.Insert(idx + 1);
         expected.Insert(idx + 1);
     }
@@ -72,9 +72,9 @@ TEST(SliceTests, Quicksort) {
     scramble(test, test.Length() - 1);
     quicksort(test, 0, test.Length() - 1);
 
-    for (unsigned int idx = 0; idx < size; idx++) {
+    for (int idx = 0; idx < size; idx++) {
         auto item = test.IndexOf(idx + 1);
-        EXPECT_EQ(item.result, Option<unsigned int>::Some);
+        EXPECT_EQ(item.result, Option<int>::Some);
         EXPECT_EQ(item.value, idx);
         EXPECT_EQ(test[idx], expected[idx]);
     }
@@ -85,7 +85,7 @@ TEST(SliceTests, Heapsort) {
     Slice<int> expected;
     int size = 10;
     EXPECT_EQ(test.Length(), 0);
-    for (unsigned int idx = 0; idx < size; idx++) {
+    for (int idx = 0; idx < size; idx++) {
         test.Insert(idx + 1);
         expected.Insert(idx + 1);
     }
@@ -96,14 +96,14 @@ TEST(SliceTests, Heapsort) {
     /*
     @@@ todo: 
     // check max heap property
-    for (unsigned int idx = test.Length() - 1; idx > 0; idx--) {
+    for (int idx = test.Length() - 1; idx > 0; idx--) {
         EXPECT_TRUE(test[idx / 2] >= test[idx]);
     }
     */
 
-    for (unsigned int idx = 0; idx < size; idx++) {
+    for (int idx = 0; idx < size; idx++) {
         auto item = test.IndexOf(idx + 1);
-        EXPECT_EQ(item.result, Option<unsigned int>::Some);
+        EXPECT_EQ(item.result, Option<int>::Some);
         EXPECT_EQ(item.value, idx);
         EXPECT_EQ(test[idx], expected[idx]);
     }
