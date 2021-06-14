@@ -52,6 +52,9 @@
     <ClInclude Include="include\option.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="include\ads\list.h">
+      <Filter>Include\ads</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\math\util.cpp">
