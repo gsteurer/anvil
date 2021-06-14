@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <string>
 
+#include "ads/arrayutils.h"
 #include "ads/slice.h"
 #include "gtest/gtest.h"
 #include "option.h"
@@ -52,7 +53,7 @@ TEST(SliceTests, Scramble) {
         EXPECT_EQ(test.Length(), idx + 1);
     }
 
-    scramble(test, test.Length());
+    scramble(test, test.Length() - 1);
 
     for (int idx = 0; idx < size; idx++) {
         EXPECT_EQ(test.IndexOf(idx + 1).result, Option<int>::Some);

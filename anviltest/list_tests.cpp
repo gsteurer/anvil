@@ -1,3 +1,4 @@
+#include "ads/arrayutils.h"
 #include "ads/list.h"
 #include "gtest/gtest.h"
 #include "option.h"
@@ -175,4 +176,21 @@ TEST(ListTests, PopBack) {
     result = test.PopBack();
     EXPECT_EQ(result.result, Option<int>::None);
     EXPECT_EQ(test.Length(), 0);
+}
+
+TEST(ListTests, ScrambleAndSort) {
+    List<int> test;
+    List<int> expected;
+    int size = 100;
+    for (int idx = 0; idx < size; idx++) {
+        test.PushFront(idx + 1);
+        expected.PushBack(idx + 1);
+    }
+
+    scramble(test, test.Length() - 1);
+    quicksort(test, 0, test.Length() - 1);
+
+    for (int idx = 0; idx < size; idx++) {
+        EXPECT_EQ(test[idx], expected[idx]);
+    }
 }
