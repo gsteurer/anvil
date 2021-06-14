@@ -18,6 +18,10 @@ void scramble(T& array, unsigned int size, unsigned int repeat_count = 1) {
 
 template <typename T>
 void sort(T& array, unsigned int size) {
+    // quicksort usually performs better than heapsort because
+    // heapsort will always swap every element in the array
+    // https://stackoverflow.com/questions/2467751/quicksort-vs-heapsort
+    quicksort(array, 0, size);
 }
 
 //max heap property: A[parent(i)] >= A[i]
