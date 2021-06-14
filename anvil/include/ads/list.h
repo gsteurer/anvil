@@ -20,8 +20,8 @@ struct List {
     void PushFront(T item);
     void PushBack(T item);
     void InsertAt(T item, int index);
-    void PopFront(T item);
-    void PopBack(T item);
+    Option<T> PopFront();
+    Option<T> PopBack();
 
     Option<T> RemoveAt(int index);
 
@@ -31,7 +31,6 @@ struct List {
    private:
     int m_size;
     ListNode<T>* m_root;
-    ListNode<T>* m_recently_accessed;
     ListNode<T>* m_last;
 };
 
@@ -39,7 +38,6 @@ template <typename T>
 List<T>::List() {
     m_root = nullptr;
     m_last = nullptr;
-    m_recently_accessed = nullptr;
     m_size = 0;
 }
 
@@ -47,7 +45,6 @@ template <typename T>
 List<T>::List(const List<T>& list) {
     m_root = nullptr;
     m_last = nullptr;
-    m_recently_accessed = nullptr;
     m_size = 0;
 }
 
@@ -151,11 +148,49 @@ void List<T>::InsertAt(T item, int index) {
 }
 
 template <typename T>
-void List<T>::PopFront(T item) {
+Option<T> List<T>::PopFront() {
+    Option<T> result;
+    result.result = Option<T>::None;
+    if (m_root != nullptr) {
+        ListNode<T>* node = m_root->right;
+        if (node != nullptr) {
+            node->left = nullptr;
+        }
+        result.value = m_root->data;
+        result.result = Option<T>::Some;
+        delete m_root;
+        m_root = node;
+        m_size--;
+        if (m_size == 0) {
+            m_last = nullptr;
+        }
+    }
+
+    return result;
 }
+
 template <typename T>
-void List<T>::PopBack(T item) {
+Option<T> List<T>::PopBack() {
+    Option<T> result;
+    result.result = Option<T>::None;
+    if (m_last != nullptr) {
+        ListNode<T>* node = m_last->left;
+        if (node != nullptr) {
+            node->right = nullptr;
+        }
+        result.value = m_last->data;
+        result.result = Option<T>::Some;
+        delete m_last;
+        m_last = node;
+        m_size--;
+        if (m_size == 0) {
+            m_root = nullptr;
+        }
+    }
+
+    return result;
 }
+
 template <typename T>
 Option<T> RemoveAt(int index) {
 }
@@ -170,6 +205,7 @@ const T List<T>::operator[](int index) const {
         node = node->right;
         current_idx++;
     }
+
     // @@@ this can segfault
     return node->data;
 }
@@ -179,10 +215,12 @@ T& List<T>::operator[](int index) {
     ListNode<T>* node = m_root;
     int current_idx = 0;
     // @@@ check if index in [0:msize)
+
     while (current_idx < index && node != nullptr) {
         node = node->right;
         current_idx++;
     }
+
     // @@@ this can segfault
     return node->data;
 }

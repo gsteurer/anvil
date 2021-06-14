@@ -1,5 +1,6 @@
 #include "ads/list.h"
 #include "gtest/gtest.h"
+#include "option.h"
 
 ::testing::AssertionResult verifyList(List<int>& list, int* expected) {
     for (int idx = 0; idx < list.Length(); idx++) {
@@ -32,6 +33,22 @@ TEST(ListTests, PushFront) {
         EXPECT_EQ(test[idx], value);
         value--;
     }
+}
+
+TEST(ListTests, Bracket) {
+    List<int> test;
+    test.PushFront(3);
+    test.PushFront(2);
+    test.PushFront(1);
+    EXPECT_EQ(test[0], 1);
+    EXPECT_EQ(test[1], 2);
+    EXPECT_EQ(test[2], 3);
+    test[0] = 45;
+    test[1] = 56;
+    test[2] = 67;
+    EXPECT_EQ(test[0], 45);
+    EXPECT_EQ(test[1], 56);
+    EXPECT_EQ(test[2], 67);
 }
 
 TEST(ListTests, Push) {
@@ -80,4 +97,82 @@ TEST(ListTests, InsertAt) {
     EXPECT_TRUE(verifyList(test, expected8));
 
     EXPECT_EQ(test.Length(), 8);
+}
+
+TEST(ListTests, PopFront) {
+    List<int> test;
+    test.PushFront(1);
+    Option<int> result = test.PopFront();
+    EXPECT_EQ(result.result, Option<int>::Some);
+    EXPECT_EQ(result.value, 1);
+    EXPECT_EQ(test.Length(), 0);
+
+    test.PushFront(1);
+    test.PushFront(2);
+    test.PushBack(3);
+    test.InsertAt(4, 1);
+    EXPECT_EQ(test.Length(), 4);
+    // test = [2, 4, 1, 3]
+    result = test.PopFront();
+    EXPECT_EQ(result.result, Option<int>::Some);
+    EXPECT_EQ(result.value, 2);
+    // test = [4, 1, 3]
+
+    result = test.PopFront();
+    EXPECT_EQ(result.result, Option<int>::Some);
+    EXPECT_EQ(result.value, 4);
+    // test = [1, 3]
+
+    result = test.PopFront();
+    EXPECT_EQ(result.result, Option<int>::Some);
+    EXPECT_EQ(result.value, 1);
+    // test = [3]
+
+    result = test.PopFront();
+    EXPECT_EQ(result.result, Option<int>::Some);
+    EXPECT_EQ(result.value, 3);
+    // test = []
+
+    result = test.PopFront();
+    EXPECT_EQ(result.result, Option<int>::None);
+    EXPECT_EQ(test.Length(), 0);
+}
+
+TEST(ListTests, PopBack) {
+    List<int> test;
+    test.PushBack(1);
+    Option<int> result = test.PopBack();
+    EXPECT_EQ(result.result, Option<int>::Some);
+    EXPECT_EQ(result.value, 1);
+    EXPECT_EQ(test.Length(), 0);
+
+    test.PushBack(1);
+    test.PushBack(2);
+    test.PushBack(3);
+    test.InsertAt(4, 1);
+    EXPECT_EQ(test.Length(), 4);
+    // test = [1, 4, 2, 3]
+    result = test.PopBack();
+    EXPECT_EQ(result.result, Option<int>::Some);
+    EXPECT_EQ(result.value, 3);
+    // test = [1, 4, 2]
+
+    result = test.PopBack();
+    EXPECT_EQ(result.result, Option<int>::Some);
+    EXPECT_EQ(result.value, 2);
+    // test = [1, 4]
+
+    result = test.PopBack();
+    EXPECT_EQ(result.result, Option<int>::Some);
+    EXPECT_EQ(result.value, 4);
+    // test = [1]
+
+    result = test.PopBack();
+    EXPECT_EQ(result.result, Option<int>::Some);
+    EXPECT_EQ(result.value, 1);
+    // test = []
+
+    result = test.PopBack();
+    EXPECT_EQ(result.result, Option<int>::None);
+    EXPECT_EQ(test.Length(), 0);
 }
