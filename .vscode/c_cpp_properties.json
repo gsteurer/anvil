@@ -4,6 +4,7 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
+                "${workspaceFolder}/anvil/include",
                 "/Users/jsteurer/Code/cpp_workbench/googletest/googletest/include"
             ],
             "defines": [],
