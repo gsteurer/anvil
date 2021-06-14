@@ -59,12 +59,14 @@ TEST(SliceTests, Scramble) {
     }
 }
 
-TEST(SliceTests, Sort) {
+TEST(SliceTests, Quicksort) {
     Slice<int> test;
+    Slice<int> expected;
     int size = 1000;
     EXPECT_EQ(test.Length(), 0);
     for (unsigned int idx = 0; idx < size; idx++) {
         test.Insert(idx + 1);
+        expected.Insert(idx + 1);
     }
 
     scramble(test, test.Length() - 1);
@@ -74,5 +76,35 @@ TEST(SliceTests, Sort) {
         auto item = test.IndexOf(idx + 1);
         EXPECT_EQ(item.result, Option<unsigned int>::Some);
         EXPECT_EQ(item.value, idx);
+        EXPECT_EQ(test[idx], expected[idx]);
+    }
+}
+
+TEST(SliceTests, Heapsort) {
+    Slice<int> test;
+    Slice<int> expected;
+    int size = 10;
+    EXPECT_EQ(test.Length(), 0);
+    for (unsigned int idx = 0; idx < size; idx++) {
+        test.Insert(idx + 1);
+        expected.Insert(idx + 1);
+    }
+
+    scramble(test, test.Length() - 1);
+    heapsort(test, test.Length() - 1);
+
+    /*
+    @@@ todo: 
+    // check max heap property
+    for (unsigned int idx = test.Length() - 1; idx > 0; idx--) {
+        EXPECT_TRUE(test[idx / 2] >= test[idx]);
+    }
+    */
+
+    for (unsigned int idx = 0; idx < size; idx++) {
+        auto item = test.IndexOf(idx + 1);
+        EXPECT_EQ(item.result, Option<unsigned int>::Some);
+        EXPECT_EQ(item.value, idx);
+        EXPECT_EQ(test[idx], expected[idx]);
     }
 }

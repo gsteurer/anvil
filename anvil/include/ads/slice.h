@@ -20,6 +20,49 @@ template <typename T>
 void sort(T& array, unsigned int size) {
 }
 
+//max heap property: A[parent(i)] >= A[i]
+//min heap property: A[parent(i)] <= A[i]
+template <typename T>
+void heapsort(T& array, int heap_size) {
+    _build_max_heap(array, heap_size);
+    for (int idx = heap_size - 1; idx > 0; idx--) {
+        auto tmp = array[0];
+        array[0] = array[idx];
+        array[idx] = tmp;
+        _max_heapify(array, idx, 0);
+    }
+}
+
+inline int _parent(int idx) { return idx / 2; }
+inline int _left(int idx) { return 2 * idx + 1; }
+inline int _right(int idx) { return 2 * idx + 2; }
+
+template <typename T>
+void _max_heapify(T& array, int heap_size, int idx) {
+    int left = _left(idx);
+    int right = _right(idx);
+    int largest = idx;
+    if (left < heap_size && array[left] > array[largest]) {
+        largest = left;
+    }
+    if (right < heap_size and array[right] > array[largest]) {
+        largest = right;
+    }
+    if (largest != idx) {
+        auto tmp = array[idx];
+        array[idx] = array[largest];
+        array[largest] = tmp;
+        _max_heapify(array, heap_size, largest);
+    }
+}
+
+template <typename T>
+void _build_max_heap(T& array, int heap_size) {
+    for (int idx = heap_size / 2 - 1; idx >= 0; idx--) {
+        _max_heapify(array, heap_size, idx);
+    }
+}
+
 template <typename T>
 void quicksort(T& array, int lo, int hi) {
     if (lo < hi) {
