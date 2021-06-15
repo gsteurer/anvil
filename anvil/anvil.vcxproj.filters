@@ -55,6 +55,15 @@
     <ClInclude Include="include\ads\list.h">
       <Filter>Include\ads</Filter>
     </ClInclude>
+    <ClInclude Include="include\ads\arrayutils.h">
+      <Filter>Include\ads</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ads\hash.h">
+      <Filter>Include\ads</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ads\map.h">
+      <Filter>Include\ads</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\math\util.cpp">
