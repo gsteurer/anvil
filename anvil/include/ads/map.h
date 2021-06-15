@@ -1,21 +1,7 @@
 #pragma once
-#include <ads/list.h>
-
+#include "ads/hash.h"
+#include "ads/list.h"
 #include "option.h"
-
-// https://en.cppreference.com/w/cpp/language/template_specialization
-
-// @@@ this is wrong
-template <typename T>
-long Hash(T key){
-
-};
-
-// @@@ this is wrong
-template <typename>
-long Hash(int key) {
-    return 55;
-}
 
 // https://en.wikipedia.org/wiki/Hash_table
 template <typename K, typename V>
@@ -85,7 +71,7 @@ V& Map<K, V>::operator[](int index) {
 
 template <typename K, typename V>
 void Map<K, V>::Insert(K key, V value) {
-    Hash(key);
+    Hashable<K>::Hash(key);
 }
 
 template <typename K, typename V>
