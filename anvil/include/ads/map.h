@@ -3,6 +3,21 @@
 #include "ads/list.h"
 #include "option.h"
 
+template <typename K, typename V>
+struct MapEntry {
+    MapEntry() {}
+    MapEntry(K key, V value) : key(key), value(value) {}
+    ~MapEntry() {}
+    K key;
+    V value;
+    bool operator==(const MapEntry<K, V>& rhs) const {
+        return this->key == rhs.key;
+    }
+    bool operator!=(const MapEntry<K, V>& rhs) const {
+        return !(this->key == rhs.key);
+    }
+};
+
 // https://en.wikipedia.org/wiki/Hash_table
 template <typename K, typename V>
 struct Map {
@@ -29,7 +44,7 @@ struct Map {
     // let's store collisions in a linked list
     // @@@ when an item is added to a bucket, compute its size; store max size.
     // according to the birthday problem there is approximately a 95% (for n = 2450?, buckets = 1mill) chance of at least two of the keys being hashed to the same slot.
-    List<V>* m_data;
+    List<MapEntry<K, V>>* m_data;           // @@@ make this an array of pointers to Lists to reduce size
     int m_size;                             // number of items
     int m_capacity;                         // number of buckets
     float m_load_factor_threshold = 0.75f;  // when the threshold is passed, we need to resize the map
@@ -42,6 +57,8 @@ struct Map {
 
 template <typename K, typename V>
 Map<K, V>::Map() {
+    m_size = 16;
+    m_data = new List<MapEntry<K, V>>[m_size];
 }
 
 template <typename K, typename V>
@@ -59,6 +76,8 @@ float Map<K, V>::LoadFactor() {
 
 template <typename K, typename V>
 void Map<K, V>::Rehash(int size) {
+    // @@@ WIP
+    // int new_size = m_size * 2;
 }
 
 template <typename K, typename V>
@@ -71,7 +90,11 @@ V& Map<K, V>::operator[](int index) {
 
 template <typename K, typename V>
 void Map<K, V>::Insert(K key, V value) {
-    Hashable<K>::Hash(key);
+    // @@@ WIP
+    // long hash = Hashable<K>::Hash(key);
+    // int index = hash & m_size - 1;
+
+    // m_data[index].PushFront()
 }
 
 template <typename K, typename V>
