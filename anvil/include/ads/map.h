@@ -57,8 +57,8 @@ struct Map {
 
 template <typename K, typename V>
 Map<K, V>::Map() {
-    m_size = 16;
-    m_data = new List<MapEntry<K, V>>[m_size];
+    m_capacity = 16;
+    m_data = new List<MapEntry<K, V>>[m_capacity];
 }
 
 template <typename K, typename V>
@@ -77,7 +77,7 @@ float Map<K, V>::LoadFactor() {
 template <typename K, typename V>
 void Map<K, V>::Rehash(int size) {
     // @@@ WIP
-    // int new_size = m_size * 2;
+    // int new_size = m_capacity * 2;
 }
 
 template <typename K, typename V>
@@ -92,9 +92,11 @@ template <typename K, typename V>
 void Map<K, V>::Insert(K key, V value) {
     // @@@ WIP
     // long hash = Hashable<K>::Hash(key);
-    // int index = hash & m_size - 1;
+    // int index = hash & m_capacity - 1;
 
     // m_data[index].PushFront()
+    // m_data[index].Length()
+    // m_size++;
 }
 
 template <typename K, typename V>
