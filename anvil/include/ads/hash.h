@@ -17,18 +17,41 @@ struct Hashable {
 // https://en.wikipedia.org/wiki/Hash_function#Multiplicative_hashing
 // https://en.wikipedia.org/wiki/Universal_hashing#Avoiding_modular_arithmetic
 // https://stackoverflow.com/questions/11871245/knuth-multiplicative-hash
-// https://stackoverflow.com/questions/664014/what-integer-hash-function-are-good-that-accepts-an-integer-hash-key
 // https://algs4.cs.princeton.edu/34hash/
+// https://gist.github.com/badboy/6267743
+// http://www.burtleburtle.net/bob/hash/doobs.html
+// https://classes.engineering.wustl.edu/cse241/handouts/hash-functions.pdf
 template <>
 struct Hashable<int> {
     static long Hash(int key) {
-        return key;
+        unsigned long temp = key >> (sizeof(int) * 8 - 1);
+        key ^= temp;
+        key += temp & 1;
+        unsigned long hash = key;
+        unsigned int phi = 2654435769;  // pow(2,32) * (-1 + math.sqrt(5)) / 2 // golden ratio
+
+        return (hash * phi) >> 32;
     }
 };
+
+// http://zimbry.blogspot.com/2011/09/better-bit-mixing-improving-on.html
+// https://stackoverflow.com/questions/664014/what-integer-hash-function-are-good-that-accepts-an-integer-hash-key
+// https://www.usna.edu/Users/cs/crabbe/IC312/current/units/06/unit.html
 template <>
 struct Hashable<long> {
     static long Hash(long key) {
-        return key;
+        // unsigned long phi = 11400714819323199488L;  // pow(2,64) * (-1 + math.sqrt(5)) / 2 // golden ratio
+        // return (key * phi) >> 64;
+        unsigned long temp = key >> (sizeof(long) * 8 - 1);
+        key ^= temp;
+        key += temp & 1;
+        unsigned long hash = key;
+        hash ^= (hash >> 33);
+        hash *= 0xff51afd7ed558ccd;
+        hash ^= (hash >> 33);
+        hash *= 0xc4ceb9fe1a85ec53;
+        hash ^= (hash >> 33);
+        return hash;
     }
 };
 template <>
