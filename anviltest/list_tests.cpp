@@ -62,6 +62,18 @@ TEST(ListTests, Push) {
     EXPECT_EQ(test[2], 2);
 }
 
+TEST(ListTests, IndexOf) {
+    List<int> test;
+    test.PushFront(3);
+    test.PushFront(3);
+    test.PushFront(3);
+    test.PushFront(1);
+    EXPECT_EQ(test.Length(), 4);
+    Option<int> result = test.IndexOf(3);
+    EXPECT_EQ(result.result, Option<int>::Some);
+    EXPECT_EQ(result.value, 1);
+}
+
 TEST(ListTests, InsertAt) {
     List<int> test;
 
@@ -193,4 +205,52 @@ TEST(ListTests, ScrambleAndSort) {
     for (int idx = 0; idx < size; idx++) {
         EXPECT_EQ(test[idx], expected[idx]);
     }
+}
+
+TEST(ListTests, RemoveAt) {
+    List<int> test;
+    test.PushBack(1);
+    test.PushBack(3);
+    test.PushBack(5);
+    test.PushBack(9);
+    for (int idx = 0; idx < 4; idx++) {
+        Option<int> result = test.RemoveAt(0);
+        int expected[4] = {1, 3, 5, 9};
+        EXPECT_EQ(result.result, Option<int>::Some);
+        EXPECT_EQ(result.value, expected[idx]);
+    }
+    EXPECT_EQ(test.Length(), 0);
+
+    test.PushBack(1);
+    test.PushBack(3);
+    test.PushBack(5);
+    test.PushBack(9);
+    for (int idx = 0; idx < 4; idx++) {
+        Option<int> result = test.RemoveAt(test.Length() - 1);
+        int expected[4] = {9, 5, 3, 1};
+        EXPECT_EQ(result.result, Option<int>::Some);
+        EXPECT_EQ(result.value, expected[idx]);
+    }
+    EXPECT_EQ(test.Length(), 0);
+
+    test.PushBack(1);
+    test.PushBack(3);
+    test.PushBack(5);
+    Option<int> result = test.RemoveAt(1);
+    EXPECT_EQ(result.result, Option<int>::Some);
+    EXPECT_EQ(result.value, 3);
+    test.PushFront(9);
+    test.PushBack(11);
+    //9, 1, 5, 11
+    result = test.RemoveAt(2);
+    EXPECT_EQ(result.result, Option<int>::Some);
+    EXPECT_EQ(result.value, 5);
+    EXPECT_EQ(test.Length(), 3);
+    EXPECT_EQ(test[0], 9);
+    EXPECT_EQ(test[1], 1);
+    EXPECT_EQ(test[2], 11);
+
+    result = test.Remove(9);
+    EXPECT_EQ(result.result, Option<int>::Some);
+    EXPECT_EQ(result.value, 9);
 }

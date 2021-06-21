@@ -24,6 +24,7 @@ struct List {
     Option<T> PopBack();
 
     Option<T> RemoveAt(int index);
+    Option<T> Remove(T item);
 
     const T operator[](int index) const;
     T& operator[](int index);
@@ -64,8 +65,23 @@ template <typename T>
 int List<T>::Length() {
     return m_size;
 }
+
 template <typename T>
 Option<int> List<T>::IndexOf(T item) {
+    Option<int> result;
+    result.result = Option<int>::None;
+    int current_index = 0;
+    ListNode<T>* node = m_root;
+    while (node != nullptr) {
+        if (node->data == item) {
+            result.result = Option<int>::Some;
+            result.value = current_index;
+            return result;
+        }
+        current_index++;
+        node = node->right;
+    }
+    return result;
 }
 
 template <typename T>
@@ -192,7 +208,58 @@ Option<T> List<T>::PopBack() {
 }
 
 template <typename T>
-Option<T> RemoveAt(int index) {
+Option<T> List<T>::RemoveAt(int index) {
+    Option<T> result;
+    result.result = Option<T>::None;
+    if (index < 0 || index > m_size - 1) {
+        return result;
+    }
+    ListNode<T>* node = m_root;
+    int current_index = 0;
+    while (current_index < index && node != nullptr) {
+        node = node->right;
+        current_index++;
+    }
+
+    if (node == nullptr) {
+        return result;
+    }
+
+    ListNode<T>* left = node->left;
+    ListNode<T>* right = node->right;
+    if (left != nullptr) {
+        left->right = right;
+        if (right == nullptr) {
+            m_last = left;
+        }
+    }
+
+    if (right != nullptr) {
+        right->left = left;
+        if (left == nullptr) {
+            m_root = right;
+        }
+    }
+
+    if (m_size == 1) {
+        m_root = nullptr;
+        m_last = nullptr;
+    }
+    result.value = node->data;
+    result.result = Option<T>::Some;
+    delete node;
+    m_size--;
+
+    return result;
+}
+
+template <typename T>
+Option<T> List<T>::Remove(T item) {
+    Option<T> result = this->IndexOf(item);
+    if (result.result == Option<T>::Some) {
+        result = this->RemoveAt(result.value);
+    }
+    return result;
 }
 
 template <typename T>
