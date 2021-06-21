@@ -3,20 +3,43 @@
 #include "ads/list.h"
 #include "option.h"
 
+/*
+template <typename T>
+inline Option<T> searchList(const ) {
+    Option<T> result;
+    result.result = Option<T>::None;
+
+    return result;
+}
+*/
+
 template <typename K, typename V>
-struct MapEntry {
-    MapEntry() {}
-    MapEntry(K key, V value) : key(key), value(value) {}
-    ~MapEntry() {}
+struct MapNode {
+    MapNode() {}
+    // @@@ DANGER MapNode(const K& key) : key(key) {}
+    MapNode(K key, V value) : key(key), value(value) {}
+    ~MapNode() {}
     K key;
     V value;
-    bool operator==(const MapEntry<K, V>& rhs) const {
+    bool operator==(const MapNode<K, V>& rhs) const {
         return this->key == rhs.key;
     }
-    bool operator!=(const MapEntry<K, V>& rhs) const {
+    bool operator!=(const MapNode<K, V>& rhs) const {
         return !(this->key == rhs.key);
     }
 };
+
+/*
+requires ctor MapNode(const K& key) : key(key) {}
+template <typename K, typename V>
+bool operator==(const K& lhs, const MapNode<K, V>& rhs) {
+    return lhs == rhs.key;
+}
+template <typename K, typename V>
+bool operator==(const MapNode<K, V>& lhs, const K& rhs) {
+    return lhs.key == rhs;
+}
+*/
 
 // https://en.wikipedia.org/wiki/Hash_table
 template <typename K, typename V>
@@ -34,17 +57,19 @@ struct Map {
     // the average cost of a lookup depends only on the average number of keys per bucket—that is, it is roughly proportional to the load factor.
     // a chained hash table with 1000 slots and 10,000 stored keys (load factor 10) is five to ten times slower than a 10,000-slot table (load factor 1); but still 1000 times faster than a plain sequential list.
     // @@@ const Option<V> operator[](int index) const;
-    const V operator[](int index) const;
+    Option<V> operator[](K key) const;
     // @@@ Option<V&> operator[](int index);
-    V& operator[](int index);
-    void Insert(K key, V value);
-    V Remove(K key);
+    // https://stackoverflow.com/questions/18670530/properly-overloading-bracket-operator-for-hashtable-get-and-set
+    // V& operator[](K key);
+    bool Insert(K key, V value);
+    Option<V> Remove(K key);
 
    private:
+    int IndexOf(K key) const;
     // let's store collisions in a linked list
     // @@@ when an item is added to a bucket, compute its size; store max size.
     // according to the birthday problem there is approximately a 95% (for n = 2450?, buckets = 1mill) chance of at least two of the keys being hashed to the same slot.
-    List<MapEntry<K, V>>* m_data;           // @@@ make this an array of pointers to Lists to reduce size
+    List<MapNode<K, V>>* m_data;            // @@@ make this an array of pointers to Lists to reduce size
     int m_size;                             // number of items
     int m_capacity;                         // number of buckets
     float m_load_factor_threshold = 0.75f;  // when the threshold is passed, we need to resize the map
@@ -58,7 +83,7 @@ struct Map {
 template <typename K, typename V>
 Map<K, V>::Map() {
     m_capacity = 16;
-    m_data = new List<MapEntry<K, V>>[m_capacity];
+    m_data = new List<MapNode<K, V>>[m_capacity];
 }
 
 template <typename K, typename V>
@@ -75,30 +100,81 @@ float Map<K, V>::LoadFactor() {
 }
 
 template <typename K, typename V>
+int Map<K, V>::IndexOf(K key) const {
+    long hash = Hashable<K>::Hash(key);
+    return hash & m_capacity - 1;
+}
+
+template <typename K, typename V>
 void Map<K, V>::Rehash(int size) {
-    // @@@ WIP
-    // int new_size = m_capacity * 2;
+    /*
+    List<MapNode<K, V>>* new_data = new List<MapNode<K, V>>[size];
+    // @@@ size must be a power of 2
+    for (int idx = 0; idx < m_capacity; idx++) {
+        for (int jdx = 0; jdx < m_data[idx].Length(); jdx++) {
+            MapNode<K, V> node = m_data[idx][jdx];
+            long hash = Hashable<K>::Hash(node.key);
+            int index = hash & size - 1;
+            new_data[index] = node;
+        }
+    }
+    */
 }
 
 template <typename K, typename V>
-const V Map<K, V>::operator[](int index) const {
+Option<V> Map<K, V>::operator[](K key) const {
+    Option<V> result;
+    result.result = Option<V>::None;
+    int index = IndexOf(key);
+    List<MapNode<K, V>>* node_list = &(m_data[index]);
+    for (int idx = 0; idx < node_list->Length(); idx++) {
+        MapNode<K, V>* node = &(*node_list)[idx];
+        if (node->key == key) {
+            result.result = Option<V>::Some;
+            result.value = node->value;
+            return result;
+        }
+    }
+    return result;
+}
+
+/*
+template <typename K, typename V>
+V& Map<K, V>::operator[](K key) {
+}
+*/
+template <typename K, typename V>
+bool Map<K, V>::Insert(K key, V value) {
+    int index = IndexOf(key);
+    MapNode<K, V> node(key, value);
+    List<MapNode<K, V>>* node_list = &(m_data[index]);
+
+    for (int idx = 0; idx < node_list->Length(); idx++) {
+        MapNode<K, V>* node = &(*node_list)[idx];
+        if (node->key == key) {
+            return false;
+        }
+    }
+    m_data[index].PushFront(node);
+    return true;
 }
 
 template <typename K, typename V>
-V& Map<K, V>::operator[](int index) {
-}
+Option<V> Map<K, V>::Remove(K key) {
+    Option<V> result;
+    result.result = Option<V>::None;
 
-template <typename K, typename V>
-void Map<K, V>::Insert(K key, V value) {
-    // @@@ WIP
-    // long hash = Hashable<K>::Hash(key);
-    // int index = hash & m_capacity - 1;
+    int map_index = IndexOf(key);
+    List<MapNode<K, V>>* node_list = &(m_data[map_index]);
+    for (int idx = 0; idx < node_list->Length(); idx++) {
+        MapNode<K, V>* node = &(*node_list)[idx];
+        if (node->key == key) {
+            Option<MapNode<K, V>> item = m_data[map_index].RemoveAt(idx);
+            result.result = Option<V>::Some;
+            result.value = item.value.value;
+            return result;
+        }
+    }
 
-    // m_data[index].PushFront()
-    // m_data[index].Length()
-    // m_size++;
-}
-
-template <typename K, typename V>
-V Map<K, V>::Remove(K key) {
+    return result;
 }

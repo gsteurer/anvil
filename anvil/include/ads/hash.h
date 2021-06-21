@@ -22,7 +22,7 @@ struct Hashable {
 // http://www.burtleburtle.net/bob/hash/doobs.html
 // https://classes.engineering.wustl.edu/cse241/handouts/hash-functions.pdf
 template <>
-struct Hashable<int> {
+struct Hashable<int> {  // knuth
     static long Hash(int key) {
         unsigned long temp = key >> (sizeof(int) * 8 - 1);
         key ^= temp;
@@ -39,7 +39,7 @@ struct Hashable<int> {
 // https://www.usna.edu/Users/cs/crabbe/IC312/current/units/06/unit.html
 template <>
 struct Hashable<long> {
-    static long Hash(long key) {
+    static long Hash(long key) {  // Austin Appleby's MurmurHash3
         // unsigned long phi = 11400714819323199488L;  // pow(2,64) * (-1 + math.sqrt(5)) / 2 // golden ratio
         // return (key * phi) >> 64;
         unsigned long temp = key >> (sizeof(long) * 8 - 1);

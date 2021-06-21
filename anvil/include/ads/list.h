@@ -26,7 +26,7 @@ struct List {
     Option<T> RemoveAt(int index);
     Option<T> Remove(T item);
 
-    const T operator[](int index) const;
+    T operator[](int index) const;
     T& operator[](int index);
 
    private:
@@ -263,7 +263,7 @@ Option<T> List<T>::Remove(T item) {
 }
 
 template <typename T>
-const T List<T>::operator[](int index) const {
+T List<T>::operator[](int index) const {
     ListNode<T>* node = m_root;
     int current_idx = 0;
     // @@@ check if index in [0:msize)
