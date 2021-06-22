@@ -1,12 +1,10 @@
-#include <stdlib.h> /* srand, rand */
-#include <time.h>   /* time */
-
 #include <string>
 
 #include "ads/hash.h"
 #include "ads/map.h"
 #include "gtest/gtest.h"
 #include "option.h"
+// #include "rand.h"
 
 struct Foo {
     Foo(int id) : id(id) {}
@@ -91,7 +89,7 @@ TEST(MapTests, Bracket) {
 }
 
 TEST(MapTests, Resize) {
-    srand(1000);
+    // srand(1000);
     Map<std::string, Foo> test;
     int size = 1000;
     int data[size];
@@ -127,6 +125,7 @@ TEST(MapTests, Resize) {
         EXPECT_EQ(item.result, Option<Foo>::Some);
         EXPECT_EQ(item.value, Foo(v));
     }
+
     EXPECT_GT(test.Capacity(), 16);
     EXPECT_LT(test.Size(), test.Capacity());
     EXPECT_EQ(test.Size(), size);
