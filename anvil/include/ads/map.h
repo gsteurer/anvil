@@ -3,20 +3,9 @@
 #include "ads/list.h"
 #include "option.h"
 
-/*
-template <typename T>
-inline Option<T> searchList(const ) {
-    Option<T> result;
-    result.result = Option<T>::None;
-
-    return result;
-}
-*/
-
 template <typename K, typename V>
 struct MapNode {
     MapNode() {}
-    // @@@ DANGER MapNode(const K& key) : key(key) {}
     MapNode(K key, V value) : key(key), value(value) {}
     ~MapNode() {}
     K key;
@@ -29,17 +18,48 @@ struct MapNode {
     }
 };
 
+template <typename K, typename V>
+struct Map;
+
+template <typename K, typename V>
+
 /*
-requires ctor MapNode(const K& key) : key(key) {}
-template <typename K, typename V>
-bool operator==(const K& lhs, const MapNode<K, V>& rhs) {
-    return lhs == rhs.key;
-}
-template <typename K, typename V>
-bool operator==(const MapNode<K, V>& lhs, const K& rhs) {
-    return lhs.key == rhs;
-}
+    // https://stackoverflow.com/questions/18670530/properly-overloading-bracket-operator-for-hashtable-get-and-set
+    // https://stackoverflow.com/questions/36510763/c-thread-safe-bracket-operator-proxy
+    // https://stackoverflow.com/questions/994488/what-is-proxy-class-in-c
+    // https://en.wikipedia.org/wiki/Proxy_pattern
+
 */
+struct MapProxy {  // this is the proxy pattern
+
+    Map<K, V>& map;
+    K key;
+    MapProxy(Map<K, V>& map, K key) : map(map), key(key) {}
+    // https://stackoverflow.com/questions/1010539/changing-return-type-of-a-function-without-template-specialization-c
+    operator Option<V>() const {  // this is a conversion function
+        Option<V> result;
+        int map_index = map.IndexOf(key);
+        List<MapNode<K, V>>* node_list = &(map.m_data[map_index]);
+
+        for (int idx = 0; idx < node_list->Length(); idx++) {
+            MapNode<K, V>* node = &(*node_list)[idx];
+            if (node->key == key) {
+                result.result = Option<V>::Some;
+                result.value = node->value;
+                return result;
+            }
+        }
+        return result;
+    }
+
+    operator V() const = delete;  // use 'Option<V> foo =' instead 'Foo ='
+
+    MapProxy&
+    operator=(V const& opt) {
+        map.Insert(key, opt);
+        return *this;
+    }
+};
 
 // https://en.wikipedia.org/wiki/Hash_table
 template <typename K, typename V>
@@ -56,16 +76,12 @@ struct Map {
     void Rehash(int size);
     // the average cost of a lookup depends only on the average number of keys per bucket—that is, it is roughly proportional to the load factor.
     // a chained hash table with 1000 slots and 10,000 stored keys (load factor 10) is five to ten times slower than a 10,000-slot table (load factor 1); but still 1000 times faster than a plain sequential list.
-    // @@@ const Option<V> operator[](int index) const;
-    Option<V> operator[](K key) const;
-    // @@@ Option<V&> operator[](int index);
+    MapProxy<K, V> operator[](const K& key);
     // https://stackoverflow.com/questions/18670530/properly-overloading-bracket-operator-for-hashtable-get-and-set
-    // V& operator[](K key);
     bool Insert(K key, V value);
     Option<V> Remove(K key);
-
-   private:
     int IndexOf(K key) const;
+
     // let's store collisions in a linked list
     // @@@ when an item is added to a bucket, compute its size; store max size.
     // according to the birthday problem there is approximately a 95% (for n = 2450?, buckets = 1mill) chance of at least two of the keys being hashed to the same slot.
@@ -122,27 +138,10 @@ void Map<K, V>::Rehash(int size) {
 }
 
 template <typename K, typename V>
-Option<V> Map<K, V>::operator[](K key) const {
-    Option<V> result;
-    result.result = Option<V>::None;
-    int index = IndexOf(key);
-    List<MapNode<K, V>>* node_list = &(m_data[index]);
-    for (int idx = 0; idx < node_list->Length(); idx++) {
-        MapNode<K, V>* node = &(*node_list)[idx];
-        if (node->key == key) {
-            result.result = Option<V>::Some;
-            result.value = node->value;
-            return result;
-        }
-    }
-    return result;
+MapProxy<K, V> Map<K, V>::operator[](const K& key) {
+    return MapProxy(*this, key);
 }
 
-/*
-template <typename K, typename V>
-V& Map<K, V>::operator[](K key) {
-}
-*/
 template <typename K, typename V>
 bool Map<K, V>::Insert(K key, V value) {
     int index = IndexOf(key);

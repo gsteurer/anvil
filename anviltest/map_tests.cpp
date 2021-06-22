@@ -62,10 +62,21 @@ TEST(MapTests, Ctor) {
     EXPECT_EQ(item.value, Foo(10));
     EXPECT_FALSE(test.Insert("foo", Foo(20)));
 
-    item = test.Remove("bar");
-    EXPECT_EQ(item.result, Option<Foo>::Some);
-    EXPECT_EQ(item.value, Foo(20));
-
-    item = test.Remove("bar");
+    item = test["qux"];
     EXPECT_EQ(item.result, Option<Foo>::None);
+
+    Option<Foo> removed = test.Remove("bar");
+    EXPECT_EQ(removed.result, Option<Foo>::Some);
+    EXPECT_EQ(removed.value, Foo(20));
+
+    removed = test.Remove("bar");
+    EXPECT_EQ(removed.result, Option<Foo>::None);
+}
+
+TEST(MapTests, Bracket) {
+    Map<std::string, Foo> test;
+    test["bar"] = Foo(1);
+    Option<Foo> removed = test.Remove("bar");
+    EXPECT_EQ(removed.result, Option<Foo>::Some);
+    EXPECT_EQ(removed.value, Foo(1));
 }
