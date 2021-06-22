@@ -1,3 +1,6 @@
+#include <stdlib.h> /* srand, rand */
+#include <time.h>   /* time */
+
 #include <string>
 
 #include "ads/hash.h"
@@ -79,4 +82,52 @@ TEST(MapTests, Bracket) {
     Option<Foo> removed = test.Remove("bar");
     EXPECT_EQ(removed.result, Option<Foo>::Some);
     EXPECT_EQ(removed.value, Foo(1));
+    test["foo"] = Foo(2);
+    Option<Foo> item = test["foo"];
+    EXPECT_EQ(item.result, Option<Foo>::Some);
+    EXPECT_EQ(item.value, Foo(2));
+    item = test["bar"];
+    EXPECT_EQ(item.result, Option<Foo>::None);
+}
+
+TEST(MapTests, Resize) {
+    srand(1000);
+    Map<std::string, Foo> test;
+    int size = 1000;
+    int data[size];
+    EXPECT_EQ(test.Capacity(), 16);
+
+    for (int idx = 0; idx < size; idx++) {
+        int v = idx;  // rand() % size + 1;
+        /*
+        bool duplicate = false;
+        // this is profoundly slow
+        do {
+            duplicate = false;
+            for (int jdx = 0; jdx <= idx; jdx++) {
+                if (data[jdx] == v) {
+                    v = rand() % size + 1;
+                    duplicate = true;
+                    break;
+                }
+            }
+        } while (duplicate);
+        */
+        std::string k = std::to_string(v);
+        test[k] = Foo(v);
+        data[idx] = v;
+    }
+
+    EXPECT_LT(test.LoadFactor(), test.Threshold());
+
+    for (int idx = 0; idx < size; idx++) {
+        int v = data[idx];
+        std::string k = std::to_string(v);
+        Option<Foo> item = test[k];
+        EXPECT_EQ(item.result, Option<Foo>::Some);
+        EXPECT_EQ(item.value, Foo(v));
+    }
+    EXPECT_GT(test.Capacity(), 16);
+    EXPECT_LT(test.Size(), test.Capacity());
+    EXPECT_EQ(test.Size(), size);
 }

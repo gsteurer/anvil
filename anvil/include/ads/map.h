@@ -85,7 +85,11 @@ struct Map {
     // let's store collisions in a linked list
     // @@@ when an item is added to a bucket, compute its size; store max size.
     // according to the birthday problem there is approximately a 95% (for n = 2450?, buckets = 1mill) chance of at least two of the keys being hashed to the same slot.
-    List<MapNode<K, V>>* m_data;            // @@@ make this an array of pointers to Lists to reduce size
+    List<MapNode<K, V>>* m_data;  // @@@ make this an array of pointers to Lists to reduce size
+    void Tick();
+    float Threshold() const;
+    int Capacity() const;
+    int Size() const;
     int m_size;                             // number of items
     int m_capacity;                         // number of buckets
     float m_load_factor_threshold = 0.75f;  // when the threshold is passed, we need to resize the map
@@ -99,11 +103,13 @@ struct Map {
 template <typename K, typename V>
 Map<K, V>::Map() {
     m_capacity = 16;
+    m_size = 0;
     m_data = new List<MapNode<K, V>>[m_capacity];
 }
 
 template <typename K, typename V>
 Map<K, V>::~Map() {
+    delete[] m_data;
 }
 
 template <typename K, typename V>
@@ -122,19 +128,46 @@ int Map<K, V>::IndexOf(K key) const {
 }
 
 template <typename K, typename V>
+void Map<K, V>::Tick() {
+    if (this->LoadFactor() > this->Threshold()) {
+        this->Rehash(m_capacity * 2);
+    }
+}
+
+template <typename K, typename V>
+float Map<K, V>::Threshold() const {
+    return m_load_factor_threshold;
+}
+
+template <typename K, typename V>
+int Map<K, V>::Capacity() const {
+    return m_capacity;
+}
+
+template <typename K, typename V>
+int Map<K, V>::Size() const {
+    return m_size;
+}
+
+template <typename K, typename V>
 void Map<K, V>::Rehash(int size) {
-    /*
+    // size must be a power of 2
+    if (!((size & (size - 1)) == 0)) {
+        return;
+    }
     List<MapNode<K, V>>* new_data = new List<MapNode<K, V>>[size];
-    // @@@ size must be a power of 2
     for (int idx = 0; idx < m_capacity; idx++) {
         for (int jdx = 0; jdx < m_data[idx].Length(); jdx++) {
             MapNode<K, V> node = m_data[idx][jdx];
             long hash = Hashable<K>::Hash(node.key);
             int index = hash & size - 1;
-            new_data[index] = node;
+            new_data[index].PushFront(node);
         }
     }
-    */
+    List<MapNode<K, V>>* previous = m_data;
+    m_data = new_data;
+    m_capacity = size;
+    delete[] previous;
 }
 
 template <typename K, typename V>
@@ -155,6 +188,8 @@ bool Map<K, V>::Insert(K key, V value) {
         }
     }
     m_data[index].PushFront(node);
+    m_size++;
+    this->Tick();
     return true;
 }
 
@@ -171,6 +206,7 @@ Option<V> Map<K, V>::Remove(K key) {
             Option<MapNode<K, V>> item = m_data[map_index].RemoveAt(idx);
             result.result = Option<V>::Some;
             result.value = item.value.value;
+            m_size--;
             return result;
         }
     }
