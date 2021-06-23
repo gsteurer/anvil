@@ -47,6 +47,7 @@
     <ClCompile Include="mat_tests.cpp" />
     <ClCompile Include="redblacktree_tests.cpp" />
     <ClCompile Include="slice_tests.cpp" />
+    <ClCompile Include="string_tests.cpp" />
     <ClCompile Include="vec_tests.cpp" />
   </ItemGroup>
   <ItemDefinitionGroup />

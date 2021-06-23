@@ -17,6 +17,9 @@
     <Filter Include="Include\ads">
       <UniqueIdentifier>{69ef6af6-2926-4215-9159-379263b98655}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\string">
+      <UniqueIdentifier>{8b77e0e8-bddf-4e89-8a60-bc697a266ccb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -63,6 +66,9 @@
     </ClInclude>
     <ClInclude Include="include\ads\map.h">
       <Filter>Include\ads</Filter>
+    </ClInclude>
+    <ClInclude Include="include\string\string.h">
+      <Filter>Include\string</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

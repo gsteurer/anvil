@@ -91,7 +91,7 @@ TEST(MapTests, Bracket) {
 TEST(MapTests, Resize) {
     // srand(1000);
     Map<std::string, Foo> test;
-    int size = 1000;
+    const int size = 1000;
     int data[size];
     EXPECT_EQ(test.Capacity(), 16);
 
