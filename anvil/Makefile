@@ -21,7 +21,10 @@ util.o:
 vec4f.o: 
 	$(CC) $(CFLAGS) -c -o .obj/$@ src/math/vec4f.cpp
 
-lib: mat4x4f.o util.o vec4f.o
+string.o: 
+	$(CC) $(CFLAGS) -c -o .obj/$@ src/string/string.cpp
+
+lib: mat4x4f.o util.o vec4f.o string.o
 	ar rvs lib/libanvil.a .obj/*.o
 
 clean:

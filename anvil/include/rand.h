@@ -4,11 +4,11 @@
 // https://stackoverflow.com/questions/6161322/using-stdlibs-rand-from-multiple-threads // thread safety
 static unsigned long int next = 1;
 
-int rand(void) {
+inline int rand(void) {
     next = next * 1103515245 + 12345;
     return (unsigned int)(next / 65536) % 32768;
 }
 
-void srand(unsigned int seed) {
+inline void srand(unsigned int seed) {
     next = seed;
 }
