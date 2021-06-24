@@ -6,6 +6,26 @@
 #include "gtest/gtest.h"
 #include "option.h"
 
+struct Foo {
+    int* m_id;
+    Foo() : m_id(new int(-1)) {}
+    Foo(int id) {
+        m_id = new int(id);
+    }
+    Foo(const Foo& rhs) {
+        m_id = new int(*(rhs.m_id));
+    }
+    ~Foo() {
+        delete m_id;
+    }
+    bool operator==(const Foo& rhs) const {
+        return *m_id == *(rhs.m_id);
+    }
+    bool operator==(int id) const {
+        return *m_id == id;
+    }
+};
+
 TEST(SliceTests, Ctor) {
     Slice<int> test;
     EXPECT_EQ(test.Length(), 0);
@@ -25,6 +45,25 @@ TEST(SliceTests, InsertPrimitive) {
         EXPECT_EQ(test[idx], idx + 1);
     }
 }
+
+/* 
+
+// currently segfaults
+TEST(SliceTests, InsertCompound) {
+    Slice<Foo> test;
+    int size = 100;
+    EXPECT_EQ(test.Length(), 0);
+    for (int idx = 0; idx < size; idx++) {
+        Foo foo(idx + 1);
+        test.Insert(foo);
+        EXPECT_EQ(test.Length(), idx + 1);
+    }
+
+    for (int idx = 0; idx < size; idx++) {
+        EXPECT_EQ(test[idx], idx + 1);
+    }
+}
+*/
 
 TEST(SliceTests, Bracket) {
     Slice<int> test;

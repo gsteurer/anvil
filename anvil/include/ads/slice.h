@@ -51,7 +51,7 @@ template <typename T>
 Slice<T>::~Slice() {
     if (m_data != nullptr) {
         for (int idx = 0; idx < m_capacity; idx++) {
-            // delete m_data[idx];
+            delete m_data[idx];
         }
         delete[] m_data;
     }
@@ -74,11 +74,15 @@ void Slice<T>::Insert(T item) {
         m_data = new T*[m_capacity * 2];
         m_capacity = m_capacity * 2;
         for (int idx = 0; idx < m_capacity; idx++) {
-            idx < m_length ? m_data[idx] = m_previous[idx] : m_data[idx] = new T();
+            if (idx < m_length) {
+                m_data[idx] = m_previous[idx];
+            } else {
+                m_data[idx] = new T();
+            }
         }
         delete[] m_previous;
     }
-    m_data[m_length] = new T(item);
+    *(m_data[m_length]) = T(item);
     m_length++;
 }
 
