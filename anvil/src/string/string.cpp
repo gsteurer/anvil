@@ -1,13 +1,14 @@
 #include "string/string.h"
 
-char* parseInt(long int num) {
-    char* str = new char;
-    return str;
-}
+namespace anvil {
 
-char* parseFloat(long int num) {
-    char* str = new char;
-    return str;
+isize_t strlen(const char* str) {
+    isize_t len = 0;
+    char c;
+    while ((c = *str++)) {
+        len++;
+    }
+    return len;
 }
 
 bool streq(const char* lhs, const char* rhs) {
@@ -21,34 +22,105 @@ bool streq(const char* lhs, const char* rhs) {
     return true;
 }
 
-void parseStr(const char* str, int* size, char** data) {
-    (*size) = 0;
-    if (*data != nullptr) {
-        delete[](*data);
+char* strrev(const char* str) {
+    isize_t len = strlen(str);
+    char* buffer = new char[len];
+    isize_t idx = 0;
+    for (; idx < len; idx++) {
+        buffer[idx] = str[(len - 1) - idx];
     }
-    int buffer_size = 16;
+    buffer[idx++] = '\0';
+    return buffer;
+}
+
+void resize(char** buffer, isize_t size) {
+    char* previous = *buffer;
+    char* position = previous;
+
+    *buffer = new char[size];
+    char c;
+    isize_t idx = 0;
+    while (idx < size && (c = *position++)) {
+        (*buffer)[idx++] = c;
+    }
+
+    delete[] previous;
+}
+
+void strcpy(const char* source, char** destination, isize_t* copied_size) {
+    (*copied_size) = 0;
+    isize_t buffer_size = 16;
     char* buffer = new char[buffer_size];
     char c;
-    while ((c = *str++)) {
-        buffer[*size] = c;
-        (*size)++;
-        if (*size == buffer_size) {
-            char* previous = buffer;
+
+    while ((c = *source++)) {
+        buffer[(*copied_size)++] = c;
+        if (*copied_size == buffer_size) {
             buffer_size *= 2;
-            buffer = new char[buffer_size];
-            for (int jdx = 0; jdx < *size; jdx++) {
-                buffer[jdx] = previous[jdx];
-            }
-            delete[] previous;
+            resize(&buffer, buffer_size);
         }
     }
 
-    *data = new char[*size + 1];
-    for (int idx = 0; idx < *size; idx++) {
-        (*data)[idx] = buffer[idx];
+    *destination = new char[*copied_size + 1];
+    for (isize_t idx = 0; idx < *copied_size; idx++) {
+        (*destination)[idx] = buffer[idx];
     }
-    (*data)[*size] = '\0';
+    (*destination)[*copied_size] = '\0';
     delete[] buffer;
+}
+
+char* itoa(i64_t num) {
+    isize_t buffer_size = 32;
+    char* buffer = new char[buffer_size];
+
+    u64_t value = num;
+    bool is_negative = false;
+    // @@@ fixme; eliminate the branch
+    if (num < 0) {
+        value = num * -1;
+        is_negative = true;
+    }
+
+    isize_t idx = 0;
+    u64_t x = value;
+    while (x) {
+        buffer[idx++] = static_cast<unsigned char>(x % 10 + '0');
+        x = x / 10;
+        if (idx - 2 == buffer_size) {  // reserve space for sign and null terminator
+            buffer_size *= 2;
+            resize(&buffer, buffer_size);
+        }
+    }
+
+    if (is_negative) {
+        buffer[idx++] = '-';
+    }
+    buffer[idx++] = '\0';
+    return strrev(buffer);
+}
+
+char* ftoa(f64_t num, isize_t precision) {
+    isize_t buffer_size = 32;
+    char* buffer = new char[buffer_size];
+    char* str = new char;
+    u64_t pow_n = 10;
+    for (isize_t idx = 0; idx < precision; idx++) {
+        pow_n *= 10;
+    }
+
+    i64_t value = static_cast<i64_t>(num);
+    u64_t fraction = num - static_cast<f64_t>(value);
+    u64_t exponent = static_cast<u64_t>(value);
+
+    itoa(exponent);
+
+    if (precision > 0) {
+        '.';
+    }
+    // @@@ impl strcat
+    itoa(fraction);
+
+    return buffer;
 }
 
 String::String() {
@@ -60,16 +132,18 @@ String::~String() {
     delete[] m_data;
 }
 
+/*
 String::String(const std::string& str) : m_data(nullptr), m_size(0) {
-    parseStr(str.c_str(), &m_size, &m_data);
+    strcpy(str.c_str(), &m_size, &m_data);
 }
+*/
 
 String::String(const char* str) : m_data(nullptr), m_size(0) {
-    parseStr(str, &m_size, &m_data);
+    strcpy(str, &m_data, &m_size);
 }
 
-String::String(const char* str, int len) : m_data(nullptr), m_size(0) {
-    parseStr(str, &m_size, &m_data);
+String::String(const char* str, isize_t len) : m_data(nullptr), m_size(0) {
+    strcpy(str, &m_data, &m_size);
 }
 
 String::String(const String& str) {
@@ -83,11 +157,13 @@ const char* String::cstr() const {
     return m_data;
 }
 
+/*
 String::operator std::string() {
     return std::string(m_data);
 }
+*/
 
-char String::operator[](int idx) const {
+char String::operator[](isize_t idx) const {
     if (idx < 0 || idx >= m_size) {
         return '\0';
     }
@@ -95,10 +171,12 @@ char String::operator[](int idx) const {
 }
 
 bool String::operator==(const char* rhs) {
-    for (int idx = 0; idx < m_size; idx++) {
+    for (isize_t idx = 0; idx < m_size; idx++) {
         if (m_data[idx] != rhs[idx]) {
             return false;
         }
     }
     return true;
 }
+
+}  // namespace anvil
