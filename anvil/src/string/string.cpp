@@ -24,7 +24,7 @@ bool streq(const char* lhs, const char* rhs) {
 
 char* strrev(const char* str) {
     isize_t len = strlen(str);
-    char* buffer = new char[len];
+    char* buffer = new char[len+1];
     isize_t idx = 0;
     for (; idx < len; idx++) {
         buffer[idx] = str[(len - 1) - idx];
@@ -109,7 +109,7 @@ char* ftoa(f64_t num, isize_t precision) {
     }
 
     i64_t value = static_cast<i64_t>(num);
-    u64_t fraction = num - static_cast<f64_t>(value);
+    u64_t fraction = static_cast<u64_t>(num - static_cast<f64_t>(value));
     u64_t exponent = static_cast<u64_t>(value);
 
     itoa(exponent);

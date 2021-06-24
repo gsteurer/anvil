@@ -1,13 +1,13 @@
 #pragma once
 namespace anvil {
-typedef unsigned long int usize_t;
-typedef long int isize_t;
+typedef unsigned long long usize_t;
+typedef long long isize_t;
 typedef unsigned char byte_t;
 
 typedef unsigned int u32_t;
 typedef int i32_t;
-typedef unsigned long u64_t;
-typedef long i64_t;
+typedef unsigned long long u64_t;
+typedef long long i64_t;
 
 typedef float f32_t;
 typedef double f64_t;

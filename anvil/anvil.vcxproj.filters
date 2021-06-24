@@ -70,6 +70,12 @@
     <ClInclude Include="include\string\string.h">
       <Filter>Include\string</Filter>
     </ClInclude>
+    <ClInclude Include="include\types.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rand.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\math\util.cpp">
@@ -79,6 +85,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="src\math\vec4f.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\string\string.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

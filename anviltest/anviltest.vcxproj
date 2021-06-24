@@ -48,6 +48,7 @@
     <ClCompile Include="redblacktree_tests.cpp" />
     <ClCompile Include="slice_tests.cpp" />
     <ClCompile Include="string_tests.cpp" />
+    <ClCompile Include="type_tests.cpp" />
     <ClCompile Include="vec_tests.cpp" />
   </ItemGroup>
   <ItemDefinitionGroup />
