@@ -20,6 +20,9 @@
     <Filter Include="Include\string">
       <UniqueIdentifier>{8b77e0e8-bddf-4e89-8a60-bc697a266ccb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\chess">
+      <UniqueIdentifier>{80a4001b-00d7-468b-8d5e-51d32000ef1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -75,6 +78,12 @@
     </ClInclude>
     <ClInclude Include="include\rand.h">
       <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ads\graph.h">
+      <Filter>Include\ads</Filter>
+    </ClInclude>
+    <ClInclude Include="include\chess\bitboard.h">
+      <Filter>Include\chess</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

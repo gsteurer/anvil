@@ -195,11 +195,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\ads\arrayutils.h" />
+    <ClInclude Include="include\ads\graph.h" />
     <ClInclude Include="include\ads\hash.h" />
     <ClInclude Include="include\ads\list.h" />
     <ClInclude Include="include\ads\map.h" />
     <ClInclude Include="include\ads\redblacktree.h" />
     <ClInclude Include="include\ads\slice.h" />
+    <ClInclude Include="include\chess\bitboard.h" />
     <ClInclude Include="include\math\mat2x2f.h" />
     <ClInclude Include="include\math\mat3x3f.h" />
     <ClInclude Include="include\math\mat4x4f.h" />

@@ -30,15 +30,15 @@ TEST(SliceTests, InsertPrimitive) {
 TEST(SliceTests, InsertCompound) {
     anvil::Slice<Foo<anvil::isize_t>> test;
     anvil::isize_t size = 100;
-    EXPECT_EQ(test.Length(), 0);
+    EXPECT_EQ(test.Length(), 0L);
     for (anvil::isize_t idx = 0; idx < size; idx++) {
-        Foo<anvil::isize_t> foo(idx + 1);
+        Foo<anvil::isize_t> foo(static_cast<int>(idx + 1));
         test.Insert(foo);
-        EXPECT_EQ(test.Length(), idx + 1);
+        EXPECT_EQ(test.Length(), idx + 1L);
     }
 
     for (anvil::isize_t idx = 0; idx < size; idx++) {
-        EXPECT_EQ(test[idx], idx + 1);
+        EXPECT_EQ(test[idx], static_cast<int>(idx + 1L));
     }
 }
 

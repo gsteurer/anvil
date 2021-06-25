@@ -41,6 +41,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="foo_tests.cpp" />
     <ClCompile Include="graph_tests.cpp" />
     <ClCompile Include="list_tests.cpp" />
     <ClCompile Include="map_tests.cpp" />
@@ -50,6 +51,9 @@
     <ClCompile Include="string_tests.cpp" />
     <ClCompile Include="type_tests.cpp" />
     <ClCompile Include="vec_tests.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="foo.h" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
