@@ -2,9 +2,10 @@
 #include <string>
 
 struct Vec4f {
-    Vec4f() : x(0.0f), y(0.0f), z(0.0f), w(0.0f){};
-    Vec4f(const Vec4f& v) : x(v.x), y(v.y), z(v.z), w(v.w){};
-    Vec4f(float x, float y, float z, float w) : x(x), y(y), z(z), w(w){};
+    Vec4f();
+    Vec4f(const Vec4f& v);
+    Vec4f& operator=(const Vec4f& v);
+    Vec4f(float x, float y, float z, float w);
     float x;
     float y;
     float z;

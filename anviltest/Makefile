@@ -7,7 +7,7 @@ TEST_LIBS=-lgtest -lgtest_main -lpthread -lanvil
 # https://www.osc.edu/resources/getting_started/howto/howto_use_address_sanitizer
 OBJDIR=-o .obj/$@
 CC=clang++ -g -O0 -std=c++17
-CFLAGS=-Wall $(INCLUDES)
+CFLAGS=-Wall -Wextra $(INCLUDES)
 SRC_FILES := $(wildcard *.cpp)
 OBJ_FILES := $(patsubst %.cpp,%.o,$(SRC_FILES))
 

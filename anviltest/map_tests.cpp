@@ -2,28 +2,10 @@
 
 #include "ads/hash.h"
 #include "ads/map.h"
+#include "foo.h"
 #include "gtest/gtest.h"
 #include "option.h"
 // #include "rand.h"
-
-struct Foo {
-    Foo(int id) : id(id) {}
-    Foo() {}
-    Foo(const Foo& foo) : id(foo.id) {}
-    bool operator==(const Foo& rhs) const { return this->id == rhs.id; }
-    int id;
-};
-
-/* 
-// need to implement hashable for foo or "symbols not found"
-template <>
-struct Hashable<Foo> {
-    static long Hash(Foo key) {
-        // @@@ FIXME
-        return 55;
-    }
-};
-*/
 
 TEST(MapTests, MapEntry) {
     MapNode<int, int> test(5, 10);
@@ -33,7 +15,7 @@ TEST(MapTests, MapEntry) {
     EXPECT_EQ(test, test2);
     EXPECT_NE(test, test3);
 
-    MapNode<std::string, Foo> test4("foo", Foo(4));
+    MapNode<std::string, Foo<int>> test4("foo", Foo<int>(4));
 }
 
 TEST(MapTests, Hash) {
@@ -50,47 +32,47 @@ TEST(MapTests, Hash) {
     EXPECT_EQ(result, 193491849);
 
     // @@@ this should produce a compiler error unless we impl hashable
-    // result = Hashable<Foo>::Hash(Foo(99));
+    // result = Hashable<Foo<int>>::Hash(Foo<int>(99));
 }
 
 TEST(MapTests, Ctor) {
-    Map<std::string, Foo> test;
-    EXPECT_TRUE(test.Insert("foo", Foo(10)));
-    EXPECT_TRUE(test.Insert("bar", Foo(20)));
-    EXPECT_TRUE(test.Insert("baz", Foo(30)));
-    Option<Foo> item = test["foo"];
-    EXPECT_EQ(item.result, Option<Foo>::Some);
-    EXPECT_EQ(item.value, Foo(10));
-    EXPECT_FALSE(test.Insert("foo", Foo(20)));
+    Map<std::string, Foo<int>> test;
+    EXPECT_TRUE(test.Insert("foo", Foo<int>(10)));
+    EXPECT_TRUE(test.Insert("bar", Foo<int>(20)));
+    EXPECT_TRUE(test.Insert("baz", Foo<int>(30)));
+    Option<Foo<int>> item = test["foo"];
+    EXPECT_EQ(item.result, Option<Foo<int>>::Some);
+    EXPECT_EQ(item.value, Foo<int>(10));
+    EXPECT_FALSE(test.Insert("foo", Foo<int>(20)));
 
     item = test["qux"];
-    EXPECT_EQ(item.result, Option<Foo>::None);
+    EXPECT_EQ(item.result, Option<Foo<int>>::None);
 
-    Option<Foo> removed = test.Remove("bar");
-    EXPECT_EQ(removed.result, Option<Foo>::Some);
-    EXPECT_EQ(removed.value, Foo(20));
+    Option<Foo<int>> removed = test.Remove("bar");
+    EXPECT_EQ(removed.result, Option<Foo<int>>::Some);
+    EXPECT_EQ(removed.value, Foo<int>(20));
 
     removed = test.Remove("bar");
-    EXPECT_EQ(removed.result, Option<Foo>::None);
+    EXPECT_EQ(removed.result, Option<Foo<int>>::None);
 }
 
 TEST(MapTests, Bracket) {
-    Map<std::string, Foo> test;
-    test["bar"] = Foo(1);
-    Option<Foo> removed = test.Remove("bar");
-    EXPECT_EQ(removed.result, Option<Foo>::Some);
-    EXPECT_EQ(removed.value, Foo(1));
-    test["foo"] = Foo(2);
-    Option<Foo> item = test["foo"];
-    EXPECT_EQ(item.result, Option<Foo>::Some);
-    EXPECT_EQ(item.value, Foo(2));
+    Map<std::string, Foo<int>> test;
+    test["bar"] = Foo<int>(1);
+    Option<Foo<int>> removed = test.Remove("bar");
+    EXPECT_EQ(removed.result, Option<Foo<int>>::Some);
+    EXPECT_EQ(removed.value, Foo<int>(1));
+    test["foo"] = Foo<int>(2);
+    Option<Foo<int>> item = test["foo"];
+    EXPECT_EQ(item.result, Option<Foo<int>>::Some);
+    EXPECT_EQ(item.value, Foo<int>(2));
     item = test["bar"];
-    EXPECT_EQ(item.result, Option<Foo>::None);
+    EXPECT_EQ(item.result, Option<Foo<int>>::None);
 }
 
 TEST(MapTests, Resize) {
     // srand(1000);
-    Map<std::string, Foo> test;
+    Map<std::string, Foo<int>> test;
     const int size = 1000;
     int data[size];
     EXPECT_EQ(test.Capacity(), 16);
@@ -112,7 +94,7 @@ TEST(MapTests, Resize) {
         } while (duplicate);
         */
         std::string k = std::to_string(v);
-        test[k] = Foo(v);
+        test[k] = Foo<int>(v);
         data[idx] = v;
     }
 
@@ -121,9 +103,9 @@ TEST(MapTests, Resize) {
     for (int idx = 0; idx < size; idx++) {
         int v = data[idx];
         std::string k = std::to_string(v);
-        Option<Foo> item = test[k];
-        EXPECT_EQ(item.result, Option<Foo>::Some);
-        EXPECT_EQ(item.value, Foo(v));
+        Option<Foo<int>> item = test[k];
+        EXPECT_EQ(item.result, Option<Foo<int>>::Some);
+        EXPECT_EQ(item.value, Foo<int>(v));
     }
 
     EXPECT_GT(test.Capacity(), 16);

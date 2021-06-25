@@ -59,8 +59,8 @@ TEST(StringTests, IntegerToStr) {
 TEST(StringTests, FloatToStr) {
     char* test;
     anvil::f64_t a = 271.829;  //2.7182818284590452353602874713527;
-    const char* astr = "2.7182818284590452353602874713527";
-    const char* expected = "271.829";
+    // const char* astr = "2.7182818284590452353602874713527";
+    // const char* expected = "271.829";
     test = anvil::ftoa(a, 5);
     // @@@ EXPECT_STREQ(expected, test);
     delete[] test;

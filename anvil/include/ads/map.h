@@ -65,7 +65,7 @@ struct MapProxy {  // this is the proxy pattern
 template <typename K, typename V>
 struct Map {
     Map();
-    Map(const Map<K, V>& m);
+    // @@@ TODO Map(const Map<K, V>& m);
     ~Map();
     float LoadFactor();
     // @@@ need function to set load factor threshold
@@ -112,9 +112,12 @@ Map<K, V>::~Map() {
     delete[] m_data;
 }
 
+/*
+// @@@ TODO 
 template <typename K, typename V>
 Map<K, V>::Map(const Map<K, V>& m) {
 }
+*/
 
 template <typename K, typename V>
 float Map<K, V>::LoadFactor() {

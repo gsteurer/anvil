@@ -2,6 +2,8 @@
 // https://en.wikipedia.org/wiki/Linear_congruential_generator
 // http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2310.pdf // page 256
 // https://stackoverflow.com/questions/6161322/using-stdlibs-rand-from-multiple-threads // thread safety
+
+namespace anvil {
 static unsigned long int next = 1;
 
 inline int rand(void) {
@@ -12,3 +14,4 @@ inline int rand(void) {
 inline void srand(unsigned int seed) {
     next = seed;
 }
+}  // namespace anvil

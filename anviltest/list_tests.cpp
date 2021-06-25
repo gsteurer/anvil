@@ -2,6 +2,7 @@
 #include "ads/list.h"
 #include "gtest/gtest.h"
 #include "option.h"
+#include "types.h"
 
 ::testing::AssertionResult verifyList(List<int>& list, int* expected) {
     for (int idx = 0; idx < list.Length(); idx++) {
@@ -199,8 +200,8 @@ TEST(ListTests, ScrambleAndSort) {
         expected.PushBack(idx + 1);
     }
 
-    scramble(test, test.Length() - 1);
-    quicksort(test, 0, test.Length() - 1);
+    anvil::scramble(test, test.Length() - 1);
+    anvil::quicksort(test, 0, test.Length() - 1);
 
     for (int idx = 0; idx < size; idx++) {
         EXPECT_EQ(test[idx], expected[idx]);

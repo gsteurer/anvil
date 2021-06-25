@@ -11,7 +11,7 @@ struct ListNode {
 template <typename T>
 struct List {
     List();
-    List(const List<T>& list);
+    // @@@ TODO List(const List<T>& list);
     // https://en.cppreference.com/w/cpp/language/copy_assignment
     // https://en.cppreference.com/w/cpp/language/operators#Assignment_operator
     ~List();
@@ -42,12 +42,15 @@ List<T>::List() {
     m_size = 0;
 }
 
+/*
 template <typename T>
 List<T>::List(const List<T>& list) {
+    // @@@ todo
     m_root = nullptr;
     m_last = nullptr;
     m_size = 0;
 }
+*/
 
 template <typename T>
 List<T>::~List() {

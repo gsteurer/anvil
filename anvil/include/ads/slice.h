@@ -2,55 +2,66 @@
 
 #include "ads/arrayutils.h"
 #include "option.h"
+#include "types.h"
 
+namespace anvil {
 template <typename T>
 struct Slice {
     Slice();
     // length -> number of items in the Slice
     // capacity -> total number of items the Slice can contain before it is resized
-    Slice(int length, int capacity);
+    // @@@ TODO Slice(isize_t length, isize_t capacity);
     void Insert(T);
-    T Remove(int index);
+    // @@@ TODO T Remove(isize_t index);
     ~Slice();
-    const T operator[](int index) const;
-    T& operator[](int index);
-    int Length();
-    int Capacity();
-    Option<int> IndexOf(T item);
+    const T operator[](isize_t index) const;
+    T& operator[](isize_t index);
+    isize_t Length();
+    isize_t Capacity();
+    Option<isize_t> IndexOf(T item);
 
    private:
-    int m_capacity;
-    int m_length;
+    isize_t m_capacity;
+    isize_t m_length;
     T** m_data;
 };
 
 template <typename T>
-int Slice<T>::Length() {
+isize_t Slice<T>::Length() {
     return m_length;
 }
 
 template <typename T>
-int Slice<T>::Capacity() {
+isize_t Slice<T>::Capacity() {
     return m_capacity;
 }
 
 template <typename T>
-Slice<T>::Slice() : Slice(0, 16) {}
-
-template <typename T>
-Slice<T>::Slice(int length, int capacity) {
-    m_capacity = capacity;
+Slice<T>::Slice() {
+    m_capacity = 16;
     m_length = 0;
     m_data = new T*[m_capacity];
-    for (int idx = 0; idx < m_capacity; idx++) {
+    for (isize_t idx = 0; idx < m_capacity; idx++) {
         m_data[idx] = new T();
     }
 }
 
+/*
+// @@@ TODO
+template <typename T>
+Slice<T>::Slice(isize_t length, isize_t capacity) {
+    m_capacity = capacity;
+    m_length = 0;
+    m_data = new T*[m_capacity];
+    for (isize_t idx = 0; idx < m_capacity; idx++) {
+        m_data[idx] = new T();
+    }
+}
+*/
 template <typename T>
 Slice<T>::~Slice() {
     if (m_data != nullptr) {
-        for (int idx = 0; idx < m_capacity; idx++) {
+        for (isize_t idx = 0; idx < m_capacity; idx++) {
             delete m_data[idx];
         }
         delete[] m_data;
@@ -58,12 +69,12 @@ Slice<T>::~Slice() {
 }
 
 template <typename T>
-const T Slice<T>::operator[](int index) const {
+const T Slice<T>::operator[](isize_t index) const {
     return *(m_data[index]);
 }
 
 template <typename T>
-T& Slice<T>::operator[](int index) {
+T& Slice<T>::operator[](isize_t index) {
     return *(m_data[index]);
 }
 
@@ -73,7 +84,7 @@ void Slice<T>::Insert(T item) {
         T** m_previous = m_data;
         m_data = new T*[m_capacity * 2];
         m_capacity = m_capacity * 2;
-        for (int idx = 0; idx < m_capacity; idx++) {
+        for (isize_t idx = 0; idx < m_capacity; idx++) {
             if (idx < m_length) {
                 m_data[idx] = m_previous[idx];
             } else {
@@ -87,14 +98,22 @@ void Slice<T>::Insert(T item) {
 }
 
 template <typename T>
-Option<int> Slice<T>::IndexOf(T item) {
+Option<isize_t> Slice<T>::IndexOf(T item) {
     return search<Slice<T>, T>(*this, Length(), item);
 }
 
+/*
+// @@@ TODO
 template <typename T>
-T Slice<T>::Remove(int index) {
+T Slice<T>::Remove(isize_t index) {
 }
+*/
 
+/*
+// @@@ TODO
 template <typename T>
 void append(Slice<T> Slice, T data) {
 }
+*/
+
+}  // namespace anvil

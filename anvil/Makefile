@@ -4,7 +4,7 @@ INCLUDES=-Iinclude
 
 OBJDIR=-o .obj/$@
 CC=clang++ -g -O0 -std=c++17
-CFLAGS=-Wall $(INCLUDES)
+CFLAGS=-Wall -Wextra $(INCLUDES)
 
 default:
 	$(MAKE) dirs lib

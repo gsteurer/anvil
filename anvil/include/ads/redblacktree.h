@@ -36,13 +36,13 @@ struct RBTree {
     void Insert(T item);
     void Delete(T item);
     Option<T> Search(T item);
-    unsigned int Height(RBNode<T>* node = nullptr);
+    int Height(RBNode<T>* node = nullptr);
     T Min();
     T Max();
-    unsigned int Size() const;
+    int Size() const;
     RBNode<T>* m_root;
     RBNode<T>* m_sentinel;
-    unsigned int m_size;
+    int m_size;
 };
 
 template <typename T>
@@ -69,15 +69,15 @@ T RBTree<T>::Max() {
 }
 
 template <typename T>
-unsigned int RBTree<T>::Height(RBNode<T>* node) {
+int RBTree<T>::Height(RBNode<T>* node) {
     if (node == nullptr) {
         node = m_root;
     }
     if (m_root == m_sentinel) {
         return 0;
     }
-    unsigned int l = 0;
-    unsigned int r = 0;
+    int l = 0;
+    int r = 0;
     if (node->left != m_sentinel) {
         l = Height(node->left);
     }
@@ -88,7 +88,7 @@ unsigned int RBTree<T>::Height(RBNode<T>* node) {
 }
 
 template <typename T>
-unsigned int RBTree<T>::Size() const {
+int RBTree<T>::Size() const {
     return m_size;
 }
 
@@ -99,10 +99,10 @@ Option<T> RBTree<T>::Search(T item) {
     if (node != nullptr) {
         result.result = Option<T>::Some;
         result.value = node->key;
-        return result; // {.result = Option<T>::Some, .value = node->key};
+        return result;  // {.result = Option<T>::Some, .value = node->key};
     }
     result.result = Option<T>::None;
-    return result; // {.result = Option<T>::None};
+    return result;  // {.result = Option<T>::None};
 }
 
 template <typename T>

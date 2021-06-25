@@ -25,9 +25,9 @@ template <typename T>
 T submatrix(const T& mat, unsigned int row, unsigned int col) {
     T m;
     float data[matrix_attributes<T>::rows * matrix_attributes<T>::cols];
-    int idx = 0;
-    for (int r = 0; r < matrix_attributes<T>::rows; r++) {
-        for (int c = 0; c < matrix_attributes<T>::cols; c++) {
+    unsigned int idx = 0;
+    for (unsigned int r = 0; r < matrix_attributes<T>::rows; r++) {
+        for (unsigned int c = 0; c < matrix_attributes<T>::cols; c++) {
             if (r != row && c != col) {
                 data[idx] = mat(r, c);
                 idx++;
@@ -35,8 +35,8 @@ T submatrix(const T& mat, unsigned int row, unsigned int col) {
         }
     }
     idx = 0;
-    for (int r = 0; r < matrix_attributes<T>::rows - 1; r++) {
-        for (int c = 0; c < matrix_attributes<T>::cols - 1; c++) {
+    for (unsigned int r = 0; r < matrix_attributes<T>::rows - 1; r++) {
+        for (unsigned int c = 0; c < matrix_attributes<T>::cols - 1; c++) {
             m(r, c) = data[idx];
             idx++;
         }
@@ -48,8 +48,8 @@ T submatrix(const T& mat, unsigned int row, unsigned int col) {
 template <typename T>
 T transpose(const T& mat) {
     T A(mat);
-    for (int n = 0; n <= matrix_attributes<T>::rows - 2; n++) {
-        for (int m = n + 1; m <= matrix_attributes<T>::cols - 1; m++) {
+    for (unsigned int n = 0; n <= matrix_attributes<T>::rows - 2; n++) {
+        for (unsigned int m = n + 1; m <= matrix_attributes<T>::cols - 1; m++) {
             float tmp = A(n, m);
             A(n, m) = A(m, n);
             A(m, n) = tmp;

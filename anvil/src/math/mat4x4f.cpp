@@ -40,7 +40,7 @@ float& Mat4x4f::operator[](unsigned int idx) {
     return this->m_elements[idx];
 }
 
-const float Mat4x4f::operator[](unsigned int idx) const {
+float Mat4x4f::operator[](unsigned int idx) const {
     return this->m_elements[idx];
 }
 
@@ -110,8 +110,8 @@ float determinant2x2(const Mat4x4f& mat, unsigned int row, unsigned int col) {
 float minor3x3(const Mat4x4f& mat, unsigned int row, unsigned int col) {
     float data[4];
     int idx = 0;
-    for (int r = 0; r < 3; r++) {
-        for (int c = 0; c < 3; c++) {
+    for (unsigned int r = 0; r < 3; r++) {
+        for (unsigned int c = 0; c < 3; c++) {
             if (r != row && c != col) {
                 data[idx] = mat(r, c);
                 idx++;

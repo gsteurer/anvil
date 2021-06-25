@@ -24,7 +24,7 @@ bool streq(const char* lhs, const char* rhs) {
 
 char* strrev(const char* str) {
     isize_t len = strlen(str);
-    char* buffer = new char[len+1];
+    char* buffer = new char[len + 1];
     isize_t idx = 0;
     for (; idx < len; idx++) {
         buffer[idx] = str[(len - 1) - idx];
@@ -102,7 +102,6 @@ char* itoa(i64_t num) {
 char* ftoa(f64_t num, isize_t precision) {
     isize_t buffer_size = 32;
     char* buffer = new char[buffer_size];
-    char* str = new char;
     u64_t pow_n = 10;
     for (isize_t idx = 0; idx < precision; idx++) {
         pow_n *= 10;
@@ -114,9 +113,9 @@ char* ftoa(f64_t num, isize_t precision) {
 
     itoa(exponent);
 
-    if (precision > 0) {
-        '.';
-    }
+    //if (precision > 0) {
+    //'.';
+    //}
     // @@@ impl strcat
     itoa(fraction);
 
@@ -142,16 +141,22 @@ String::String(const char* str) : m_data(nullptr), m_size(0) {
     strcpy(str, &m_data, &m_size);
 }
 
+/*
+// @@@ TODO
 String::String(const char* str, isize_t len) : m_data(nullptr), m_size(0) {
     strcpy(str, &m_data, &m_size);
 }
 
+// @@@ TODO
 String::String(const String& str) {
 }
 
+
+// @@@ TODO
 String& String::operator=(const String& rhs) {
     return *this;
 }
+*/
 
 const char* String::cstr() const {
     return m_data;

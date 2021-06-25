@@ -5,6 +5,17 @@
 
 #include "math/util.h"
 
+Vec4f::Vec4f() : x(0.0f), y(0.0f), z(0.0f), w(0.0f){};
+Vec4f::Vec4f(const Vec4f& v) : x(v.x), y(v.y), z(v.z), w(v.w){};
+Vec4f& Vec4f::operator=(const Vec4f& v) {
+    this->x = v.x;
+    this->y = v.y;
+    this->z = v.z;
+    this->w = v.w;
+    return *this;
+}
+Vec4f::Vec4f(float x, float y, float z, float w) : x(x), y(y), z(z), w(w){};
+
 bool point(const Vec4f& vec) {
     return eq(1.0, vec.w);
 }
