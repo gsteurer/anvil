@@ -61,12 +61,26 @@ RBTree<T>::RBTree() {
 
 template <typename T>
 RBTree<T>::~RBTree() {
+    RBNode<T>* node = rbTreeMinimum(this->m_root, this->m_sentinel);
+    while (m_root != m_sentinel) {
+        rbDelete(this, node);
+        m_size--;
+        delete node;
+        node = rbTreeMinimum(this->m_root, this->m_sentinel);
+    }
+    delete m_sentinel;
+
+    // the following delete implementation leaked memory and i dont know why
+    // insert 100000 (9158 was the first quantity I discovered) random numbers into the tree
+    // iterating over a list of each element and calling delete directly does not leak
+    /*
     while (m_root != m_sentinel) {
         RBNode<T>* node = rbSearch(this, rbTreeMinimum(this->m_root, this->m_sentinel)->key);
         rbDelete(this, node);
         delete node;
     }
     delete m_sentinel;
+    */
 }
 
 template <typename T>

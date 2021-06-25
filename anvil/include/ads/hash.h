@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 
+#include "types.h"
+
 template <typename T>
 struct Hashable {
     static long Hash(T key) {
@@ -38,33 +40,33 @@ struct Hashable<int> {  // knuth
 // http://zimbry.blogspot.com/2011/09/better-bit-mixing-improving-on.html
 // https://stackoverflow.com/questions/664014/what-integer-hash-function-are-good-that-accepts-an-integer-hash-key
 // https://www.usna.edu/Users/cs/crabbe/IC312/current/units/06/unit.html
+
+long murmurHash3(long key) {
+    // unsigned long phi = 11400714819323199488L;  // pow(2,64) * (-1 + math.sqrt(5)) / 2 // golden ratio
+    // return (key * phi) >> 64;
+    unsigned long temp = key >> (sizeof(long) * 8 - 1);
+    key ^= temp;
+    key += temp & 1;
+    unsigned long hash = key;
+    hash ^= (hash >> 33);
+    hash *= 0xff51afd7ed558ccd;
+    hash ^= (hash >> 33);
+    hash *= 0xc4ceb9fe1a85ec53;
+    hash ^= (hash >> 33);
+    return hash;
+}
+
 template <>
 struct Hashable<long> {
     static long Hash(long key) {  // Austin Appleby's MurmurHash3
-        // unsigned long phi = 11400714819323199488L;  // pow(2,64) * (-1 + math.sqrt(5)) / 2 // golden ratio
-        // return (key * phi) >> 64;
-        unsigned long temp = key >> (sizeof(long) * 8 - 1);
-        key ^= temp;
-        key += temp & 1;
-        unsigned long hash = key;
-        hash ^= (hash >> 33);
-        hash *= 0xff51afd7ed558ccd;
-        hash ^= (hash >> 33);
-        hash *= 0xc4ceb9fe1a85ec53;
-        hash ^= (hash >> 33);
-        return hash;
+        return murmurHash3(key);
     }
 };
+
 template <>
-struct Hashable<unsigned int> {
-    static long Hash(long key) {
-        return key;
-    }
-};
-template <>
-struct Hashable<unsigned long> {
-    static long Hash(long key) {
-        return key;
+struct Hashable<anvil::u64_t> {
+    static long Hash(anvil::u64_t key) {  // Austin Appleby's MurmurHash3
+        return murmurHash3(key);
     }
 };
 
@@ -73,7 +75,8 @@ struct Hashable<unsigned long> {
 // https://stackoverflow.com/questions/19411742/what-is-the-default-hash-function-used-in-c-stdunordered-map
 
 // https://stackoverflow.com/questions/1579721/why-are-5381-and-33-so-important-in-the-djb2-algorithm
-inline unsigned long djb2(unsigned char* str) {
+inline unsigned long
+djb2(unsigned char* str) {
     unsigned long hash = 5381;
     int c;
     // http://www.cse.yorku.ca/~oz/hash.html
