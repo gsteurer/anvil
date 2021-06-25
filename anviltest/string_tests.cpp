@@ -27,6 +27,7 @@ TEST(StringTests, Copy) {
     anvil::strcpy(expected, &test, &size);
     EXPECT_STREQ(expected, test);
     EXPECT_EQ(anvil::strlen(expected), anvil::strlen(test));
+    delete[] test;
 }
 
 TEST(StringTests, IntegerToStr) {

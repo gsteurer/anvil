@@ -96,7 +96,9 @@ char* itoa(i64_t num) {
         buffer[idx++] = '-';
     }
     buffer[idx++] = '\0';
-    return strrev(buffer);
+    char* ret = strrev(buffer);
+    delete[] buffer;
+    return ret;
 }
 
 char* ftoa(f64_t num, isize_t precision) {
@@ -111,14 +113,15 @@ char* ftoa(f64_t num, isize_t precision) {
     u64_t fraction = static_cast<u64_t>(num - static_cast<f64_t>(value));
     u64_t exponent = static_cast<u64_t>(value);
 
-    itoa(exponent);
+    char* e = itoa(exponent);
 
     //if (precision > 0) {
     //'.';
     //}
     // @@@ impl strcat
-    itoa(fraction);
-
+    char* f = itoa(fraction);
+    delete[] e;
+    delete[] f;
     return buffer;
 }
 
