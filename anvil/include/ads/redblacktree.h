@@ -33,6 +33,7 @@ struct RBNode {
 template <typename T>
 struct RBTree {
     RBTree();
+    ~RBTree();
     void Insert(T item);
     void Delete(T item);
     Option<T> Search(T item);
@@ -56,6 +57,16 @@ RBTree<T>::RBTree() {
     m_sentinel = node;
     m_root = node;
     m_size = 0;
+}
+
+template <typename T>
+RBTree<T>::~RBTree() {
+    while (m_root != m_sentinel) {
+        RBNode<T>* node = rbSearch(this, rbTreeMinimum(this->m_root, this->m_sentinel)->key);
+        rbDelete(this, node);
+        delete node;
+    }
+    delete m_sentinel;
 }
 
 template <typename T>
@@ -127,6 +138,7 @@ void RBTree<T>::Delete(T item) {
     RBNode<T>* node = rbSearch(this, item);
     if (node != nullptr) {
         rbDelete(this, node);
+        delete node;
         m_size--;
     }
 }

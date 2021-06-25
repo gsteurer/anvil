@@ -3,17 +3,9 @@
 #include <cmath>
 
 #include "ads/redblacktree.h"
+#include "foo.h"
 #include "gtest/gtest.h"
 #include "option.h"
-
-struct Foo {
-    Foo() : id(0) {}
-    Foo(int id) : id(id) {}
-    bool operator<(const Foo& foo) { return id < foo.id; };
-    bool operator==(const Foo& foo) const { return id == foo.id; };
-    bool operator!=(const Foo& foo) { return !(id == foo.id); };
-    int id;
-};
 
 template <typename T>
 ::testing::AssertionResult verifySentinel(RBTree<T>* tree) {
@@ -59,7 +51,25 @@ inline void checkRedBlackProperties(RBTree<T>* tree, RBNode<T>* node) {
     }
 }
 
-TEST(RedBlackTreeTest, Insert) {
+TEST(RedBlackTreeTest, Ctor) {
+    RBTree<int>* tree = new RBTree<int>();
+
+    delete tree;
+}
+
+TEST(RedBlackTreeTest, InsertOne) {
+    RBTree<int>* tree = new RBTree<int>();
+    tree->Insert(1);
+    delete tree;
+}
+
+TEST(RedBlackTreeTest, InsertOneCompound) {
+    RBTree<Foo<int>>* tree = new RBTree<Foo<int>>();
+    tree->Insert(1);
+    delete tree;
+}
+
+TEST(RedBlackTreeTest, InsertMulti) {
     RBTree<int>* tree = new RBTree<int>();
     RBNode<int>* node;
     RBNode<int>* sentinel = tree->m_sentinel;
@@ -80,47 +90,52 @@ TEST(RedBlackTreeTest, Insert) {
     EXPECT_NE(node->right, sentinel);
 
     EXPECT_TRUE(verifySentinel(tree));
+    delete tree;
 }
 
 TEST(RedBlackTreeTest, InsertLarge) {
-    RBTree<Foo>* tree = new RBTree<Foo>();
+    RBTree<Foo<int>>* tree = new RBTree<Foo<int>>();
     int size = 1000;
-
+    // adding seventh leaks
     for (int idx = 0; idx < size; idx++) {
-        tree->Insert(Foo(idx + 1));
+        tree->Insert(Foo<int>(idx + 1));
         EXPECT_TRUE(verifySentinel(tree));
-        Option<Foo> result = tree->Search(Foo(idx + 1));
-        EXPECT_EQ(result.result, Option<Foo>::Some);
-        EXPECT_EQ(result.value.id, idx + 1);
+        Option<Foo<int>> result = tree->Search(Foo<int>(idx + 1));
+        EXPECT_EQ(result.result, Option<Foo<int>>::Some);
+        EXPECT_EQ(result.value.ID(), idx + 1);
     }
 
     for (int idx = 0; idx < size; idx++) {
-        Option<Foo> result = tree->Search(Foo(idx + 1));
-        EXPECT_EQ(result.result, Option<Foo>::Some);
-        EXPECT_EQ(result.value.id, idx + 1);
+        Option<Foo<int>> result = tree->Search(Foo<int>(idx + 1));
+        EXPECT_EQ(result.result, Option<Foo<int>>::Some);
+        EXPECT_EQ(result.value.ID(), idx + 1);
     }
     // https://www.codesdope.com/course/data-structures-red-black-trees/
     // https://www.baeldung.com/cs/binary-tree-height
     // https://www.cs.auckland.ac.nz/software/AlgAnim/red_black.html
     EXPECT_TRUE(tree->Height() <= 2 * (std::log(size + 1) / std::log(2)));
     checkRedBlackProperties(tree, tree->m_root);
-    EXPECT_EQ(tree->Min(), Foo(1));
-    EXPECT_EQ(tree->Max(), Foo(size));
+    EXPECT_EQ(tree->Min(), Foo<int>(1));
+    EXPECT_EQ(tree->Max(), Foo<int>(size));
+
+    delete tree;
 }
 
 TEST(RedBlackTreeTest, Delete) {
-    RBTree<Foo>* tree = new RBTree<Foo>();
+    RBTree<Foo<int>>* tree = new RBTree<Foo<int>>();
     int size = 1000;
 
     for (int idx = 0; idx < size; idx++) {
-        tree->Insert(Foo(idx + 1));
+        tree->Insert(Foo<int>(idx + 1));
     }
 
     EXPECT_EQ(tree->Size(), size);
     for (int idx = 0; idx < size; idx++) {
         tree->Delete(idx + 1);
-        Option<Foo> result = tree->Search(Foo(idx + 1));
-        EXPECT_EQ(result.result, Option<Foo>::None);
+        Option<Foo<int>> result = tree->Search(Foo<int>(idx + 1));
+        EXPECT_EQ(result.result, Option<Foo<int>>::None);
     }
     EXPECT_EQ(tree->Size(), 0);
+
+    delete tree;
 }

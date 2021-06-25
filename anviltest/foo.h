@@ -13,6 +13,7 @@ struct Foo {
     Foo<T>& operator=(const Foo<T>& rhs);
     bool operator==(const Foo<T>& rhs) const;
     bool operator==(int id) const;
+    bool operator<(const Foo<T>& rhs) const;
     int ID() const;
 };
 
@@ -58,6 +59,16 @@ bool Foo<T>::operator==(int id) const {
 }
 
 template <typename T>
+bool Foo<T>::operator<(const Foo<T>& rhs) const {
+    return this->ID() < rhs.ID();
+}
+
+template <typename T>
 int Foo<T>::ID() const {
     return *m_id;
+}
+
+template <typename T>
+bool operator==(int id, const Foo<T>& rhs) {
+    return *rhs.m_id == id;
 }
