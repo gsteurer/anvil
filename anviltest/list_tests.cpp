@@ -257,3 +257,67 @@ TEST(ListTests, RemoveAt) {
     EXPECT_EQ(result.result, Option<isize_t>::Some);
     EXPECT_EQ(result.value, 9);
 }
+
+TEST(ListTests, Iterator) {
+    List<isize_t> test;
+
+    for (isize_t idx = 0; idx < 10; idx++) {
+        i64_t val = anvil::math::rand();
+        test.PushFront(val);
+    }
+    List<isize_t>::Iterator it = test.Begin();
+    EXPECT_EQ(*it, test[0]);
+    it = test.End();
+    EXPECT_EQ(*it, test[test.Length() - 1]);
+    isize_t idx = 0;
+    // @@@ for loop doesnt check the last ekement of the list
+    for (List<isize_t>::Iterator it = test.Begin(); it != test.End(); it++) {
+        EXPECT_EQ(*it, test[idx++]);
+    }
+    EXPECT_EQ(*test.End(), test[idx]);
+}
+
+TEST(ListTests, CopyAssign) {
+    List<isize_t> test;
+
+    for (isize_t idx = 0; idx < 10; idx++) {
+        i64_t val = anvil::math::rand();
+        test.PushFront(val);
+    }
+    List<isize_t> test_copy = test;
+
+    EXPECT_EQ(test_copy.Length(), test.Length());
+
+    for (isize_t idx = 0; idx < test_copy.Length(); idx++) {
+        EXPECT_EQ(test_copy[idx], test[idx]);
+    }
+
+    test[0] = test[0] - 1;
+    EXPECT_NE(test_copy[0], test[0]);
+    isize_t end_idx = test_copy.Length() - 1;
+    test[end_idx] = test[end_idx] - 1;
+    EXPECT_NE(test_copy[end_idx], test[end_idx]);
+}
+
+TEST(ListTests, CopyCtor) {
+    List<isize_t> test;
+
+    for (isize_t idx = 0; idx < 10; idx++) {
+        i64_t val = anvil::math::rand();
+        test.PushFront(val);
+    }
+
+    List<isize_t> test_copy(test);
+
+    EXPECT_EQ(test_copy.Length(), test.Length());
+
+    for (isize_t idx = 0; idx < test_copy.Length(); idx++) {
+        EXPECT_EQ(test_copy[idx], test[idx]);
+    }
+
+    test[0] = test[0] - 1;
+    EXPECT_NE(test_copy[0], test[0]);
+    isize_t end_idx = test_copy.Length() - 1;
+    test[end_idx] = test[end_idx] - 1;
+    EXPECT_NE(test_copy[end_idx], test[end_idx]);
+}

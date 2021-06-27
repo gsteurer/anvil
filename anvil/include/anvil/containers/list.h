@@ -12,14 +12,68 @@ struct ListNode {
     T data;
 };
 
+// @@@ TODO
+// if a list is empty, dereferencing the iterator segfaults;
+// the list needs to have a mechanism to iterate to the end, because
+// iterating with a for loop only goes to the second to last element before exiting
 template <typename T>
 struct List {
+    class Iterator {
+       public:
+        Iterator() {
+            m_node = nullptr;
+        }
+        ~Iterator() {
+        }
+        Iterator(ListNode<T>* node) {
+            m_node = node;
+        }
+        Iterator(const Iterator& it) {
+            m_node = it.m_node;
+        }
+        Iterator& operator=(const Iterator& it) {
+            this->m_node = it.m_node;
+            return *this;
+        }
+        Iterator& operator++() {
+            m_node = m_node->right;
+            return *this;
+        }
+        Iterator operator++(int) {
+            Iterator it = *this;
+            ++*this;
+            return it;
+        }
+        Iterator& operator--() {
+            m_node = m_node->left;
+            return *this;
+        }
+        Iterator operator--(int) {
+            Iterator it = *this;
+            --*this;
+            return it;
+        }
+        T operator*() {
+            return m_node->data;
+        }
+        bool operator!=(const Iterator& rhs) {
+            return m_node != rhs.m_node;
+        }
+        bool operator==(const Iterator& rhs) {
+            return m_node == rhs.m_node;
+        }
+        ListNode<T>* m_node;
+    };
     List();
+    List(const List<T>& list);
+    List<T>& operator=(const List<T>& list);
     // @@@ TODO List(const List<T>& list);
     // https://en.cppreference.com/w/cpp/language/copy_assignment
     // https://en.cppreference.com/w/cpp/language/operators#Assignment_operator
     ~List();
     isize_t Length();
+    Iterator Begin() const;
+    Iterator End() const;
     Option<isize_t> IndexOf(T item);
     void PushFront(T item);
     void PushBack(T item);
@@ -44,6 +98,24 @@ List<T>::List() {
     m_root = nullptr;
     m_last = nullptr;
     m_size = 0;
+}
+
+template <typename T>
+List<T>::List(const List<T>& list) : List() {
+    for (List<isize_t>::Iterator it = list.Begin(); it != list.End(); it++) {
+        this->PushBack(*it);
+    }
+    this->PushBack(*(list.End()));
+}
+
+template <typename T>
+List<T>& List<T>::operator=(const List<T>& list) {
+    this->Clear();
+    for (List<isize_t>::Iterator it = list.Begin(); it != list.End(); it++) {
+        this->PushBack(*it);
+    }
+    this->PushBack(*(list.End()));
+    return *this;
 }
 
 /*
@@ -71,6 +143,15 @@ List<T>::~List() {
 template <typename T>
 isize_t List<T>::Length() {
     return m_size;
+}
+
+template <typename T>
+typename List<T>::Iterator List<T>::Begin() const {
+    return Iterator(m_root);
+}
+template <typename T>
+typename List<T>::Iterator List<T>::End() const {
+    return Iterator(m_last);
 }
 
 template <typename T>
