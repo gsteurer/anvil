@@ -1,16 +1,18 @@
 #pragma once
 
-#include "ads/arrayutils.h"
-#include "ads/redblacktree.h"
-#include "rand.h"
+#include "containers/arrayutils.h"
+#include "containers/redblacktree.h"
+#include "math/rand.h"
 #include "testcase.h"
 #include "types.h"
+
+using namespace anvil::containers;
 
 class RBTreeTest : public TestCase {
    public:
     RBTreeTest() = delete;
-    RBTreeTest(const anvil::isize_t test_size) : m_test_size(test_size) {
-        m_tree = new RBTree<anvil::u64_t>();
+    RBTreeTest(const isize_t test_size) : m_test_size(test_size) {
+        m_tree = new RBTree<u64_t>();
         m_elements = new int[m_test_size];
     }
     virtual ~RBTreeTest() {
@@ -23,18 +25,18 @@ class RBTreeTest : public TestCase {
 
     virtual void TearDown() = 0;
 
-    anvil::isize_t m_test_size;
-    RBTree<anvil::u64_t>* m_tree;
+    isize_t m_test_size;
+    RBTree<u64_t>* m_tree;
     int* m_elements;
 };
 
 class RBTreeInsertTest : public RBTreeTest {
    public:
-    RBTreeInsertTest(const anvil::isize_t test_size) : RBTreeTest(test_size) {}
+    RBTreeInsertTest(const isize_t test_size) : RBTreeTest(test_size) {}
     void Setup() override {}
     void Execute() override {
-        for (anvil::isize_t idx = 0; idx < m_test_size; idx++) {
-            anvil::u64_t val = static_cast<anvil::u64_t>(anvil::rand());
+        for (isize_t idx = 0; idx < m_test_size; idx++) {
+            u64_t val = static_cast<u64_t>(rand());
             m_tree->Insert(val);
             m_elements[idx] = val;
         }
@@ -44,17 +46,17 @@ class RBTreeInsertTest : public RBTreeTest {
 
 class RBTreeSearchTest : public RBTreeTest {
    public:
-    RBTreeSearchTest(const anvil::isize_t test_size) : RBTreeTest(test_size) {}
+    RBTreeSearchTest(const isize_t test_size) : RBTreeTest(test_size) {}
     void Setup() override {
-        for (anvil::isize_t idx = 0; idx < m_test_size; idx++) {
-            int val = anvil::rand();
+        for (isize_t idx = 0; idx < m_test_size; idx++) {
+            int val = rand();
             m_tree->Insert(val);
             m_elements[idx] = val;
         }
-        anvil::scramble(m_elements, m_test_size);
+        scramble(m_elements, m_test_size);
     }
     void Execute() override {
-        for (anvil::isize_t idx = 0; idx < m_test_size; idx++) {
+        for (isize_t idx = 0; idx < m_test_size; idx++) {
             m_tree->Search(m_elements[idx]);
         }
     }

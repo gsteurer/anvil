@@ -2,8 +2,11 @@
 #include <cmath>
 
 #include "types.h"
-
-bool eq(float lhs, float rhs);
+namespace anvil {
+namespace math {
+inline bool floateq(float lhs, float rhs) {
+    return std::fabs(lhs - rhs) < std::numeric_limits<float>::epsilon();
+}
 /*
 inline anvil::i64_t abs(anvil::i64_t n) {
     //anvil::i64_t v;
@@ -20,3 +23,5 @@ inline anvil::i64_t abs(anvil::i64_t n) {
 return 0;
 }
 */
+}  // namespace math
+}  // namespace anvil

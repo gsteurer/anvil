@@ -1,6 +1,7 @@
 #include "string/string.h"
 
 namespace anvil {
+namespace string {
 
 isize_t strlen(const char* str) {
     isize_t len = 0;
@@ -187,4 +188,5 @@ bool String::operator==(const char* rhs) {
     return true;
 }
 
+}  // namespace string
 }  // namespace anvil

@@ -7,18 +7,18 @@
 #include "testresult.h"
 #include "types.h"
 
-static const anvil::isize_t TEST_SIZE = 1000;
-static const anvil::isize_t ITERATIONS = 10;
+static const isize_t TEST_SIZE = 1000;
+static const isize_t ITERATIONS = 10;
 
 #define STR(x) #x
 
 template <typename T>
 struct TestRun {
     TestRun() = delete;
-    TestRun(anvil::isize_t test_size, anvil::isize_t num_iterations) {
+    TestRun(isize_t test_size, isize_t num_iterations) {
         m_buffer = new char[512];
         T test(test_size);
-        for (anvil::isize_t idx = 0; idx < num_iterations; idx++) {
+        for (isize_t idx = 0; idx < num_iterations; idx++) {
             m_result = test.Run();
         }
     }

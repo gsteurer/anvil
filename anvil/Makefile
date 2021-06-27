@@ -15,16 +15,13 @@ dirs:
 mat4x4f.o: 
 	$(CC) $(CFLAGS) -c -o .obj/$@ src/math/mat4x4f.cpp
 
-util.o: 
-	$(CC) $(CFLAGS) -c -o .obj/$@ src/math/util.cpp
-
 vec4f.o: 
 	$(CC) $(CFLAGS) -c -o .obj/$@ src/math/vec4f.cpp
 
 string.o: 
 	$(CC) $(CFLAGS) -c -o .obj/$@ src/string/string.cpp
 
-lib: mat4x4f.o util.o vec4f.o string.o
+lib: mat4x4f.o vec4f.o string.o
 	ar rvs lib/libanvil.a .obj/*.o
 
 clean:

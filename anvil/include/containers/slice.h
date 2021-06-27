@@ -1,10 +1,12 @@
 #pragma once
 
-#include "ads/arrayutils.h"
+#include "containers/arrayutils.h"
 #include "option.h"
 #include "types.h"
 
 namespace anvil {
+namespace containers {
+
 template <typename T>
 struct Slice {
     Slice();
@@ -115,7 +117,7 @@ template <typename T>
 T Slice<T>::Remove(isize_t index) {
     T result = *(m_data[index]);
     delete m_data[index];
-    for (int idx = index + 1; idx < m_size; idx++) {
+    for (isize_t idx = index + 1; idx < m_size; idx++) {
         m_data[idx - 1] = m_data[idx];
     }
     m_data[m_size - 1] = new T();
@@ -141,4 +143,5 @@ void append(Slice<T> Slice, T data) {
 }
 */
 
+}  // namespace containers
 }  // namespace anvil

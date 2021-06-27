@@ -4,6 +4,8 @@
 #include "math/util.h"
 #include "math/vec4f.h"
 
+using namespace anvil::math;
+
 Mat4x4f NewTestMatrix() {
     Mat4x4f m;
     for (int idx = 0; idx < 16; idx++) {
@@ -270,6 +272,6 @@ TEST(Mat4x4fTest, UndoMul) {
         6.0, -2.0, 0.0, 5.0};
     auto B = Mat4x4f(dataB);
     auto C = A * B;
-    EXPECT_EQ(A, round(C * inverse(B)));
+    EXPECT_EQ(A, matround(C * inverse(B)));
     EXPECT_EQ(str(A), str(C * inverse(B)));
 }

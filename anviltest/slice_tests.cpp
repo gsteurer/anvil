@@ -1,59 +1,61 @@
 #include <cstdlib>
 #include <string>
 
-#include "ads/arrayutils.h"
-#include "ads/slice.h"
+#include "containers/arrayutils.h"
+#include "containers/slice.h"
 #include "foo.h"
 #include "gtest/gtest.h"
+#include "math/rand.h"
 #include "option.h"
-#include "rand.h"
+
+using namespace anvil::containers;
 
 TEST(SliceTests, Ctor) {
-    anvil::Slice<anvil::isize_t> test;
+    Slice<isize_t> test;
     EXPECT_EQ(test.Length(), 0);
     EXPECT_GT(test.Capacity(), 0);
 }
 
 TEST(SliceTests, InsertPrimitive) {
-    anvil::Slice<anvil::isize_t> test;
-    anvil::isize_t size = 100;
+    Slice<isize_t> test;
+    isize_t size = 100;
     EXPECT_EQ(test.Length(), 0);
-    for (anvil::isize_t idx = 0; idx < size; idx++) {
+    for (isize_t idx = 0; idx < size; idx++) {
         test.Insert(idx + 1);
         EXPECT_EQ(test.Length(), idx + 1);
     }
 
-    for (anvil::isize_t idx = 0; idx < size; idx++) {
+    for (isize_t idx = 0; idx < size; idx++) {
         EXPECT_EQ(test[idx], idx + 1);
     }
 }
 
 TEST(SliceTests, InsertCompound) {
-    anvil::Slice<Foo<anvil::isize_t>> test;
-    anvil::isize_t size = 100;
+    Slice<Foo<isize_t>> test;
+    isize_t size = 100;
     EXPECT_EQ(test.Length(), 0L);
-    for (anvil::isize_t idx = 0; idx < size; idx++) {
-        Foo<anvil::isize_t> foo(static_cast<int>(idx + 1));
+    for (isize_t idx = 0; idx < size; idx++) {
+        Foo<isize_t> foo(static_cast<int>(idx + 1));
         test.Insert(foo);
         EXPECT_EQ(test.Length(), idx + 1L);
     }
 
-    for (anvil::isize_t idx = 0; idx < size; idx++) {
+    for (isize_t idx = 0; idx < size; idx++) {
         EXPECT_EQ(test[idx], static_cast<int>(idx + 1L));
     }
 }
 
 TEST(SliceTests, Bracket) {
-    anvil::Slice<anvil::isize_t> test;
-    anvil::isize_t size = 100;
+    Slice<isize_t> test;
+    isize_t size = 100;
     EXPECT_EQ(test.Length(), 0);
-    for (anvil::isize_t idx = 0; idx < size; idx++) {
+    for (isize_t idx = 0; idx < size; idx++) {
         test.Insert(idx + 1);
         EXPECT_EQ(test.Length(), idx + 1);
     }
     EXPECT_EQ(test.Length(), size);
     EXPECT_LT(test.Length(), test.Capacity());
-    for (anvil::isize_t idx = 0; idx < size; idx++) {
+    for (isize_t idx = 0; idx < size; idx++) {
         EXPECT_EQ(test[idx], idx + 1);
     }
 
@@ -62,73 +64,73 @@ TEST(SliceTests, Bracket) {
 }
 
 TEST(SliceTests, Scramble) {
-    anvil::Slice<anvil::isize_t> test;
-    anvil::isize_t size = 100;
+    Slice<isize_t> test;
+    isize_t size = 100;
     EXPECT_EQ(test.Length(), 0);
-    for (anvil::isize_t idx = 0; idx < size; idx++) {
+    for (isize_t idx = 0; idx < size; idx++) {
         test.Insert(idx + 1);
         EXPECT_EQ(test.Length(), idx + 1);
     }
 
-    anvil::scramble(test, test.Length() - 1);
+    scramble(test, test.Length() - 1);
 
-    for (anvil::isize_t idx = 0; idx < size; idx++) {
-        EXPECT_EQ(test.IndexOf(idx + 1).result, Option<anvil::isize_t>::Some);
+    for (isize_t idx = 0; idx < size; idx++) {
+        EXPECT_EQ(test.IndexOf(idx + 1).result, Option<isize_t>::Some);
     }
 }
 
 TEST(SliceTests, Quicksort) {
-    anvil::Slice<anvil::isize_t> test;
-    anvil::Slice<anvil::isize_t> expected;
-    anvil::isize_t size = 1000;
+    Slice<isize_t> test;
+    Slice<isize_t> expected;
+    isize_t size = 1000;
     EXPECT_EQ(test.Length(), 0);
-    for (anvil::isize_t idx = 0; idx < size; idx++) {
+    for (isize_t idx = 0; idx < size; idx++) {
         test.Insert(idx + 1);
         expected.Insert(idx + 1);
     }
 
-    anvil::scramble(test, test.Length() - 1);
-    anvil::quicksort(test, 0, test.Length() - 1);
+    scramble(test, test.Length() - 1);
+    quicksort(test, 0, test.Length() - 1);
 
-    for (anvil::isize_t idx = 0; idx < size; idx++) {
+    for (isize_t idx = 0; idx < size; idx++) {
         auto item = test.IndexOf(idx + 1);
-        EXPECT_EQ(item.result, Option<anvil::isize_t>::Some);
+        EXPECT_EQ(item.result, Option<isize_t>::Some);
         EXPECT_EQ(item.value, idx);
         EXPECT_EQ(test[idx], expected[idx]);
     }
 }
 
 TEST(SliceTests, Heapsort) {
-    anvil::Slice<anvil::isize_t> test;
-    anvil::Slice<anvil::isize_t> expected;
-    anvil::isize_t size = 10;
+    Slice<isize_t> test;
+    Slice<isize_t> expected;
+    isize_t size = 10;
     EXPECT_EQ(test.Length(), 0);
-    for (anvil::isize_t idx = 0; idx < size; idx++) {
+    for (isize_t idx = 0; idx < size; idx++) {
         test.Insert(idx + 1);
         expected.Insert(idx + 1);
     }
 
-    anvil::scramble(test, test.Length() - 1);
-    anvil::heapsort(test, test.Length() - 1);
+    scramble(test, test.Length() - 1);
+    heapsort(test, test.Length() - 1);
 
     /*
     @@@ todo: 
     // check max heap property
-    for (anvil::isize_t idx = test.Length() - 1; idx > 0; idx--) {
+    for (isize_t idx = test.Length() - 1; idx > 0; idx--) {
         EXPECT_TRUE(test[idx / 2] >= test[idx]);
     }
     */
 
-    for (anvil::isize_t idx = 0; idx < size; idx++) {
+    for (isize_t idx = 0; idx < size; idx++) {
         auto item = test.IndexOf(idx + 1);
-        EXPECT_EQ(item.result, Option<anvil::isize_t>::Some);
+        EXPECT_EQ(item.result, Option<isize_t>::Some);
         EXPECT_EQ(item.value, idx);
         EXPECT_EQ(test[idx], expected[idx]);
     }
 }
 
 TEST(SliceTests, RemoveSimple) {
-    anvil::Slice<anvil::isize_t> test;
+    Slice<isize_t> test;
     test.Insert(5);
     EXPECT_EQ(test.Remove(0), 5);
     EXPECT_EQ(test.Length(), 0);
@@ -141,22 +143,22 @@ TEST(SliceTests, RemoveSimple) {
 }
 
 TEST(SliceTests, Remove) {
-    anvil::isize_t size = 100;
+    isize_t size = 100;
 
-    anvil::Slice<anvil::i64_t> test;
-    anvil::i64_t* elements = new anvil::isize_t[size];
+    Slice<i64_t> test;
+    i64_t* elements = new isize_t[size];
 
-    for (anvil::isize_t idx = 0; idx < size; idx++) {
-        anvil::i64_t val = static_cast<anvil::i64_t>(anvil::rand());
+    for (isize_t idx = 0; idx < size; idx++) {
+        i64_t val = static_cast<i64_t>(anvil::math::rand());
         test.Insert(val);
         elements[idx] = val;
     }
 
-    anvil::scramble(elements, test.Length() - 1);
+    scramble(elements, test.Length() - 1);
 
-    for (anvil::isize_t idx = 0; idx < size; idx++) {
-        Option<anvil::isize_t> jdx = test.IndexOf(elements[idx]);
-        EXPECT_EQ(Option<anvil::isize_t>::Some, jdx.result);
+    for (isize_t idx = 0; idx < size; idx++) {
+        Option<isize_t> jdx = test.IndexOf(elements[idx]);
+        EXPECT_EQ(Option<isize_t>::Some, jdx.result);
         EXPECT_EQ(elements[idx], test.Remove(jdx.value));
         EXPECT_EQ(test.Length(), size - idx - 1);
     }

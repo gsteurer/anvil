@@ -1,15 +1,17 @@
 #pragma once
-#include "ads/arrayutils.h"
-#include "ads/slice.h"
-#include "rand.h"
+#include "containers/arrayutils.h"
+#include "containers/slice.h"
+#include "math/rand.h"
 #include "testcase.h"
 #include "types.h"
+
+using namespace anvil::containers;
 
 class SliceTest : public TestCase {
    public:
     SliceTest() = delete;
-    SliceTest(const anvil::isize_t test_size) : m_test_size(test_size) {
-        m_slice = new anvil::Slice<anvil::u64_t>();
+    SliceTest(const isize_t test_size) : m_test_size(test_size) {
+        m_slice = new Slice<u64_t>();
         m_elements = new int[m_test_size];
     }
     virtual ~SliceTest() {
@@ -22,18 +24,18 @@ class SliceTest : public TestCase {
 
     virtual void TearDown() = 0;
 
-    anvil::isize_t m_test_size;
-    anvil::Slice<anvil::u64_t>* m_slice;
+    isize_t m_test_size;
+    Slice<u64_t>* m_slice;
     int* m_elements;
 };
 
 class SliceInsertTest : public SliceTest {
    public:
-    SliceInsertTest(const anvil::isize_t test_size) : SliceTest(test_size) {}
+    SliceInsertTest(const isize_t test_size) : SliceTest(test_size) {}
     void Setup() override {}
     void Execute() override {
-        for (anvil::isize_t idx = 0; idx < m_test_size; idx++) {
-            anvil::u64_t val = static_cast<anvil::u64_t>(anvil::rand());
+        for (isize_t idx = 0; idx < m_test_size; idx++) {
+            u64_t val = static_cast<u64_t>(rand());
             m_slice->Insert(val);
             m_elements[idx] = val;
         }
@@ -43,17 +45,17 @@ class SliceInsertTest : public SliceTest {
 
 class SliceSearchTest : public SliceTest {
    public:
-    SliceSearchTest(const anvil::isize_t test_size) : SliceTest(test_size) {}
+    SliceSearchTest(const isize_t test_size) : SliceTest(test_size) {}
     void Setup() override {
-        for (anvil::isize_t idx = 0; idx < m_test_size; idx++) {
-            int val = anvil::rand();
+        for (isize_t idx = 0; idx < m_test_size; idx++) {
+            int val = rand();
             m_slice->Insert(val);
             m_elements[idx] = val;
         }
-        anvil::scramble(m_elements, m_test_size);
+        scramble(m_elements, m_test_size);
     }
     void Execute() override {
-        for (anvil::isize_t idx = 0; idx < m_test_size; idx++) {
+        for (isize_t idx = 0; idx < m_test_size; idx++) {
             m_slice->IndexOf(m_elements[idx]);
         }
     }

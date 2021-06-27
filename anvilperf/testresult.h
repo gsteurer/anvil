@@ -24,7 +24,7 @@ struct TestResult {
     timespec last;
     timespec avg;
     timespec total;
-    anvil::isize_t count;
+    isize_t count;
     void Update(timespec t) {
         last = t;
 

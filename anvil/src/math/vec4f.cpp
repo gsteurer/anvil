@@ -5,6 +5,9 @@
 
 #include "math/util.h"
 
+namespace anvil {
+namespace math {
+
 Vec4f::Vec4f() : x(0.0f), y(0.0f), z(0.0f), w(0.0f){};
 Vec4f::Vec4f(const Vec4f& v) : x(v.x), y(v.y), z(v.z), w(v.w){};
 Vec4f& Vec4f::operator=(const Vec4f& v) {
@@ -17,22 +20,22 @@ Vec4f& Vec4f::operator=(const Vec4f& v) {
 Vec4f::Vec4f(float x, float y, float z, float w) : x(x), y(y), z(z), w(w){};
 
 bool point(const Vec4f& vec) {
-    return eq(1.0, vec.w);
+    return floateq(1.0, vec.w);
 }
 
 bool vector(const Vec4f& vec) {
-    return eq(0.0, vec.w);
+    return floateq(0.0, vec.w);
 }
 
-bool eq(const Vec4f& lhs, const Vec4f& rhs) {
-    return eq(lhs.x, rhs.x) &&
-           eq(lhs.y, rhs.y) &&
-           eq(lhs.z, rhs.z) &&
-           eq(lhs.w, rhs.w);
+bool floateq(const Vec4f& lhs, const Vec4f& rhs) {
+    return floateq(lhs.x, rhs.x) &&
+           floateq(lhs.y, rhs.y) &&
+           floateq(lhs.z, rhs.z) &&
+           floateq(lhs.w, rhs.w);
 }
 
 bool ne(const Vec4f& lhs, const Vec4f& rhs) {
-    return !eq(lhs, rhs);
+    return !floateq(lhs, rhs);
 }
 
 Vec4f add(const Vec4f& lhs, const Vec4f& rhs) {
@@ -101,7 +104,7 @@ Vec4f cross(const Vec4f& lhs, const Vec4f& rhs) {
 
 Vec4f operator+(const Vec4f& lhs, const Vec4f& rhs) { return add(lhs, rhs); }
 Vec4f operator-(const Vec4f& lhs, const Vec4f& rhs) { return sub(lhs, rhs); }
-bool operator==(const Vec4f& lhs, const Vec4f& rhs) { return eq(lhs, rhs); }
+bool operator==(const Vec4f& lhs, const Vec4f& rhs) { return floateq(lhs, rhs); }
 
 Vec4f mul(const Vec4f& vec, float scale) {
     return mul(scale, vec);
@@ -121,3 +124,6 @@ std::string str(const Vec4f& vec, unsigned int precision) {
            << vec.w << ")";
     return stream.str();
 }
+
+}  // namespace math
+}  // namespace anvil

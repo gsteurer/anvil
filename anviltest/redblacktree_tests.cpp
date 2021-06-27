@@ -2,10 +2,12 @@
 
 #include <cmath>
 
-#include "ads/redblacktree.h"
+#include "containers/redblacktree.h"
 #include "foo.h"
 #include "gtest/gtest.h"
 #include "option.h"
+
+using namespace anvil::containers;
 
 template <typename T>
 ::testing::AssertionResult verifySentinel(RBTree<T>* tree) {

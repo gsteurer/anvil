@@ -46,7 +46,7 @@ inline timespec operator+(const timespec& lhs, const timespec& rhs) {
     return result;
 }
 
-inline timespec operator/(const timespec& t, anvil::isize_t n) {
+inline timespec operator/(const timespec& t, isize_t n) {
     timespec result;
 
     long nsec = t.tv_sec > 0 ? t.tv_sec + 1000000000 + t.tv_nsec / n : t.tv_nsec / n;

@@ -1,7 +1,7 @@
-#include "ads/graph.h"
+#include "containers/graph.h"
 #include "gtest/gtest.h"
 
 TEST(GraphTest, Ctor) {
-    anvil::Graph g;
+    anvil::containers::Graph g;
     EXPECT_EQ(g.m_size, 0);
 }

@@ -3,6 +3,9 @@
 
 #include "types.h"
 
+namespace anvil {
+namespace containers {
+
 template <typename T>
 struct Hashable {
     static long Hash(T key) {
@@ -64,8 +67,8 @@ struct Hashable<long> {
 };
 
 template <>
-struct Hashable<anvil::u64_t> {
-    static long Hash(anvil::u64_t key) {  // Austin Appleby's MurmurHash3
+struct Hashable<u64_t> {
+    static long Hash(u64_t key) {  // Austin Appleby's MurmurHash3
         return murmurHash3(key);
     }
 };
@@ -106,3 +109,5 @@ struct Hashable<char*> {
         return djb2(reinterpret_cast<unsigned char*>(key));
     }
 };
+}  // namespace containers
+}  // namespace anvil

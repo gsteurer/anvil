@@ -1,5 +1,5 @@
 #pragma once
-namespace anvil {
+
 typedef unsigned long long usize_t;
 typedef long long isize_t;
 typedef unsigned char byte_t;
@@ -32,5 +32,3 @@ struct limit<i64_t> {
 };
 
 // @@@ TODO float
-
-}  // namespace anvil

@@ -1,5 +1,9 @@
 #pragma once
 #include "option.h"
+#include "types.h"
+
+namespace anvil {
+namespace containers {
 
 template <typename T>
 struct ListNode {
@@ -15,22 +19,22 @@ struct List {
     // https://en.cppreference.com/w/cpp/language/copy_assignment
     // https://en.cppreference.com/w/cpp/language/operators#Assignment_operator
     ~List();
-    int Length();
-    Option<int> IndexOf(T item);
+    isize_t Length();
+    Option<isize_t> IndexOf(T item);
     void PushFront(T item);
     void PushBack(T item);
-    void InsertAt(T item, int index);
+    void InsertAt(T item, isize_t index);
     Option<T> PopFront();
     Option<T> PopBack();
 
-    Option<T> RemoveAt(int index);
+    Option<T> RemoveAt(isize_t index);
     Option<T> Remove(T item);
 
-    T operator[](int index) const;
-    T& operator[](int index);
+    T operator[](isize_t index) const;
+    T& operator[](isize_t index);
 
    private:
-    int m_size;
+    isize_t m_size;
     ListNode<T>* m_root;
     ListNode<T>* m_last;
 };
@@ -65,19 +69,19 @@ List<T>::~List() {
 }
 
 template <typename T>
-int List<T>::Length() {
+isize_t List<T>::Length() {
     return m_size;
 }
 
 template <typename T>
-Option<int> List<T>::IndexOf(T item) {
-    Option<int> result;
-    result.result = Option<int>::None;
-    int current_index = 0;
+Option<isize_t> List<T>::IndexOf(T item) {
+    Option<isize_t> result;
+    result.result = Option<isize_t>::None;
+    isize_t current_index = 0;
     ListNode<T>* node = m_root;
     while (node != nullptr) {
         if (node->data == item) {
-            result.result = Option<int>::Some;
+            result.result = Option<isize_t>::Some;
             result.value = current_index;
             return result;
         }
@@ -123,11 +127,11 @@ void List<T>::PushBack(T item) {
 }
 
 template <typename T>
-void List<T>::InsertAt(T item, int index) {
+void List<T>::InsertAt(T item, isize_t index) {
     if (m_root != nullptr) {
         ListNode<T>* node;
         bool go_right = true;
-        int counter;
+        isize_t counter;
         if (index > m_size / 2) {
             node = m_last;
             go_right = false;
@@ -211,14 +215,14 @@ Option<T> List<T>::PopBack() {
 }
 
 template <typename T>
-Option<T> List<T>::RemoveAt(int index) {
+Option<T> List<T>::RemoveAt(isize_t index) {
     Option<T> result;
     result.result = Option<T>::None;
     if (index < 0 || index > m_size - 1) {
         return result;
     }
     ListNode<T>* node = m_root;
-    int current_index = 0;
+    isize_t current_index = 0;
     while (current_index < index && node != nullptr) {
         node = node->right;
         current_index++;
@@ -266,9 +270,9 @@ Option<T> List<T>::Remove(T item) {
 }
 
 template <typename T>
-T List<T>::operator[](int index) const {
+T List<T>::operator[](isize_t index) const {
     ListNode<T>* node = m_root;
-    int current_idx = 0;
+    isize_t current_idx = 0;
     // @@@ check if index in [0:msize)
 
     while (current_idx < index && node != nullptr) {
@@ -281,9 +285,9 @@ T List<T>::operator[](int index) const {
 }
 
 template <typename T>
-T& List<T>::operator[](int index) {
+T& List<T>::operator[](isize_t index) {
     ListNode<T>* node = m_root;
-    int current_idx = 0;
+    isize_t current_idx = 0;
     // @@@ check if index in [0:msize)
 
     while (current_idx < index && node != nullptr) {
@@ -294,3 +298,6 @@ T& List<T>::operator[](int index) {
     // @@@ this can segfault
     return node->data;
 }
+
+}  // namespace containers
+}  // namespace anvil

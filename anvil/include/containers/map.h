@@ -1,7 +1,11 @@
 #pragma once
-#include "ads/hash.h"
-#include "ads/list.h"
+#include "containers/hash.h"
+#include "containers/list.h"
 #include "option.h"
+#include "types.h"
+
+namespace anvil {
+namespace containers {
 
 template <typename K, typename V>
 struct MapNode {
@@ -38,10 +42,10 @@ struct MapProxy {  // this is the proxy pattern
     // https://stackoverflow.com/questions/1010539/changing-return-type-of-a-function-without-template-specialization-c
     operator Option<V>() const {  // this is a conversion function
         Option<V> result;
-        int map_index = map.IndexOf(key);
+        isize_t map_index = map.IndexOf(key);
         List<MapNode<K, V>>* node_list = &(map.m_data[map_index]);
 
-        for (int idx = 0; idx < node_list->Length(); idx++) {
+        for (isize_t idx = 0; idx < node_list->Length(); idx++) {
             MapNode<K, V>* node = &(*node_list)[idx];
             if (node->key == key) {
                 result.result = Option<V>::Some;
@@ -67,13 +71,13 @@ struct Map {
     Map();
     // @@@ TODO Map(const Map<K, V>& m);
     ~Map();
-    float LoadFactor();
+    f64_t LoadFactor();
     // @@@ need function to set load factor threshold
     /*
         When an insert is made such that the number of entries in a hash table exceeds the product of the load factor and the current capacity then the hash table will need to be rehashed.[9] Rehashing includes increasing the size of the underlying data structure[9] and mapping existing items to new bucket locations
         To limit the proportion of memory wasted due to empty buckets, some implementations also shrink the size of the table—followed by a rehash—when items are deleted.
     */
-    void Rehash(int size);
+    void Rehash(isize_t size);
     // the average cost of a lookup depends only on the average number of keys per bucket—that is, it is roughly proportional to the load factor.
     // a chained hash table with 1000 slots and 10,000 stored keys (load factor 10) is five to ten times slower than a 10,000-slot table (load factor 1); but still 1000 times faster than a plain sequential list.
     MapProxy<K, V> operator[](const K& key);
@@ -81,19 +85,19 @@ struct Map {
     bool Insert(K key, V value);
     Option<V> Remove(K key);
     void Clear();
-    int IndexOf(K key) const;
+    isize_t IndexOf(K key) const;
 
     // let's store collisions in a linked list
     // @@@ when an item is added to a bucket, compute its size; store max size.
     // according to the birthday problem there is approximately a 95% (for n = 2450?, buckets = 1mill) chance of at least two of the keys being hashed to the same slot.
-    List<MapNode<K, V>>* m_data;  // @@@ make this an array of pointers to Lists to reduce size
+    List<MapNode<K, V>>* m_data;  // @@@ make this an array of poisize_ters to Lists to reduce size
     void Tick();
-    float Threshold() const;
-    int Capacity() const;
-    int Size() const;
-    int m_size;                             // number of items
-    int m_capacity;                         // number of buckets
-    float m_load_factor_threshold = 0.75f;  // when the threshold is passed, we need to resize the map
+    f64_t Threshold() const;
+    isize_t Capacity() const;
+    isize_t Size() const;
+    isize_t m_size;                         // number of items
+    isize_t m_capacity;                     // number of buckets
+    f64_t m_load_factor_threshold = 0.75f;  // when the threshold is passed, we need to resize the map
 };
 
 // As the load factor grows larger, the hash table becomes slower,
@@ -121,12 +125,12 @@ Map<K, V>::Map(const Map<K, V>& m) {
 */
 
 template <typename K, typename V>
-float Map<K, V>::LoadFactor() {
-    return static_cast<float>(m_size) / static_cast<float>(m_capacity);
+f64_t Map<K, V>::LoadFactor() {
+    return static_cast<f64_t>(m_size) / static_cast<f64_t>(m_capacity);
 }
 
 template <typename K, typename V>
-int Map<K, V>::IndexOf(K key) const {
+isize_t Map<K, V>::IndexOf(K key) const {
     long hash = Hashable<K>::Hash(key);
     return hash & m_capacity - 1;
 }
@@ -139,32 +143,32 @@ void Map<K, V>::Tick() {
 }
 
 template <typename K, typename V>
-float Map<K, V>::Threshold() const {
+f64_t Map<K, V>::Threshold() const {
     return m_load_factor_threshold;
 }
 
 template <typename K, typename V>
-int Map<K, V>::Capacity() const {
+isize_t Map<K, V>::Capacity() const {
     return m_capacity;
 }
 
 template <typename K, typename V>
-int Map<K, V>::Size() const {
+isize_t Map<K, V>::Size() const {
     return m_size;
 }
 
 template <typename K, typename V>
-void Map<K, V>::Rehash(int size) {
+void Map<K, V>::Rehash(isize_t size) {
     // size must be a power of 2
     if (!((size & (size - 1)) == 0)) {
         return;
     }
     List<MapNode<K, V>>* new_data = new List<MapNode<K, V>>[size];
-    for (int idx = 0; idx < m_capacity; idx++) {
-        for (int jdx = 0; jdx < m_data[idx].Length(); jdx++) {
+    for (isize_t idx = 0; idx < m_capacity; idx++) {
+        for (isize_t jdx = 0; jdx < m_data[idx].Length(); jdx++) {
             MapNode<K, V> node = m_data[idx][jdx];
             long hash = Hashable<K>::Hash(node.key);
-            int index = hash & size - 1;
+            isize_t index = hash & size - 1;
             new_data[index].PushFront(node);
         }
     }
@@ -181,11 +185,11 @@ MapProxy<K, V> Map<K, V>::operator[](const K& key) {
 
 template <typename K, typename V>
 bool Map<K, V>::Insert(K key, V value) {
-    int index = IndexOf(key);
+    isize_t index = IndexOf(key);
     MapNode<K, V> node(key, value);
     List<MapNode<K, V>>* node_list = &(m_data[index]);
 
-    for (int idx = 0; idx < node_list->Length(); idx++) {
+    for (isize_t idx = 0; idx < node_list->Length(); idx++) {
         MapNode<K, V>* node = &(*node_list)[idx];
         if (node->key == key) {
             return false;
@@ -202,9 +206,9 @@ Option<V> Map<K, V>::Remove(K key) {
     Option<V> result;
     result.result = Option<V>::None;
 
-    int map_index = IndexOf(key);
+    isize_t map_index = IndexOf(key);
     List<MapNode<K, V>>* node_list = &(m_data[map_index]);
-    for (int idx = 0; idx < node_list->Length(); idx++) {
+    for (isize_t idx = 0; idx < node_list->Length(); idx++) {
         MapNode<K, V>* node = &(*node_list)[idx];
         if (node->key == key) {
             Option<MapNode<K, V>> item = m_data[map_index].RemoveAt(idx);
@@ -225,3 +229,6 @@ void Map<K, V>::Clear() {
     delete[] m_data;
     m_data = new List<MapNode<K, V>>[m_capacity];
 }
+
+}  // namespace containers
+}  // namespace anvil

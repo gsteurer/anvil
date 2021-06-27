@@ -9,6 +9,9 @@
 #include "math/util.h"
 #include "math/vec4f.h"
 
+namespace anvil {
+namespace math {
+
 Mat4x4f::Mat4x4f() {
     for (int idx = 0; idx < 16; idx++) {
         m_elements[idx] = 0.0;
@@ -57,9 +60,9 @@ Mat4x4f& Mat4x4f::operator=(const Mat4x4f& m) {
     return *this;
 }
 
-bool eq(const Mat4x4f& lhs, const Mat4x4f& rhs) {
+bool mateq(const Mat4x4f& lhs, const Mat4x4f& rhs) {
     for (int idx = 0; idx < 16; idx++) {
-        if (!eq(lhs[idx], rhs[idx])) {
+        if (!floateq(lhs[idx], rhs[idx])) {
             return false;
         }
     }
@@ -151,7 +154,7 @@ float determinant4x4(const Mat4x4f& mat, unsigned int row) {
 }
 
 bool invertible(const Mat4x4f& mat) {
-    return !eq(determinant4x4(mat), 0.0);
+    return !floateq(determinant4x4(mat), 0.0);
 }
 Mat4x4f inverse(const Mat4x4f& mat) {
     // create a matrix of cofactors
@@ -168,7 +171,7 @@ Mat4x4f inverse(const Mat4x4f& mat) {
     return mul(t, 1.0f / d);
 }
 
-Mat4x4f round(const Mat4x4f& mat) {
+Mat4x4f matround(const Mat4x4f& mat) {
     Mat4x4f m;
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
@@ -179,11 +182,11 @@ Mat4x4f round(const Mat4x4f& mat) {
 }
 
 bool operator==(const Mat4x4f& lhs, const Mat4x4f& rhs) {
-    return eq(lhs, rhs);
+    return mateq(lhs, rhs);
 }
 
 bool operator!=(const Mat4x4f& lhs, const Mat4x4f& rhs) {
-    return !eq(lhs, rhs);
+    return !mateq(lhs, rhs);
 }
 
 Mat4x4f operator*(const Mat4x4f& lhs, const Mat4x4f& rhs) {
@@ -205,3 +208,6 @@ std::string str(const Mat4x4f& m, unsigned int precision) {
            << "]";
     return stream.str();
 }
+
+}  // namespace math
+}  // namespace anvil

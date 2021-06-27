@@ -4,6 +4,8 @@
 // https://stackoverflow.com/questions/6161322/using-stdlibs-rand-from-multiple-threads // thread safety
 
 namespace anvil {
+namespace math {
+
 static unsigned long int next = 1;
 
 inline int rand(void) {
@@ -14,4 +16,6 @@ inline int rand(void) {
 inline void srand(unsigned int seed) {
     next = seed;
 }
+
+}  // namespace math
 }  // namespace anvil

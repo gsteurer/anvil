@@ -4,6 +4,9 @@
 #include "math/mat2x2f.h"
 #include "math/vec4f.h"
 
+namespace anvil {
+namespace math {
+
 struct Mat4x4f {
     float m_elements[16];
     Mat4x4f();
@@ -17,7 +20,7 @@ struct Mat4x4f {
 };
 
 Mat4x4f Identity();
-bool eq(const Mat4x4f& lhs, const Mat4x4f& rhs);
+bool mateq(const Mat4x4f& lhs, const Mat4x4f& rhs);
 Mat4x4f mul(const Mat4x4f& mat, float scale);
 Mat4x4f mul(const Mat4x4f& lhs, const Mat4x4f& rhs);
 Vec4f mul(const Mat4x4f& mat, const Vec4f& vec);
@@ -32,8 +35,11 @@ float cofactor4x4(const Mat4x4f& mat, unsigned int row, unsigned int col);
 // if the determinant of a 4x4 matrix is 0, it is not invertible.
 bool invertible(const Mat4x4f& mat);
 Mat4x4f inverse(const Mat4x4f& mat);
-Mat4x4f round(const Mat4x4f& mat);
+Mat4x4f matround(const Mat4x4f& mat);
 bool operator==(const Mat4x4f& lhs, const Mat4x4f& rhs);
 bool operator!=(const Mat4x4f& lhs, const Mat4x4f& rhs);
 Mat4x4f operator*(const Mat4x4f& lhs, const Mat4x4f& rhs);
 Vec4f operator*(const Mat4x4f& mat, const Vec4f& vec);
+
+}  // namespace math
+}  // namespace anvil

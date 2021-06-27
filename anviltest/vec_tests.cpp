@@ -4,15 +4,17 @@
 #include "math/util.h"
 #include "math/vec4f.h"
 
+using namespace anvil::math;
+
 TEST(EqTest, FloatEquality) {
-    EXPECT_TRUE(eq(0.0f, 0.0f));
-    EXPECT_TRUE(eq(-0.0f, -0.0f));
-    EXPECT_TRUE(eq(-0.0f, 0.0f));
-    EXPECT_TRUE(eq(0.0f, -0.0f));
-    EXPECT_FALSE(eq(0.0f, 0.1f));
-    EXPECT_FALSE(eq(0.1f, 0.0f));
-    EXPECT_TRUE(eq(0.0000000001f, 0.0000000001f));
-    EXPECT_TRUE(eq(std::numeric_limits<float>::max(), std::numeric_limits<float>::max()));
+    EXPECT_TRUE(floateq(0.0f, 0.0f));
+    EXPECT_TRUE(floateq(-0.0f, -0.0f));
+    EXPECT_TRUE(floateq(-0.0f, 0.0f));
+    EXPECT_TRUE(floateq(0.0f, -0.0f));
+    EXPECT_FALSE(floateq(0.0f, 0.1f));
+    EXPECT_FALSE(floateq(0.1f, 0.0f));
+    EXPECT_TRUE(floateq(0.0000000001f, 0.0000000001f));
+    EXPECT_TRUE(floateq(std::numeric_limits<float>::max(), std::numeric_limits<float>::max()));
 }
 
 TEST(Vec4fTest, Ctor) {

@@ -1,15 +1,17 @@
 #pragma once
+#include "math/rand.h"
 #include "option.h"
-#include "rand.h"
 #include "types.h"
 
 namespace anvil {
+namespace containers {
+
 template <typename T>
 void scramble(T& array, isize_t size, isize_t repeat_count = 1) {
     for (isize_t count = 0; count < repeat_count; count++) {
         for (isize_t idx = 0; idx < size; idx++) {
-            isize_t jdx = rand() % size;
-            isize_t kdx = rand() % size;
+            isize_t jdx = anvil::math::rand() % size;
+            isize_t kdx = anvil::math::rand() % size;
             auto tmp = array[jdx];
             array[jdx] = array[kdx];
             array[kdx] = tmp;
@@ -108,4 +110,6 @@ Option<isize_t> search(T& array, isize_t size, U item) {
     result.result = Option<isize_t>::None;
     return result;  // {.result = Option<isize_t>::None};
 }
+
+}  // namespace containers
 }  // namespace anvil

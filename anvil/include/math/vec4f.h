@@ -1,6 +1,9 @@
 #pragma once
 #include <string>
 
+namespace anvil {
+namespace math {
+
 struct Vec4f {
     Vec4f();
     Vec4f(const Vec4f& v);
@@ -42,3 +45,6 @@ Vec4f operator-(const Vec4f& lhs, const Vec4f& rhs);
 bool operator==(const Vec4f& lhs, const Vec4f& rhs);
 
 std::string str(const Vec4f& vec, unsigned int precision = 1);
+
+}  // namespace math
+}  // namespace anvil

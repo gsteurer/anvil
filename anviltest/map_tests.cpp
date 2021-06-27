@@ -1,11 +1,13 @@
 #include <string>
 
-#include "ads/hash.h"
-#include "ads/map.h"
+#include "containers/hash.h"
+#include "containers/map.h"
 #include "foo.h"
 #include "gtest/gtest.h"
 #include "option.h"
 // #include "rand.h"
+
+using namespace anvil::containers;
 
 TEST(MapTests, MapEntry) {
     MapNode<int, int> test(5, 10);

@@ -3,6 +3,9 @@
 #include "math/mat3x3f.h"
 #include "math/mat4x4f.h"
 
+namespace anvil {
+namespace math {
+
 template <typename T>
 struct matrix_attributes {
     static const unsigned int rows = 0;
@@ -57,3 +60,6 @@ T transpose(const T& mat) {
     }
     return A;
 }
+
+}  // namespace math
+}  // namespace anvil

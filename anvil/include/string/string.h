@@ -2,6 +2,7 @@
 #include "types.h"
 
 namespace anvil {
+namespace string {
 
 isize_t strlen(const char* str);
 bool streq(const char* lhs, const char* rhs);
@@ -32,5 +33,6 @@ struct String {
     char* m_data;
     isize_t m_size;
 };
+}  // namespace string
 
 }  // namespace anvil

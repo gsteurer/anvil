@@ -2,6 +2,10 @@
 #include <string>
 
 #include "option.h"
+#include "types.h"
+
+namespace anvil {
+namespace containers {
 
 enum Color { NONE = 0,
              BLACK = 1,
@@ -38,13 +42,13 @@ struct RBTree {
     void Delete(T item);
     void Clear();
     Option<T> Search(T item);
-    int Height(RBNode<T>* node = nullptr);
+    isize_t Height(RBNode<T>* node = nullptr);
     T Min();
     T Max();
-    int Size() const;
+    isize_t Size() const;
     RBNode<T>* m_root;
     RBNode<T>* m_sentinel;
-    int m_size;
+    isize_t m_size;
 };
 
 template <typename T>
@@ -66,7 +70,7 @@ RBTree<T>::~RBTree() {
     delete m_sentinel;
 
     // the following delete implementation leaked memory and i dont know why
-    // insert 100000 (9158 was the first quantity I discovered) random numbers into the tree
+    // insert 100000 (9158 was the first quantity I discovered) random numbers isize_to the tree
     // iterating over a list of each element and calling delete directly does not leak
     /*
     while (m_root != m_sentinel) {
@@ -100,15 +104,15 @@ T RBTree<T>::Max() {
 }
 
 template <typename T>
-int RBTree<T>::Height(RBNode<T>* node) {
+isize_t RBTree<T>::Height(RBNode<T>* node) {
     if (node == nullptr) {
         node = m_root;
     }
     if (m_root == m_sentinel) {
         return 0;
     }
-    int l = 0;
-    int r = 0;
+    isize_t l = 0;
+    isize_t r = 0;
     if (node->left != m_sentinel) {
         l = Height(node->left);
     }
@@ -119,7 +123,7 @@ int RBTree<T>::Height(RBNode<T>* node) {
 }
 
 template <typename T>
-int RBTree<T>::Size() const {
+isize_t RBTree<T>::Size() const {
     return m_size;
 }
 
@@ -402,3 +406,6 @@ inline void rbDelete(RBTree<T>* tree, RBNode<T>* z) {
         rbDeleteFixup(tree, x);
     }
 }
+
+}  // namespace containers
+}  // namespace anvil
