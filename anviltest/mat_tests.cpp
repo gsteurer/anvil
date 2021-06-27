@@ -40,7 +40,7 @@ TEST(Mat4x4fTest, Cmp) {
     auto m2 = Mat4x4f(data);
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
-            EXPECT_FLOAT_EQ(m2(row, col), data[row * 4 + col]);
+            EXPECT_DOUBLE_EQ(m2(row, col), data[row * 4 + col]);
         }
     }
 }
@@ -48,13 +48,13 @@ TEST(Mat4x4fTest, Cmp) {
 TEST(Mat4x4fTest, Assignment) {
     Mat4x4f m;
     for (int idx = 0; idx < 16; idx++) {
-        EXPECT_FLOAT_EQ(m.m_elements[idx], 0.0);
+        EXPECT_DOUBLE_EQ(m.m_elements[idx], 0.0);
     }
 
     m(0, 0) = 3.0;
 
     Mat4x4f i = Identity();
-    EXPECT_FLOAT_EQ(i(0, 0), 1.0);
+    EXPECT_DOUBLE_EQ(i(0, 0), 1.0);
 }
 
 TEST(Mat4x4fTest, Str) {
@@ -88,7 +88,7 @@ TEST(Mat4x4fTest, Mul) {
 
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
-            EXPECT_FLOAT_EQ(r(row, col), e(row, col));
+            EXPECT_DOUBLE_EQ(r(row, col), e(row, col));
         }
     }
 
@@ -105,10 +105,10 @@ TEST(Mat4x4fTest, MulVec) {
     Vec4f v(1.0, 2.0, 3.0, 1.0);
     auto result = mul(m, v);
     Vec4f expected(18.0, 24.0, 33.0, 1.0);
-    EXPECT_FLOAT_EQ(result.x, expected.x);
-    EXPECT_FLOAT_EQ(result.y, expected.y);
-    EXPECT_FLOAT_EQ(result.z, expected.z);
-    EXPECT_FLOAT_EQ(result.w, expected.w);
+    EXPECT_DOUBLE_EQ(result.x, expected.x);
+    EXPECT_DOUBLE_EQ(result.y, expected.y);
+    EXPECT_DOUBLE_EQ(result.z, expected.z);
+    EXPECT_DOUBLE_EQ(result.w, expected.w);
     EXPECT_EQ(result, expected);
 }
 
@@ -153,8 +153,8 @@ TEST(Mat4x4fTest, Determinant) {
         0.0, 6.0, -3.0, 0.0,
         0.0, 0.0, 0.0, 0.0};
     auto test = Mat4x4f(data);
-    EXPECT_FLOAT_EQ(determinant2x2(test, 0, 0), 17.0);
-    EXPECT_FLOAT_EQ(determinant2x2(test, 1, 1), -48.0);
+    EXPECT_DOUBLE_EQ(determinant2x2(test, 0, 0), 17.0);
+    EXPECT_DOUBLE_EQ(determinant2x2(test, 1, 1), -48.0);
 }
 
 TEST(Mat4x4fTest, Submatrix) {
@@ -182,10 +182,10 @@ TEST(Mat4x4fTest, MinorAndCofactor) {
         6.0, -1.0, 5.0, 0.0,
         0.0, 0.0, 0.0, 0.0};
     auto test = Mat4x4f(data);
-    EXPECT_FLOAT_EQ(minor3x3(test, 1, 0), 25.0);
-    EXPECT_FLOAT_EQ(cofactor3x3(test, 1, 0), -25.0);
-    EXPECT_FLOAT_EQ(minor3x3(test, 0, 0), -12.0);
-    EXPECT_FLOAT_EQ(cofactor3x3(test, 0, 0), -12.0);
+    EXPECT_DOUBLE_EQ(minor3x3(test, 1, 0), 25.0);
+    EXPECT_DOUBLE_EQ(cofactor3x3(test, 1, 0), -25.0);
+    EXPECT_DOUBLE_EQ(minor3x3(test, 0, 0), -12.0);
+    EXPECT_DOUBLE_EQ(cofactor3x3(test, 0, 0), -12.0);
 }
 
 TEST(Mat4x4fTest, Determinant3x3) {
@@ -195,12 +195,12 @@ TEST(Mat4x4fTest, Determinant3x3) {
         2.0, 6.0, 4.0, 0.0,
         0.0, 0.0, 0.0, 0.0};
     auto test = Mat4x4f(data);
-    EXPECT_FLOAT_EQ(cofactor3x3(test, 0, 0), 56.0);
-    EXPECT_FLOAT_EQ(cofactor3x3(test, 0, 1), 12.0);
-    EXPECT_FLOAT_EQ(cofactor3x3(test, 0, 2), -46.0);
-    EXPECT_FLOAT_EQ(determinant3x3(test), -196.0);
-    EXPECT_FLOAT_EQ(determinant3x3(test, 1), -196.0);
-    EXPECT_FLOAT_EQ(determinant3x3(test, 2), -196.0);
+    EXPECT_DOUBLE_EQ(cofactor3x3(test, 0, 0), 56.0);
+    EXPECT_DOUBLE_EQ(cofactor3x3(test, 0, 1), 12.0);
+    EXPECT_DOUBLE_EQ(cofactor3x3(test, 0, 2), -46.0);
+    EXPECT_DOUBLE_EQ(determinant3x3(test), -196.0);
+    EXPECT_DOUBLE_EQ(determinant3x3(test, 1), -196.0);
+    EXPECT_DOUBLE_EQ(determinant3x3(test, 2), -196.0);
 }
 
 TEST(Mat4x4fTest, Determinant4x4) {
@@ -211,14 +211,14 @@ TEST(Mat4x4fTest, Determinant4x4) {
         -6.0, 7.0, 7.0, -9.0};
     auto test = Mat4x4f(data);
 
-    EXPECT_FLOAT_EQ(cofactor4x4(test, 0, 0), 690.0);
-    EXPECT_FLOAT_EQ(cofactor4x4(test, 0, 1), 447.0);
-    EXPECT_FLOAT_EQ(cofactor4x4(test, 0, 2), 210.0);
-    EXPECT_FLOAT_EQ(cofactor4x4(test, 0, 3), 51.0);
-    EXPECT_FLOAT_EQ(determinant4x4(test), -4071.0);
-    EXPECT_FLOAT_EQ(determinant4x4(test, 1), -4071.0);
-    EXPECT_FLOAT_EQ(determinant4x4(test, 2), -4071.0);
-    EXPECT_FLOAT_EQ(determinant4x4(test, 3), -4071.0);
+    EXPECT_DOUBLE_EQ(cofactor4x4(test, 0, 0), 690.0);
+    EXPECT_DOUBLE_EQ(cofactor4x4(test, 0, 1), 447.0);
+    EXPECT_DOUBLE_EQ(cofactor4x4(test, 0, 2), 210.0);
+    EXPECT_DOUBLE_EQ(cofactor4x4(test, 0, 3), 51.0);
+    EXPECT_DOUBLE_EQ(determinant4x4(test), -4071.0);
+    EXPECT_DOUBLE_EQ(determinant4x4(test, 1), -4071.0);
+    EXPECT_DOUBLE_EQ(determinant4x4(test, 2), -4071.0);
+    EXPECT_DOUBLE_EQ(determinant4x4(test, 3), -4071.0);
 }
 
 TEST(Mat4x4fTest, Invertible) {
@@ -252,8 +252,8 @@ TEST(Mat4x4fTest, Inverse) {
         -0.07895f, -0.22368f, -0.05263f, 0.19737f,
         -0.52256f, -0.81391f, -0.30075f, 0.30639f};
     auto expected = Mat4x4f(expectedData);
-    EXPECT_FLOAT_EQ(determinant4x4(test), 532.0);
-    EXPECT_FLOAT_EQ(cofactor4x4(test, 3, 2), 105.0);
+    EXPECT_DOUBLE_EQ(determinant4x4(test), 532.0);
+    EXPECT_DOUBLE_EQ(cofactor4x4(test, 3, 2), 105.0);
     EXPECT_EQ(str(expected, 5), str(inverse(test), 5));
 }
 

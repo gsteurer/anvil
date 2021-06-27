@@ -26,6 +26,35 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\anvil\chess\bitboard.h" />
+    <ClInclude Include="include\anvil\containers\arrayutils.h" />
+    <ClInclude Include="include\anvil\containers\graph.h" />
+    <ClInclude Include="include\anvil\containers\hash.h" />
+    <ClInclude Include="include\anvil\containers\list.h" />
+    <ClInclude Include="include\anvil\containers\map.h" />
+    <ClInclude Include="include\anvil\containers\redblacktree.h" />
+    <ClInclude Include="include\anvil\containers\slice.h" />
+    <ClInclude Include="include\anvil\math\mat.h" />
+    <ClInclude Include="include\anvil\math\mat2x2f.h" />
+    <ClInclude Include="include\anvil\math\mat3x3f.h" />
+    <ClInclude Include="include\anvil\math\mat4x4f.h" />
+    <ClInclude Include="include\anvil\math\rand.h" />
+    <ClInclude Include="include\anvil\math\util.h" />
+    <ClInclude Include="include\anvil\math\vec2f.h" />
+    <ClInclude Include="include\anvil\math\vec3f.h" />
+    <ClInclude Include="include\anvil\math\vec4f.h" />
+    <ClInclude Include="include\anvil\option.h" />
+    <ClInclude Include="include\anvil\smartpointer.h" />
+    <ClInclude Include="include\anvil\string\string.h" />
+    <ClInclude Include="include\anvil\time.h" />
+    <ClInclude Include="include\anvil\types.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\anvil\math\mat4x4f.cpp" />
+    <ClCompile Include="src\anvil\math\vec4f.cpp" />
+    <ClCompile Include="src\anvil\string\string.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{21758951-5a6a-4393-bb99-6a1d5fe47e51}</ProjectGuid>
     <Keyword>StaticLibrary</Keyword>
@@ -193,34 +222,6 @@
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="include\ads\arrayutils.h" />
-    <ClInclude Include="include\ads\graph.h" />
-    <ClInclude Include="include\ads\hash.h" />
-    <ClInclude Include="include\ads\list.h" />
-    <ClInclude Include="include\ads\map.h" />
-    <ClInclude Include="include\ads\redblacktree.h" />
-    <ClInclude Include="include\ads\slice.h" />
-    <ClInclude Include="include\chess\bitboard.h" />
-    <ClInclude Include="include\math\mat2x2f.h" />
-    <ClInclude Include="include\math\mat3x3f.h" />
-    <ClInclude Include="include\math\mat4x4f.h" />
-    <ClInclude Include="include\math\util.h" />
-    <ClInclude Include="include\math\vec2f.h" />
-    <ClInclude Include="include\math\vec3f.h" />
-    <ClInclude Include="include\math\vec4f.h" />
-    <ClInclude Include="include\option.h" />
-    <ClInclude Include="include\rand.h" />
-    <ClInclude Include="include\string\string.h" />
-    <ClInclude Include="include\types.h" />
-    <ClInclude Include="targetver.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\math\mat4x4f.cpp" />
-    <ClCompile Include="src\math\util.cpp" />
-    <ClCompile Include="src\math\vec4f.cpp" />
-    <ClCompile Include="src\string\string.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -72,6 +72,8 @@ RBTree<T>::~RBTree() {
     // the following delete implementation leaked memory and i dont know why
     // insert 100000 (9158 was the first quantity I discovered) random numbers isize_to the tree
     // iterating over a list of each element and calling delete directly does not leak
+    // @@@ TODO check if rbMin/rbMax function we're fucking up because last_node wasn't initialized before being used in a while loop
+    // AND MSVC++ WAS THE ONE THAT CAUGHT IT, CLANG COULD NOT BE BOTHERED EVEN WITH -wall -wextra
     /*
     while (m_root != m_sentinel) {
         RBNode<T>* node = rbSearch(this, rbTreeMinimum(this->m_root, this->m_sentinel)->key);
@@ -169,7 +171,7 @@ void RBTree<T>::Delete(T item) {
 
 template <typename T>
 inline RBNode<T>* rbTreeMinimum(RBNode<T>* node, RBNode<T>* sentinel) {
-    RBNode<T>* last_node;
+    RBNode<T>* last_node = node;
     while (node != sentinel) {
         last_node = node;
         node = node->left;
@@ -179,7 +181,7 @@ inline RBNode<T>* rbTreeMinimum(RBNode<T>* node, RBNode<T>* sentinel) {
 
 template <typename T>
 inline RBNode<T>* rbTreeMaximum(RBNode<T>* node, RBNode<T>* sentinel) {
-    RBNode<T>* last_node;
+    RBNode<T>* last_node = node;
     while (node != sentinel) {
         last_node = node;
         node = node->right;

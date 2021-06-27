@@ -5,99 +5,108 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source">
-      <UniqueIdentifier>{527fa346-d6c6-4de1-8357-0ead48964bee}</UniqueIdentifier>
+    <Filter Include="include">
+      <UniqueIdentifier>{126920b4-5b72-46f6-9a20-b20e6da1282d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include">
-      <UniqueIdentifier>{e425aa98-ba14-4100-b268-8f911c18728a}</UniqueIdentifier>
+    <Filter Include="src">
+      <UniqueIdentifier>{0593da5a-737e-4ae3-b97a-09d26a5d5128}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\math">
-      <UniqueIdentifier>{95608c78-5a82-4770-b52c-945d47a83710}</UniqueIdentifier>
+    <Filter Include="include\math">
+      <UniqueIdentifier>{5623e342-0296-4a77-ab57-49e3e81aaa56}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\ads">
-      <UniqueIdentifier>{69ef6af6-2926-4215-9159-379263b98655}</UniqueIdentifier>
+    <Filter Include="include\string">
+      <UniqueIdentifier>{854d2909-87af-4a6d-92ad-7b89cf45dbf8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\string">
-      <UniqueIdentifier>{8b77e0e8-bddf-4e89-8a60-bc697a266ccb}</UniqueIdentifier>
+    <Filter Include="include\containers">
+      <UniqueIdentifier>{8cfe1461-ada8-43d6-821c-04e41b125b96}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\chess">
-      <UniqueIdentifier>{80a4001b-00d7-468b-8d5e-51d32000ef1f}</UniqueIdentifier>
+    <Filter Include="include\chess">
+      <UniqueIdentifier>{0d27d1c3-2ca8-406e-9ff9-5f4d16358502}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\math">
+      <UniqueIdentifier>{d874323f-f01a-449b-ac09-23d7956dc8ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\string">
+      <UniqueIdentifier>{4b78a012-4d19-400b-8eaa-69a29cbfc0a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="targetver.h">
-      <Filter>Include</Filter>
+    <ClInclude Include="include\anvil\option.h">
+      <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\math\mat2x2f.h">
-      <Filter>Include\math</Filter>
+    <ClInclude Include="include\anvil\smartpointer.h">
+      <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\math\mat3x3f.h">
-      <Filter>Include\math</Filter>
+    <ClInclude Include="include\anvil\time.h">
+      <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\math\mat4x4f.h">
-      <Filter>Include\math</Filter>
+    <ClInclude Include="include\anvil\types.h">
+      <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\math\util.h">
-      <Filter>Include\math</Filter>
+    <ClInclude Include="include\anvil\math\mat.h">
+      <Filter>include\math</Filter>
     </ClInclude>
-    <ClInclude Include="include\math\vec2f.h">
-      <Filter>Include\math</Filter>
+    <ClInclude Include="include\anvil\math\mat2x2f.h">
+      <Filter>include\math</Filter>
     </ClInclude>
-    <ClInclude Include="include\math\vec3f.h">
-      <Filter>Include\math</Filter>
+    <ClInclude Include="include\anvil\math\mat3x3f.h">
+      <Filter>include\math</Filter>
     </ClInclude>
-    <ClInclude Include="include\math\vec4f.h">
-      <Filter>Include\math</Filter>
+    <ClInclude Include="include\anvil\math\mat4x4f.h">
+      <Filter>include\math</Filter>
     </ClInclude>
-    <ClInclude Include="include\ads\redblacktree.h">
-      <Filter>Include\ads</Filter>
+    <ClInclude Include="include\anvil\math\rand.h">
+      <Filter>include\math</Filter>
     </ClInclude>
-    <ClInclude Include="include\ads\slice.h">
-      <Filter>Include\ads</Filter>
+    <ClInclude Include="include\anvil\math\util.h">
+      <Filter>include\math</Filter>
     </ClInclude>
-    <ClInclude Include="include\option.h">
-      <Filter>Include</Filter>
+    <ClInclude Include="include\anvil\math\vec2f.h">
+      <Filter>include\math</Filter>
     </ClInclude>
-    <ClInclude Include="include\ads\list.h">
-      <Filter>Include\ads</Filter>
+    <ClInclude Include="include\anvil\math\vec3f.h">
+      <Filter>include\math</Filter>
     </ClInclude>
-    <ClInclude Include="include\ads\arrayutils.h">
-      <Filter>Include\ads</Filter>
+    <ClInclude Include="include\anvil\math\vec4f.h">
+      <Filter>include\math</Filter>
     </ClInclude>
-    <ClInclude Include="include\ads\hash.h">
-      <Filter>Include\ads</Filter>
+    <ClInclude Include="include\anvil\containers\arrayutils.h">
+      <Filter>include\containers</Filter>
     </ClInclude>
-    <ClInclude Include="include\ads\map.h">
-      <Filter>Include\ads</Filter>
+    <ClInclude Include="include\anvil\containers\graph.h">
+      <Filter>include\containers</Filter>
     </ClInclude>
-    <ClInclude Include="include\string\string.h">
-      <Filter>Include\string</Filter>
+    <ClInclude Include="include\anvil\containers\hash.h">
+      <Filter>include\containers</Filter>
     </ClInclude>
-    <ClInclude Include="include\types.h">
-      <Filter>Include</Filter>
+    <ClInclude Include="include\anvil\containers\list.h">
+      <Filter>include\containers</Filter>
     </ClInclude>
-    <ClInclude Include="include\rand.h">
-      <Filter>Include</Filter>
+    <ClInclude Include="include\anvil\containers\map.h">
+      <Filter>include\containers</Filter>
     </ClInclude>
-    <ClInclude Include="include\ads\graph.h">
-      <Filter>Include\ads</Filter>
+    <ClInclude Include="include\anvil\containers\redblacktree.h">
+      <Filter>include\containers</Filter>
     </ClInclude>
-    <ClInclude Include="include\chess\bitboard.h">
-      <Filter>Include\chess</Filter>
+    <ClInclude Include="include\anvil\containers\slice.h">
+      <Filter>include\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\anvil\string\string.h">
+      <Filter>include\string</Filter>
+    </ClInclude>
+    <ClInclude Include="include\anvil\chess\bitboard.h">
+      <Filter>include\chess</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\math\util.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="src\anvil\string\string.cpp">
+      <Filter>src\string</Filter>
     </ClCompile>
-    <ClCompile Include="src\math\mat4x4f.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="src\anvil\math\mat4x4f.cpp">
+      <Filter>src\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\math\vec4f.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\string\string.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="src\anvil\math\vec4f.cpp">
+      <Filter>src\math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
