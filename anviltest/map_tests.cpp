@@ -1,10 +1,10 @@
 #include <string>
 
-#include "containers/hash.h"
-#include "containers/map.h"
+#include "anvil/containers/hash.h"
+#include "anvil/containers/map.h"
+#include "anvil/option.h"
 #include "foo.h"
 #include "gtest/gtest.h"
-#include "option.h"
 // #include "rand.h"
 
 using namespace anvil::containers;

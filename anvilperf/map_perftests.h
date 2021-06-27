@@ -1,10 +1,10 @@
 #pragma once
 
-#include "containers/arrayutils.h"
-#include "containers/map.h"
-#include "math/rand.h"
+#include "anvil/containers/arrayutils.h"
+#include "anvil/containers/map.h"
+#include "anvil/math/rand.h"
+#include "anvil/types.h"
 #include "testcase.h"
-#include "types.h"
 
 using namespace anvil::containers;
 

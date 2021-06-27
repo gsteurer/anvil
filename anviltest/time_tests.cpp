@@ -1,9 +1,9 @@
 #include <time.h>
 
+#include "anvil/time.h"
 #include "gtest/gtest.h"
-#include "timeutils.h"
 
-TEST(TimeUtilsTests, Ops) {
+TEST(TimeTests, Ops) {
     timespec a, b, expected, result;
     a.tv_nsec = 1000;
     a.tv_sec = 1000;

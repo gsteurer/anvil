@@ -1,8 +1,8 @@
 #pragma once
 #include <time.h>
 
+#include "anvil/time.h"
 #include "testresult.h"
-#include "timeutils.h"
 
 static const clockid_t PRECISION = CLOCK_THREAD_CPUTIME_ID;
 

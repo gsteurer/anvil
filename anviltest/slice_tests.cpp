@@ -1,12 +1,12 @@
 #include <cstdlib>
 #include <string>
 
-#include "containers/arrayutils.h"
-#include "containers/slice.h"
+#include "anvil/containers/arrayutils.h"
+#include "anvil/containers/slice.h"
+#include "anvil/math/rand.h"
+#include "anvil/option.h"
 #include "foo.h"
 #include "gtest/gtest.h"
-#include "math/rand.h"
-#include "option.h"
 
 using namespace anvil::containers;
 

@@ -1,10 +1,12 @@
 #pragma once
 
+#include "anvil/types.h"
+
 namespace anvil {
 namespace math {
 
 struct Mat3x3f {
-    float m_elements[9];
+    f64_t m_elements[9];
     Mat3x3f();
 };
 

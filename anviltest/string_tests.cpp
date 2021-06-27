@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "string/string.h"
-#include "types.h"
+#include "anvil/string/string.h"
+#include "anvil/types.h"
 
 using namespace anvil::string;
 

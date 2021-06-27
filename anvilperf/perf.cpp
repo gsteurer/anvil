@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <time.h>
 
+#include "anvil/types.h"
 #include "map_perftests.h"
 #include "redblacktree_perftests.h"
 #include "slice_perftests.h"
 #include "testresult.h"
-#include "types.h"
 
 static const isize_t TEST_SIZE = 1000;
 static const isize_t ITERATIONS = 10;

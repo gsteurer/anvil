@@ -1,5 +1,5 @@
+#include "anvil/types.h"
 #include "gtest/gtest.h"
-#include "types.h"
 
 TEST(TypeTests, Types) {
     EXPECT_EQ(sizeof(usize_t), 8U);

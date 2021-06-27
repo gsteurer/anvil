@@ -1,8 +1,8 @@
+#include "anvil/math/mat.h"
+#include "anvil/math/mat4x4f.h"
+#include "anvil/math/util.h"
+#include "anvil/math/vec4f.h"
 #include "gtest/gtest.h"
-#include "math/mat.h"
-#include "math/mat4x4f.h"
-#include "math/util.h"
-#include "math/vec4f.h"
 
 using namespace anvil::math;
 
@@ -32,7 +32,7 @@ TEST(Mat4x4fTest, Cmp) {
     m(3, 3) = 1.0;
     auto id = Identity();
     EXPECT_EQ(m, id);
-    float data[16] = {
+    f64_t data[16] = {
         1.0, 2.0, 3.0, 4.0,
         5.0, 6.0, 7.0, 8.0,
         9.0, 8.0, 7.0, 6.0,
@@ -64,17 +64,17 @@ TEST(Mat4x4fTest, Str) {
 }
 
 TEST(Mat4x4fTest, Mul) {
-    float adata[16] = {
+    f64_t adata[16] = {
         1.0, 2.0, 3.0, 4.0,
         5.0, 6.0, 7.0, 8.0,
         9.0, 8.0, 7.0, 6.0,
         5.0, 4.0, 3.0, 2.0};
-    float bdata[16] = {
+    f64_t bdata[16] = {
         -2.0, 1.0, 2.0, 3.0,
         3.0, 2.0, 1.0, -1.0,
         4.0, 3.0, 6.0, 5.0,
         1.0, 2.0, 7.0, 8.0};
-    float edata[16] = {
+    f64_t edata[16] = {
         20.0, 22.0, 50.0, 48.0,
         44.0, 54.0, 114.0, 108.0,
         40.0, 58.0, 110.0, 102.0,
@@ -96,7 +96,7 @@ TEST(Mat4x4fTest, Mul) {
 }
 
 TEST(Mat4x4fTest, MulVec) {
-    float data[16] = {
+    f64_t data[16] = {
         1.0, 2.0, 3.0, 4.0,
         2.0, 4.0, 4.0, 2.0,
         8.0, 6.0, 4.0, 1.0,
@@ -117,7 +117,7 @@ TEST(Mat4x4fTest, Identity) {
     auto a = Vec4f(1.0, 2.0, 3.0, 4.0);
     EXPECT_EQ(id * a, Vec4f(1.0, 2.0, 3.0, 4.0));
 
-    float data[16] = {
+    f64_t data[16] = {
         1.0, 2.0, 3.0, 4.0,
         5.0, 6.0, 7.0, 8.0,
         9.0, 8.0, 7.0, 6.0,
@@ -128,12 +128,12 @@ TEST(Mat4x4fTest, Identity) {
 }
 
 TEST(Mat4x4fTest, Transpose) {
-    float data[16] = {
+    f64_t data[16] = {
         0.0, 9.0, 3.0, 0.0,
         9.0, 8.0, 0.0, 8.0,
         1.0, 8.0, 5.0, 3.0,
         0.0, 0.0, 5.0, 8.0};
-    float transposeData[16] = {
+    f64_t transposeData[16] = {
         0.0, 9.0, 1.0, 0.0,
         9.0, 8.0, 8.0, 0.0,
         3.0, 0.0, 5.0, 5.0,
@@ -147,7 +147,7 @@ TEST(Mat4x4fTest, Transpose) {
 }
 
 TEST(Mat4x4fTest, Determinant) {
-    float data[16] = {
+    f64_t data[16] = {
         1.0, 5.0, 0.0, 0.0,
         -3.0, 2.0, 7.0, 0.0,
         0.0, 6.0, -3.0, 0.0,
@@ -158,13 +158,13 @@ TEST(Mat4x4fTest, Determinant) {
 }
 
 TEST(Mat4x4fTest, Submatrix) {
-    float data[16] = {
+    f64_t data[16] = {
         -6.0, 1.0, 1.0, 6.0,
         -8.0, 5.0, 8.0, 6.0,
         -1.0, 0.0, 8.0, 2.0,
         -7.0, 1.0, -1.0, 1.0};
 
-    float expectedData[16] = {
+    f64_t expectedData[16] = {
         -6.0, 1.0, 6.0, 0.0,
         -8.0, 8.0, 6.0, 0.0,
         -7.0, -1.0, 1.0, 0.0,
@@ -176,7 +176,7 @@ TEST(Mat4x4fTest, Submatrix) {
 }
 
 TEST(Mat4x4fTest, MinorAndCofactor) {
-    float data[16] = {
+    f64_t data[16] = {
         3.0, 5.0, 0.0, 0.0,
         2.0, -1.0, -7.0, 0.0,
         6.0, -1.0, 5.0, 0.0,
@@ -189,7 +189,7 @@ TEST(Mat4x4fTest, MinorAndCofactor) {
 }
 
 TEST(Mat4x4fTest, Determinant3x3) {
-    float data[16] = {
+    f64_t data[16] = {
         1.0, 2.0, 6.0, 0.0,
         -5.0, 8.0, -4.0, 0.0,
         2.0, 6.0, 4.0, 0.0,
@@ -204,7 +204,7 @@ TEST(Mat4x4fTest, Determinant3x3) {
 }
 
 TEST(Mat4x4fTest, Determinant4x4) {
-    float data[16] = {
+    f64_t data[16] = {
         -2.0, -8.0, 3.0, 5.0,
         -3.0, 1.0, 7.0, 3.0,
         1.0, 2.0, -9.0, 6.0,
@@ -222,13 +222,13 @@ TEST(Mat4x4fTest, Determinant4x4) {
 }
 
 TEST(Mat4x4fTest, Invertible) {
-    float data1[16] = {
+    f64_t data1[16] = {
         6.0, 4.0, 4.0, 4.0,
         5.0, 5.0, 7.0, 6.0,
         4.0, -9.0, 3.0, -7.0,
         9.0, 1.0, 7.0, -6.0};
     auto test1 = Mat4x4f(data1);
-    float data2[16] = {
+    f64_t data2[16] = {
         -4.0, 2.0, -2.0, -3.0,
         9.0, 6.0, 2.0, 6.0,
         0.0, -5.0, 1.0, -5.0,
@@ -240,13 +240,13 @@ TEST(Mat4x4fTest, Invertible) {
 }
 
 TEST(Mat4x4fTest, Inverse) {
-    float data[16] = {
+    f64_t data[16] = {
         -5.0, 2.0, 6.0, -8.0,
         1.0, -5.0, 1.0, 8.0,
         7.0, 7.0, -6.0, -7.0,
         1.0, -3.0, 7.0, 4.0};
     auto test = Mat4x4f(data);
-    float expectedData[16] = {
+    f64_t expectedData[16] = {
         0.21805f, 0.45113f, 0.24060f, -0.04511f,
         -0.80827f, -1.45677f, -0.44361f, 0.52068f,
         -0.07895f, -0.22368f, -0.05263f, 0.19737f,
@@ -258,14 +258,14 @@ TEST(Mat4x4fTest, Inverse) {
 }
 
 TEST(Mat4x4fTest, UndoMul) {
-    float dataA[16] = {
+    f64_t dataA[16] = {
         3.0, -9.0, 7.0, 3.0,
         3.0, -8.0, 2.0, -9.0,
         -4.0, 4.0, 4.0, 1.0,
         -6.0, 5.0, -1.0, 1.0};
     auto A = Mat4x4f(dataA);
 
-    float dataB[16] = {
+    f64_t dataB[16] = {
         8.0, 2.0, 2.0, 2.0,
         3.0, -1.0, 7.0, 0.0,
         7.0, 0.0, 5.0, 4.0,

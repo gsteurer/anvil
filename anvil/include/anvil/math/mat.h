@@ -1,7 +1,7 @@
 #pragma once
 
-#include "math/mat3x3f.h"
-#include "math/mat4x4f.h"
+#include "anvil/math/mat3x3f.h"
+#include "anvil/math/mat4x4f.h"
 
 namespace anvil {
 namespace math {
@@ -27,7 +27,7 @@ struct matrix_attributes<Mat3x3f> {
 template <typename T>
 T submatrix(const T& mat, unsigned int row, unsigned int col) {
     T m;
-    float data[matrix_attributes<T>::rows * matrix_attributes<T>::cols];
+    f64_t data[matrix_attributes<T>::rows * matrix_attributes<T>::cols];
     unsigned int idx = 0;
     for (unsigned int r = 0; r < matrix_attributes<T>::rows; r++) {
         for (unsigned int c = 0; c < matrix_attributes<T>::cols; c++) {
@@ -53,7 +53,7 @@ T transpose(const T& mat) {
     T A(mat);
     for (unsigned int n = 0; n <= matrix_attributes<T>::rows - 2; n++) {
         for (unsigned int m = n + 1; m <= matrix_attributes<T>::cols - 1; m++) {
-            float tmp = A(n, m);
+            f64_t tmp = A(n, m);
             A(n, m) = A(m, n);
             A(m, n) = tmp;
         }

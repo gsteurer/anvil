@@ -1,8 +1,8 @@
 #include <limits>
 
+#include "anvil/math/util.h"
+#include "anvil/math/vec4f.h"
 #include "gtest/gtest.h"
-#include "math/util.h"
-#include "math/vec4f.h"
 
 using namespace anvil::math;
 

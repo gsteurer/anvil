@@ -13,13 +13,13 @@ dirs:
 	mkdir -p .obj lib
 
 mat4x4f.o: 
-	$(CC) $(CFLAGS) -c -o .obj/$@ src/math/mat4x4f.cpp
+	$(CC) $(CFLAGS) -c -o .obj/$@ src/anvil/math/mat4x4f.cpp
 
 vec4f.o: 
-	$(CC) $(CFLAGS) -c -o .obj/$@ src/math/vec4f.cpp
+	$(CC) $(CFLAGS) -c -o .obj/$@ src/anvil/math/vec4f.cpp
 
 string.o: 
-	$(CC) $(CFLAGS) -c -o .obj/$@ src/string/string.cpp
+	$(CC) $(CFLAGS) -c -o .obj/$@ src/anvil/string/string.cpp
 
 lib: mat4x4f.o vec4f.o string.o
 	ar rvs lib/libanvil.a .obj/*.o

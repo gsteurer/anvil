@@ -1,9 +1,10 @@
-#include "math/vec4f.h"
+#include "anvil/math/vec4f.h"
 
 #include <iomanip>
 #include <sstream>
 
-#include "math/util.h"
+#include "anvil/math/util.h"
+#include "anvil/types.h"
 
 namespace anvil {
 namespace math {
@@ -17,7 +18,7 @@ Vec4f& Vec4f::operator=(const Vec4f& v) {
     this->w = v.w;
     return *this;
 }
-Vec4f::Vec4f(float x, float y, float z, float w) : x(x), y(y), z(z), w(w){};
+Vec4f::Vec4f(f64_t x, f64_t y, f64_t z, f64_t w) : x(x), y(y), z(z), w(w){};
 
 bool point(const Vec4f& vec) {
     return floateq(1.0, vec.w);
@@ -54,7 +55,7 @@ Vec4f sub(const Vec4f& lhs, const Vec4f& rhs) {
         lhs.w - rhs.w);
 }
 
-Vec4f mul(float scale, const Vec4f& vec) {
+Vec4f mul(f64_t scale, const Vec4f& vec) {
     return Vec4f(
         scale * vec.x,
         scale * vec.y,
@@ -62,7 +63,7 @@ Vec4f mul(float scale, const Vec4f& vec) {
         scale * vec.w);
 }
 
-Vec4f div(float scale, const Vec4f& vec) {
+Vec4f div(f64_t scale, const Vec4f& vec) {
     return Vec4f(
         vec.x / scale,
         vec.y / scale,
@@ -70,7 +71,7 @@ Vec4f div(float scale, const Vec4f& vec) {
         vec.w / scale);
 }
 
-float mag(const Vec4f& vec) {
+f64_t mag(const Vec4f& vec) {
     return std::sqrt(
         (vec.x * vec.x) +
         (vec.y * vec.y) +
@@ -79,7 +80,7 @@ float mag(const Vec4f& vec) {
 }
 
 Vec4f norm(const Vec4f& vec) {
-    float m = mag(vec);
+    f64_t m = mag(vec);
     return Vec4f(
         vec.x / m,
         vec.y / m,
@@ -87,7 +88,7 @@ Vec4f norm(const Vec4f& vec) {
         vec.w / m);
 }
 
-float dot(const Vec4f& lhs, const Vec4f& rhs) {
+f64_t dot(const Vec4f& lhs, const Vec4f& rhs) {
     return (lhs.x * rhs.x) +
            (lhs.y * rhs.y) +
            (lhs.z * rhs.z) +
@@ -106,15 +107,15 @@ Vec4f operator+(const Vec4f& lhs, const Vec4f& rhs) { return add(lhs, rhs); }
 Vec4f operator-(const Vec4f& lhs, const Vec4f& rhs) { return sub(lhs, rhs); }
 bool operator==(const Vec4f& lhs, const Vec4f& rhs) { return floateq(lhs, rhs); }
 
-Vec4f mul(const Vec4f& vec, float scale) {
+Vec4f mul(const Vec4f& vec, f64_t scale) {
     return mul(scale, vec);
 }
 
-Vec4f div(const Vec4f& vec, float scale) {
+Vec4f div(const Vec4f& vec, f64_t scale) {
     return div(scale, vec);
 }
 
-std::string str(const Vec4f& vec, unsigned int precision) {
+std::string str(const Vec4f& vec, isize_t precision) {
     std::stringstream stream;
     stream << std::fixed << std::setprecision(precision)
            << "("
