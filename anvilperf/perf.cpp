@@ -1,167 +1,65 @@
 #include <stdio.h>
 #include <time.h>
 
-#include "ads/arrayutils.h"
-#include "ads/list.h"
-#include "ads/map.h"
-#include "ads/redblacktree.h"
-#include "ads/slice.h"
-#include "option.h"
-#include "rand.h"
+#include "map_perftests.h"
+#include "redblacktree_perftests.h"
+#include "slice_perftests.h"
+#include "testresult.h"
 #include "types.h"
 
-static const anvil::i64_t TEST_SIZE = 42069;
-static const clockid_t PRECISION = CLOCK_THREAD_CPUTIME_ID;
+static const anvil::isize_t TEST_SIZE = 1000;
+static const anvil::isize_t ITERATIONS = 10;
 
-// https://stackoverflow.com/questions/17705786/getting-negative-values-using-clock-gettime
-timespec diff(timespec start, timespec end) {
-    timespec temp;
-    if ((end.tv_nsec - start.tv_nsec) < 0) {
-        temp.tv_sec = end.tv_sec - start.tv_sec - 1;
-        temp.tv_nsec = 1000000000 + end.tv_nsec - start.tv_nsec;
-    } else {
-        temp.tv_sec = end.tv_sec - start.tv_sec;
-        temp.tv_nsec = end.tv_nsec - start.tv_nsec;
+#define STR(x) #x
+
+template <typename T>
+struct TestRun {
+    TestRun() = delete;
+    TestRun(anvil::isize_t test_size, anvil::isize_t num_iterations) {
+        m_buffer = new char[512];
+        T test(test_size);
+        for (anvil::isize_t idx = 0; idx < num_iterations; idx++) {
+            m_result = test.Run();
+        }
     }
-    return temp;
-}
-
-void slice() {
-    printf("\n>>>slice test\n");
-    timespec t_initial, t_final, delta;
-    int* elements = new int[TEST_SIZE];
-    anvil::Slice<anvil::u64_t>* slice = new anvil::Slice<anvil::u64_t>();
-
-    clock_gettime(PRECISION, &t_initial);
-    for (anvil::isize_t idx = 0; idx < TEST_SIZE; idx++) {
-        int val = anvil::rand();
-        slice->Insert(anvil::rand());
-        elements[idx] = val;
+    ~TestRun() {
+        delete[] m_buffer;
     }
-    clock_gettime(PRECISION, &t_final);
-
-    delta = diff(t_initial, t_final);
-    printf("slice insert time: %lds || %ldns\n", delta.tv_sec, delta.tv_nsec);
-
-    anvil::scramble(elements, TEST_SIZE);
-
-    clock_gettime(PRECISION, &t_initial);
-    for (anvil::isize_t idx = 0; idx < TEST_SIZE; idx++) {
-        slice->IndexOf(elements[idx]);
+    char* to_str(char* buffer) {
+        sprintf(buffer, "%s", m_result.to_str(buffer));
+        return buffer;
     }
-    clock_gettime(PRECISION, &t_final);
-
-    delta = diff(t_initial, t_final);
-    printf("slice search time: %lds || %ldns\n", delta.tv_sec, delta.tv_nsec);
-
-    delete slice;
-    delete[] elements;
-    printf("<<<\n");
-}
-
-void list() {
-    printf("\n>>>list test\n");
-    timespec t_initial, t_final, delta;
-    int* elements = new int[TEST_SIZE];
-    List<anvil::u64_t>* list = new List<anvil::u64_t>();
-
-    clock_gettime(PRECISION, &t_initial);
-    for (anvil::isize_t idx = 0; idx < TEST_SIZE; idx++) {
-        int val = anvil::rand();
-        list->PushFront(val);
-        elements[idx] = val;
-    }
-    clock_gettime(PRECISION, &t_final);
-
-    delta = diff(t_initial, t_final);
-    printf("list insert time: %lds || %ldns\n", delta.tv_sec, delta.tv_nsec);
-
-    anvil::scramble(elements, TEST_SIZE);
-
-    clock_gettime(PRECISION, &t_initial);
-    for (anvil::isize_t idx = 0; idx < TEST_SIZE; idx++) {
-        list->IndexOf(elements[idx]);
-    }
-    clock_gettime(PRECISION, &t_final);
-
-    delta = diff(t_initial, t_final);
-    printf("list search time: %lds || %ldns\n", delta.tv_sec, delta.tv_nsec);
-
-    delete list;
-    delete[] elements;
-    printf("<<<\n");
-}
-
-void rbtree() {
-    printf("\n>>>rbtree test\n");
-    timespec t_initial, t_final, delta;
-    anvil::srand(time(0));
-    int* elements = new int[TEST_SIZE];
-
-    clock_gettime(PRECISION, &t_initial);
-    RBTree<anvil::u64_t>* tree = new RBTree<anvil::u64_t>();
-    for (anvil::isize_t idx = 0; idx < TEST_SIZE; idx++) {
-        int val = anvil::rand();
-        tree->Insert(val);
-        elements[idx] = val;
-    }
-    clock_gettime(PRECISION, &t_final);
-
-    delta = diff(t_initial, t_final);
-    printf("tree insert time: %lds || %ldns\n", delta.tv_sec, delta.tv_nsec);
-
-    anvil::scramble(elements, TEST_SIZE);
-
-    clock_gettime(PRECISION, &t_initial);
-    for (anvil::isize_t idx = 0; idx < TEST_SIZE; idx++) {
-        tree->Search(elements[idx]);
-    }
-    clock_gettime(PRECISION, &t_final);
-
-    delta = diff(t_initial, t_final);
-    printf("tree search time: %lds || %ldns\n", delta.tv_sec, delta.tv_nsec);
-
-    delete tree;
-    delete[] elements;
-    printf("<<<\n");
-}
-
-void map() {
-    printf("\n>>>map test\n");
-    timespec t_initial, t_final, delta;
-    int* elements = new int[TEST_SIZE];
-    Map<anvil::u64_t, anvil::u64_t>* map = new Map<anvil::u64_t, anvil::u64_t>();
-
-    clock_gettime(PRECISION, &t_initial);
-    for (anvil::isize_t idx = 0; idx < TEST_SIZE; idx++) {
-        anvil::u64_t val = static_cast<anvil::u64_t>(anvil::rand());
-        (*map)[val] = val;
-        elements[idx] = val;
-    }
-    clock_gettime(PRECISION, &t_final);
-
-    delta = diff(t_initial, t_final);
-    printf("map insert time: %lds || %ldns\n", delta.tv_sec, delta.tv_nsec);
-
-    anvil::scramble(elements, TEST_SIZE);
-
-    clock_gettime(PRECISION, &t_initial);
-    for (anvil::isize_t idx = 0; idx < TEST_SIZE; idx++) {
-        (*map)[elements[idx]];
-    }
-    clock_gettime(PRECISION, &t_final);
-
-    delta = diff(t_initial, t_final);
-    printf("map search time: %lds || %ldns\n", delta.tv_sec, delta.tv_nsec);
-
-    delete map;
-    delete[] elements;
-    printf("<<<\n");
-}
+    char* m_buffer;
+    TestResult m_result;
+};
 
 int main() {
-    slice();
-    list();
-    rbtree();
-    map();
+    char* buffer = new char[512];
+    /*
+        Slice
+    */
+    TestRun<SliceSearchTest> sliceSearchTest(TEST_SIZE, ITERATIONS);
+    printf("%s: %s\n", STR(SliceSearchTest), sliceSearchTest.to_str(buffer));
+
+    TestRun<SliceInsertTest> sliceInsertTest(TEST_SIZE, ITERATIONS);
+    printf("%s: %s\n", STR(SliceInsertTest), sliceInsertTest.to_str(buffer));
+
+    /*
+        Tree
+    */
+    TestRun<RBTreeSearchTest> rbtreeSearchTest(TEST_SIZE, ITERATIONS);
+    printf("%s: %s\n", STR(RBTreeSearchTest), rbtreeSearchTest.to_str(buffer));
+
+    TestRun<RBTreeInsertTest> rbtreeInsertTest(TEST_SIZE, ITERATIONS);
+    printf("%s: %s\n", STR(RBTreeInsertTest), rbtreeInsertTest.to_str(buffer));
+
+    /*
+        Map
+    */
+    TestRun<MapSearchTest> mapSearchTest(TEST_SIZE, ITERATIONS);
+    printf("%s: %s\n", STR(MapSearchTest), mapSearchTest.to_str(buffer));
+
+    TestRun<MapInsertTest> mapInsertTest(TEST_SIZE, ITERATIONS);
+    printf("%s: %s\n", STR(MapInsertTest), mapInsertTest.to_str(buffer));
+    delete[] buffer;
 }

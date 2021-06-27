@@ -80,6 +80,7 @@ struct Map {
     // https://stackoverflow.com/questions/18670530/properly-overloading-bracket-operator-for-hashtable-get-and-set
     bool Insert(K key, V value);
     Option<V> Remove(K key);
+    void Clear();
     int IndexOf(K key) const;
 
     // let's store collisions in a linked list
@@ -215,4 +216,12 @@ Option<V> Map<K, V>::Remove(K key) {
     }
 
     return result;
+}
+
+template <typename K, typename V>
+void Map<K, V>::Clear() {
+    m_capacity = 16;
+    m_size = 0;
+    delete[] m_data;
+    m_data = new List<MapNode<K, V>>[m_capacity];
 }

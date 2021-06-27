@@ -36,6 +36,7 @@ struct RBTree {
     ~RBTree();
     void Insert(T item);
     void Delete(T item);
+    void Clear();
     Option<T> Search(T item);
     int Height(RBNode<T>* node = nullptr);
     T Min();
@@ -61,13 +62,7 @@ RBTree<T>::RBTree() {
 
 template <typename T>
 RBTree<T>::~RBTree() {
-    RBNode<T>* node = rbTreeMinimum(this->m_root, this->m_sentinel);
-    while (m_root != m_sentinel) {
-        rbDelete(this, node);
-        m_size--;
-        delete node;
-        node = rbTreeMinimum(this->m_root, this->m_sentinel);
-    }
+    this->Clear();
     delete m_sentinel;
 
     // the following delete implementation leaked memory and i dont know why
@@ -81,6 +76,17 @@ RBTree<T>::~RBTree() {
     }
     delete m_sentinel;
     */
+}
+
+template <typename T>
+void RBTree<T>::Clear() {
+    RBNode<T>* node = rbTreeMinimum(this->m_root, this->m_sentinel);
+    while (m_root != m_sentinel) {
+        rbDelete(this, node);
+        m_size--;
+        delete node;
+        node = rbTreeMinimum(this->m_root, this->m_sentinel);
+    }
 }
 
 template <typename T>
