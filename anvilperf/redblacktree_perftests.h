@@ -36,7 +36,7 @@ class RBTreeInsertTest : public RBTreeTest {
     void Setup() override {}
     void Execute() override {
         for (isize_t idx = 0; idx < m_test_size; idx++) {
-            u64_t val = static_cast<u64_t>(rand());
+            u64_t val = static_cast<u64_t>(anvil::math::rand());
             m_tree->Insert(val);
             m_elements[idx] = val;
         }
@@ -49,7 +49,7 @@ class RBTreeSearchTest : public RBTreeTest {
     RBTreeSearchTest(const isize_t test_size) : RBTreeTest(test_size) {}
     void Setup() override {
         for (isize_t idx = 0; idx < m_test_size; idx++) {
-            int val = rand();
+            int val = anvil::math::rand();
             m_tree->Insert(val);
             m_elements[idx] = val;
         }

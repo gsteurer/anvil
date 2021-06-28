@@ -36,7 +36,7 @@ class MapInsertTest : public MapTest {
     void Setup() override {}
     void Execute() override {
         for (isize_t idx = 0; idx < m_test_size; idx++) {
-            u64_t val = static_cast<u64_t>(rand());
+            u64_t val = static_cast<u64_t>(anvil::math::rand());
             (*m_map)[val] = val;
             m_elements[idx] = val;
         }
@@ -49,7 +49,7 @@ class MapSearchTest : public MapTest {
     MapSearchTest(const isize_t test_size) : MapTest(test_size) {}
     void Setup() override {
         for (isize_t idx = 0; idx < m_test_size; idx++) {
-            int val = rand();
+            int val = anvil::math::rand();
             (*m_map)[val] = val;
             m_elements[idx] = val;
         }

@@ -2,6 +2,7 @@
 #include <time.h>
 
 #include "anvil/types.h"
+#include "list_perftests.h"
 #include "map_perftests.h"
 #include "redblacktree_perftests.h"
 #include "slice_perftests.h"
@@ -43,6 +44,15 @@ int main() {
 
     TestRun<SliceInsertTest> sliceInsertTest(TEST_SIZE, ITERATIONS);
     printf("%s: %s\n", STR(SliceInsertTest), sliceInsertTest.to_str(buffer));
+
+    /*
+        List
+    */
+    TestRun<ListSearchTest> listSearchTest(TEST_SIZE, ITERATIONS);
+    printf("%s: %s\n", STR(ListSearchTest), listSearchTest.to_str(buffer));
+
+    TestRun<ListInsertTest> listInsertTest(TEST_SIZE, ITERATIONS);
+    printf("%s: %s\n", STR(ListInsertTest), listInsertTest.to_str(buffer));
 
     /*
         Tree

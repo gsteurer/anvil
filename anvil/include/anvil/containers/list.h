@@ -5,19 +5,17 @@
 namespace anvil {
 namespace containers {
 
-template <typename T>
-struct ListNode {
-    ListNode<T>* left;
-    ListNode<T>* right;
-    T data;
-};
-
 // @@@ TODO
 // if a list is empty, dereferencing the iterator segfaults;
 // the list needs to have a mechanism to iterate to the end, because
 // iterating with a for loop only goes to the second to last element before exiting
 template <typename T>
 struct List {
+    struct Node {
+        Node* left;
+        Node* right;
+        T data;
+    };
     class Iterator {
        public:
         Iterator() {
@@ -25,7 +23,7 @@ struct List {
         }
         ~Iterator() {
         }
-        Iterator(ListNode<T>* node) {
+        Iterator(Node* node) {
             m_node = node;
         }
         Iterator(const Iterator& it) {
@@ -62,7 +60,7 @@ struct List {
         bool operator==(const Iterator& rhs) {
             return m_node == rhs.m_node;
         }
-        ListNode<T>* m_node;
+        Node* m_node;
     };
     List();
     List(const List<T>& list);
@@ -84,13 +82,15 @@ struct List {
     Option<T> RemoveAt(isize_t index);
     Option<T> Remove(T item);
 
+    void Clear();
+
     T operator[](isize_t index) const;
     T& operator[](isize_t index);
 
    private:
     isize_t m_size;
-    ListNode<T>* m_root;
-    ListNode<T>* m_last;
+    Node* m_root;
+    Node* m_last;
 };
 
 template <typename T>
@@ -130,14 +130,7 @@ List<T>::List(const List<T>& list) {
 
 template <typename T>
 List<T>::~List() {
-    ListNode<T>* node = m_root;
-    while (node != nullptr) {
-        ListNode<T>* next = node->right;
-        node->left = nullptr;
-        delete node;
-        m_size--;
-        node = next;
-    }
+    Clear();
 }
 
 template <typename T>
@@ -159,7 +152,7 @@ Option<isize_t> List<T>::IndexOf(T item) {
     Option<isize_t> result;
     result.result = Option<isize_t>::None;
     isize_t current_index = 0;
-    ListNode<T>* node = m_root;
+    Node* node = m_root;
     while (node != nullptr) {
         if (node->data == item) {
             result.result = Option<isize_t>::Some;
@@ -174,13 +167,13 @@ Option<isize_t> List<T>::IndexOf(T item) {
 
 template <typename T>
 void List<T>::PushFront(T item) {
-    ListNode<T>* node = new ListNode<T>();
+    Node* node = new Node();
     node->data = item;
     node->left = nullptr;
     node->right = nullptr;
     m_size++;
     if (m_root != nullptr) {
-        ListNode<T>* current_root = m_root;
+        Node* current_root = m_root;
         current_root->left = node;
         m_root = node;
         m_root->right = current_root;
@@ -189,15 +182,16 @@ void List<T>::PushFront(T item) {
         m_last = m_root;
     }
 }
+
 template <typename T>
 void List<T>::PushBack(T item) {
-    ListNode<T>* node = new ListNode<T>();
+    Node* node = new Node();
     node->data = item;
     node->left = nullptr;
     node->right = nullptr;
     m_size++;
     if (m_root != nullptr) {
-        ListNode<T>* current_last = m_last;
+        Node* current_last = m_last;
         current_last->right = node;
         m_last = node;
         m_last->left = current_last;
@@ -210,7 +204,7 @@ void List<T>::PushBack(T item) {
 template <typename T>
 void List<T>::InsertAt(T item, isize_t index) {
     if (m_root != nullptr) {
-        ListNode<T>* node;
+        Node* node;
         bool go_right = true;
         isize_t counter;
         if (index > m_size / 2) {
@@ -237,8 +231,8 @@ void List<T>::InsertAt(T item, isize_t index) {
         } else if (counter >= m_size) {
             PushBack(item);
         } else {
-            ListNode<T>* lhs = node->left;
-            ListNode<T>* new_node = new ListNode<T>();
+            Node* lhs = node->left;
+            Node* new_node = new Node();
             new_node->data = item;
             new_node->left = lhs;
             lhs->right = new_node;
@@ -256,7 +250,7 @@ Option<T> List<T>::PopFront() {
     Option<T> result;
     result.result = Option<T>::None;
     if (m_root != nullptr) {
-        ListNode<T>* node = m_root->right;
+        Node* node = m_root->right;
         if (node != nullptr) {
             node->left = nullptr;
         }
@@ -278,7 +272,7 @@ Option<T> List<T>::PopBack() {
     Option<T> result;
     result.result = Option<T>::None;
     if (m_last != nullptr) {
-        ListNode<T>* node = m_last->left;
+        Node* node = m_last->left;
         if (node != nullptr) {
             node->right = nullptr;
         }
@@ -302,7 +296,7 @@ Option<T> List<T>::RemoveAt(isize_t index) {
     if (index < 0 || index > m_size - 1) {
         return result;
     }
-    ListNode<T>* node = m_root;
+    Node* node = m_root;
     isize_t current_index = 0;
     while (current_index < index && node != nullptr) {
         node = node->right;
@@ -313,8 +307,8 @@ Option<T> List<T>::RemoveAt(isize_t index) {
         return result;
     }
 
-    ListNode<T>* left = node->left;
-    ListNode<T>* right = node->right;
+    Node* left = node->left;
+    Node* right = node->right;
     if (left != nullptr) {
         left->right = right;
         if (right == nullptr) {
@@ -351,8 +345,22 @@ Option<T> List<T>::Remove(T item) {
 }
 
 template <typename T>
+void List<T>::Clear() {
+    Node* node = m_root;
+    while (node != nullptr) {
+        Node* next = node->right;
+        node->left = nullptr;
+        delete node;
+        m_size--;
+        node = next;
+    }
+    m_root = nullptr;
+    m_last = nullptr;
+}
+
+template <typename T>
 T List<T>::operator[](isize_t index) const {
-    ListNode<T>* node = m_root;
+    Node* node = m_root;
     isize_t current_idx = 0;
     // @@@ check if index in [0:msize)
 
@@ -367,7 +375,7 @@ T List<T>::operator[](isize_t index) const {
 
 template <typename T>
 T& List<T>::operator[](isize_t index) {
-    ListNode<T>* node = m_root;
+    Node* node = m_root;
     isize_t current_idx = 0;
     // @@@ check if index in [0:msize)
 
