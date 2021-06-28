@@ -44,7 +44,7 @@ struct Hashable<int> {  // knuth
 // https://stackoverflow.com/questions/664014/what-integer-hash-function-are-good-that-accepts-an-integer-hash-key
 // https://www.usna.edu/Users/cs/crabbe/IC312/current/units/06/unit.html
 
-long murmurHash3(long key) {
+inline long murmurHash3(long key) {
     // unsigned long phi = 11400714819323199488L;  // pow(2,64) * (-1 + math.sqrt(5)) / 2 // golden ratio
     // return (key * phi) >> 64;
     unsigned long temp = key >> (sizeof(long) * 8 - 1);
@@ -73,13 +73,19 @@ struct Hashable<u64_t> {
     }
 };
 
+template <>
+struct Hashable<i64_t> {
+    static long Hash(i64_t key) {  // Austin Appleby's MurmurHash3
+        return murmurHash3(key);
+    }
+};
+
 // https://dave.cheney.net/2018/05/29/how-the-go-runtime-implements-maps-efficiently-without-generics
 // https://en.wikipedia.org/wiki/MurmurHash
 // https://stackoverflow.com/questions/19411742/what-is-the-default-hash-function-used-in-c-stdunordered-map
 
 // https://stackoverflow.com/questions/1579721/why-are-5381-and-33-so-important-in-the-djb2-algorithm
-inline unsigned long
-djb2(unsigned char* str) {
+inline unsigned long djb2(unsigned char* str) {
     unsigned long hash = 5381;
     int c;
     // http://www.cse.yorku.ca/~oz/hash.html

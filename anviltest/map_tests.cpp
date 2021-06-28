@@ -5,7 +5,6 @@
 #include "anvil/option.h"
 #include "foo.h"
 #include "gtest/gtest.h"
-// #include "rand.h"
 
 using namespace anvil::containers;
 
@@ -73,28 +72,13 @@ TEST(MapTests, Bracket) {
 }
 
 TEST(MapTests, Resize) {
-    // srand(1000);
     Map<std::string, Foo<int>> test;
     const int size = 1000;
     int data[size];
     EXPECT_EQ(test.Capacity(), 16);
 
     for (int idx = 0; idx < size; idx++) {
-        int v = idx;  // rand() % size + 1;
-        /*
-        bool duplicate = false;
-        // this is profoundly slow
-        do {
-            duplicate = false;
-            for (int jdx = 0; jdx <= idx; jdx++) {
-                if (data[jdx] == v) {
-                    v = rand() % size + 1;
-                    duplicate = true;
-                    break;
-                }
-            }
-        } while (duplicate);
-        */
+        int v = idx;
         std::string k = std::to_string(v);
         test[k] = Foo<int>(v);
         data[idx] = v;

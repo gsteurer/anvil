@@ -1,7 +1,7 @@
 #include "anvil/containers/graph.h"
 #include "gtest/gtest.h"
 
+using namespace anvil::containers;
 TEST(GraphTest, Ctor) {
-    anvil::containers::Graph g;
-    EXPECT_EQ(g.m_size, 0);
+    Graph test;
 }

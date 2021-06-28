@@ -41,19 +41,8 @@ struct MapProxy {  // this is the proxy pattern
     MapProxy(Map<K, V>& map, K key) : map(map), key(key) {}
     // https://stackoverflow.com/questions/1010539/changing-return-type-of-a-function-without-template-specialization-c
     operator Option<V>() const {  // this is a conversion function
-        Option<V> result;
-        isize_t map_index = map.IndexOf(key);
-        List<MapNode<K, V>>* node_list = &(map.m_data[map_index]);
-
-        for (isize_t idx = 0; idx < node_list->Length(); idx++) {
-            MapNode<K, V>* node = &(*node_list)[idx];
-            if (node->key == key) {
-                result.result = Option<V>::Some;
-                result.value = node->value;
-                return result;
-            }
-        }
-        return result;
+        const Map<K, V>* m = &map;
+        return m->operator[](key);
     }
 
     operator V() const = delete;  // use 'Option<V> foo =' instead 'Foo ='
@@ -81,6 +70,7 @@ struct Map {
     // the average cost of a lookup depends only on the average number of keys per bucket—that is, it is roughly proportional to the load factor.
     // a chained hash table with 1000 slots and 10,000 stored keys (load factor 10) is five to ten times slower than a 10,000-slot table (load factor 1); but still 1000 times faster than a plain sequential list.
     MapProxy<K, V> operator[](const K& key);
+    Option<V> operator[](const K& key) const;
     // https://stackoverflow.com/questions/18670530/properly-overloading-bracket-operator-for-hashtable-get-and-set
     bool Insert(K key, V value);
     Option<V> Remove(K key);
@@ -181,6 +171,24 @@ void Map<K, V>::Rehash(isize_t size) {
 template <typename K, typename V>
 MapProxy<K, V> Map<K, V>::operator[](const K& key) {
     return MapProxy(*this, key);
+}
+
+template <typename K, typename V>
+Option<V> Map<K, V>::operator[](const K& key) const {
+    Option<V> result;
+    isize_t map_index = IndexOf(key);
+    List<MapNode<K, V>>* node_list = &(m_data[map_index]);
+
+    for (isize_t idx = 0; idx < node_list->Length(); idx++) {
+        MapNode<K, V>* node = &(*node_list)[idx];
+        if (node->key == key) {
+            result.result = Option<V>::Some;
+            result.value = node->value;
+            return result;
+        }
+    }
+
+    return result;
 }
 
 template <typename K, typename V>

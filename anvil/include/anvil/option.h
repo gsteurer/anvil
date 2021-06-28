@@ -5,7 +5,6 @@ struct Option {
     Option() : result(None) {}
     // Option(const T& val) : result(Some), value(val) {}
     operator T() { return value; }
-
     enum Result { None,
                   Some };
     Result result;
