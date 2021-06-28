@@ -8,17 +8,6 @@
 
 using namespace anvil::containers;
 
-TEST(MapTests, MapEntry) {
-    MapNode<int, int> test(5, 10);
-    MapNode<int, int> test2(5, 15);
-    MapNode<int, int> test3(6, 15);
-
-    EXPECT_EQ(test, test2);
-    EXPECT_NE(test, test3);
-
-    MapNode<std::string, Foo<int>> test4("foo", Foo<int>(4));
-}
-
 TEST(MapTests, Hash) {
     int size = 16;
     long result = Hashable<int>::Hash(55);

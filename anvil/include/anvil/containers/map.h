@@ -7,26 +7,6 @@
 namespace anvil {
 namespace containers {
 
-template <typename K, typename V>
-struct MapNode {
-    MapNode() {}
-    MapNode(K key, V value) : key(key), value(value) {}
-    ~MapNode() {}
-    K key;
-    V value;
-    bool operator==(const MapNode<K, V>& rhs) const {
-        return this->key == rhs.key;
-    }
-    bool operator!=(const MapNode<K, V>& rhs) const {
-        return !(this->key == rhs.key);
-    }
-};
-
-template <typename K, typename V>
-struct Map;
-
-template <typename K, typename V>
-
 /*
     // https://stackoverflow.com/questions/18670530/properly-overloading-bracket-operator-for-hashtable-get-and-set
     // https://stackoverflow.com/questions/36510763/c-thread-safe-bracket-operator-proxy
@@ -34,33 +14,29 @@ template <typename K, typename V>
     // https://en.wikipedia.org/wiki/Proxy_pattern
 
 */
-struct MapProxy {  // this is the proxy pattern
-
-    Map<K, V>& map;
-    K key;
-    MapProxy(Map<K, V>& map, K key) : map(map), key(key) {}
-    // https://stackoverflow.com/questions/1010539/changing-return-type-of-a-function-without-template-specialization-c
-    operator Option<V>() const {  // this is a conversion function
-        const Map<K, V>* m = &map;
-        return m->operator[](key);
-    }
-
-    operator V() const = delete;  // use 'Option<V> foo =' instead 'Foo ='
-
-    MapProxy&
-    operator=(V const& opt) {
-        map.Insert(key, opt);
-        return *this;
-    }
-};
 
 // https://en.wikipedia.org/wiki/Hash_table
 template <typename K, typename V>
 struct Map {
+   public:
+    struct Proxy {  // the proxy pattern lets use overload the bracket operator on map correctly
+        Map<K, V>& map;
+        K key;
+        Proxy(Map<K, V>& map, K key);
+        // https://stackoverflow.com/questions/1010539/changing-return-type-of-a-function-without-template-specialization-c
+        operator Option<V>() const;
+        operator V() const = delete;  // use 'Option<V> foo =' instead 'Foo ='
+        Proxy& operator=(V const& opt);
+    };
+
     Map();
     // @@@ TODO Map(const Map<K, V>& m);
+    // @@@ TODO Map<K,V>& operator(const Map<K,V> &m);
     ~Map();
-    f64_t LoadFactor();
+    f64_t LoadFactor() const;
+    f64_t Threshold() const;
+    isize_t Capacity() const;
+    isize_t Size() const;
     // @@@ need function to set load factor threshold
     /*
         When an insert is made such that the number of entries in a hash table exceeds the product of the load factor and the current capacity then the hash table will need to be rehashed.[9] Rehashing includes increasing the size of the underlying data structure[9] and mapping existing items to new bucket locations
@@ -69,22 +45,31 @@ struct Map {
     void Rehash(isize_t size);
     // the average cost of a lookup depends only on the average number of keys per bucket—that is, it is roughly proportional to the load factor.
     // a chained hash table with 1000 slots and 10,000 stored keys (load factor 10) is five to ten times slower than a 10,000-slot table (load factor 1); but still 1000 times faster than a plain sequential list.
-    MapProxy<K, V> operator[](const K& key);
+    Proxy operator[](const K& key);
     Option<V> operator[](const K& key) const;
+    isize_t IndexOf(K key) const;
     // https://stackoverflow.com/questions/18670530/properly-overloading-bracket-operator-for-hashtable-get-and-set
     bool Insert(K key, V value);
     Option<V> Remove(K key);
     void Clear();
-    isize_t IndexOf(K key) const;
 
     // let's store collisions in a linked list
     // @@@ when an item is added to a bucket, compute its size; store max size.
     // according to the birthday problem there is approximately a 95% (for n = 2450?, buckets = 1mill) chance of at least two of the keys being hashed to the same slot.
-    List<MapNode<K, V>>* m_data;  // @@@ make this an array of poisize_ters to Lists to reduce size
+
+   private:
+    struct Node {
+        Node() {}
+        Node(K key, V value);
+        ~Node() {}
+        K key;
+        V value;
+        bool operator==(const Node& rhs) const;
+        bool operator!=(const Node& rhs) const;
+    };
+
+    List<Node>* m_data;  // @@@ make this an array of poisize_ters to Lists to reduce size
     void Tick();
-    f64_t Threshold() const;
-    isize_t Capacity() const;
-    isize_t Size() const;
     isize_t m_size;                         // number of items
     isize_t m_capacity;                     // number of buckets
     f64_t m_load_factor_threshold = 0.75f;  // when the threshold is passed, we need to resize the map
@@ -99,7 +84,7 @@ template <typename K, typename V>
 Map<K, V>::Map() {
     m_capacity = 16;
     m_size = 0;
-    m_data = new List<MapNode<K, V>>[m_capacity];
+    m_data = new List<Node>[m_capacity];
 }
 
 template <typename K, typename V>
@@ -107,29 +92,9 @@ Map<K, V>::~Map() {
     delete[] m_data;
 }
 
-/*
-// @@@ TODO 
 template <typename K, typename V>
-Map<K, V>::Map(const Map<K, V>& m) {
-}
-*/
-
-template <typename K, typename V>
-f64_t Map<K, V>::LoadFactor() {
+f64_t Map<K, V>::LoadFactor() const {
     return static_cast<f64_t>(m_size) / static_cast<f64_t>(m_capacity);
-}
-
-template <typename K, typename V>
-isize_t Map<K, V>::IndexOf(K key) const {
-    long hash = Hashable<K>::Hash(key);
-    return hash & m_capacity - 1;
-}
-
-template <typename K, typename V>
-void Map<K, V>::Tick() {
-    if (this->LoadFactor() > this->Threshold()) {
-        this->Rehash(m_capacity * 2);
-    }
 }
 
 template <typename K, typename V>
@@ -153,34 +118,34 @@ void Map<K, V>::Rehash(isize_t size) {
     if (!((size & (size - 1)) == 0)) {
         return;
     }
-    List<MapNode<K, V>>* new_data = new List<MapNode<K, V>>[size];
+    List<Node>* new_data = new List<Node>[size];
     for (isize_t idx = 0; idx < m_capacity; idx++) {
         for (isize_t jdx = 0; jdx < m_data[idx].Length(); jdx++) {
-            MapNode<K, V> node = m_data[idx][jdx];
+            Node node = m_data[idx][jdx];
             long hash = Hashable<K>::Hash(node.key);
             isize_t index = hash & size - 1;
             new_data[index].PushFront(node);
         }
     }
-    List<MapNode<K, V>>* previous = m_data;
+    List<Node>* previous = m_data;
     m_data = new_data;
     m_capacity = size;
     delete[] previous;
 }
 
 template <typename K, typename V>
-MapProxy<K, V> Map<K, V>::operator[](const K& key) {
-    return MapProxy(*this, key);
+typename Map<K, V>::Proxy Map<K, V>::operator[](const K& key) {
+    return Proxy(*this, key);
 }
 
 template <typename K, typename V>
 Option<V> Map<K, V>::operator[](const K& key) const {
     Option<V> result;
     isize_t map_index = IndexOf(key);
-    List<MapNode<K, V>>* node_list = &(m_data[map_index]);
+    List<Node>* node_list = &(m_data[map_index]);
 
     for (isize_t idx = 0; idx < node_list->Length(); idx++) {
-        MapNode<K, V>* node = &(*node_list)[idx];
+        Node* node = &(*node_list)[idx];
         if (node->key == key) {
             result.result = Option<V>::Some;
             result.value = node->value;
@@ -192,13 +157,19 @@ Option<V> Map<K, V>::operator[](const K& key) const {
 }
 
 template <typename K, typename V>
+isize_t Map<K, V>::IndexOf(K key) const {
+    long hash = Hashable<K>::Hash(key);
+    return hash & m_capacity - 1;
+}
+
+template <typename K, typename V>
 bool Map<K, V>::Insert(K key, V value) {
     isize_t index = IndexOf(key);
-    MapNode<K, V> node(key, value);
-    List<MapNode<K, V>>* node_list = &(m_data[index]);
+    Node node(key, value);
+    List<Node>* node_list = &(m_data[index]);
 
     for (isize_t idx = 0; idx < node_list->Length(); idx++) {
-        MapNode<K, V>* node = &(*node_list)[idx];
+        Node* node = &(*node_list)[idx];
         if (node->key == key) {
             return false;
         }
@@ -215,11 +186,11 @@ Option<V> Map<K, V>::Remove(K key) {
     result.result = Option<V>::None;
 
     isize_t map_index = IndexOf(key);
-    List<MapNode<K, V>>* node_list = &(m_data[map_index]);
+    List<Node>* node_list = &(m_data[map_index]);
     for (isize_t idx = 0; idx < node_list->Length(); idx++) {
-        MapNode<K, V>* node = &(*node_list)[idx];
+        Node* node = &(*node_list)[idx];
         if (node->key == key) {
-            Option<MapNode<K, V>> item = m_data[map_index].RemoveAt(idx);
+            Option<Node> item = m_data[map_index].RemoveAt(idx);
             result.result = Option<V>::Some;
             result.value = item.value.value;
             m_size--;
@@ -235,7 +206,45 @@ void Map<K, V>::Clear() {
     m_capacity = 16;
     m_size = 0;
     delete[] m_data;
-    m_data = new List<MapNode<K, V>>[m_capacity];
+    m_data = new List<Node>[m_capacity];
+}
+
+template <typename K, typename V>
+void Map<K, V>::Tick() {
+    if (this->LoadFactor() > this->Threshold()) {
+        this->Rehash(m_capacity * 2);
+    }
+}
+
+template <typename K, typename V>
+Map<K, V>::Node::Node(K key, V value) : key(key), value(value) {
+}
+
+template <typename K, typename V>
+bool Map<K, V>::Node::operator==(const Node& rhs) const {
+    return this->key == rhs.key;
+}
+
+template <typename K, typename V>
+bool Map<K, V>::Node::operator!=(const Node& rhs) const {
+    return !(this->key == rhs.key);
+}
+
+template <typename K, typename V>
+Map<K, V>::Proxy::Proxy(Map<K, V>& map, K key) : map(map), key(key) {
+}
+// https://stackoverflow.com/questions/1010539/changing-return-type-of-a-function-without-template-specialization-c
+
+template <typename K, typename V>
+Map<K, V>::Proxy::operator Option<V>() const {  // this is a conversion function
+    const Map<K, V>* m = &map;
+    return m->operator[](key);
+}
+
+template <typename K, typename V>
+typename Map<K, V>::Proxy& Map<K, V>::Proxy::operator=(V const& opt) {
+    map.Insert(key, opt);
+    return *this;
 }
 
 }  // namespace containers
