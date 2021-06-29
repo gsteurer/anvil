@@ -39,6 +39,32 @@ inline void _build_max_heap(T& array, isize_t heap_size) {
 }
 
 template <typename T>
+inline void _min_heapify(T& array, isize_t heap_size, isize_t idx) {
+    isize_t left = _left(idx);
+    isize_t right = _right(idx);
+    isize_t smallest = idx;
+    if (left < heap_size && array[left] < array[smallest]) {
+        smallest = left;
+    }
+    if (right < heap_size && array[right] < array[smallest]) {
+        smallest = right;
+    }
+    if (smallest != idx) {
+        auto tmp = array[idx];
+        array[idx] = array[smallest];
+        array[smallest] = tmp;
+        _min_heapify(array, heap_size, smallest);
+    }
+}
+
+template <typename T>
+inline void _build_min_heap(T& array, isize_t heap_size) {
+    for (isize_t idx = heap_size / 2 - 1; idx >= 0; idx--) {
+        _min_heapify(array, heap_size, idx);
+    }
+}
+
+template <typename T>
 inline isize_t _partition(T& array, isize_t lo, isize_t hi) {
     auto pivot = array[hi];
     isize_t i = lo;
