@@ -29,6 +29,7 @@ struct QueueType<MinPriorityQueue, T> {
     }
 };
 
+// page 164 for heap increase key, which promotes a node and rebalances the tree
 template <typename M, typename T>
 struct PriorityQueue {
     PriorityQueue();

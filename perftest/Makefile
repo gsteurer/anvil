@@ -1,5 +1,5 @@
-INCLUDES=-I../anvil/include
-LIB_LOCATIONS=-L../anvil/lib
+INCLUDES=-I../include
+LIB_LOCATIONS=-L../lib
 TEST_LIBS=-lanvil -lpthread
 
 # https://stackoverflow.com/questions/7815400/how-do-i-make-makefile-to-recompile-only-changed-files
