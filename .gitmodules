@@ -1,9 +1,0 @@
-[submodule "lua/lua"]
-	path = lua/lua
-	url = https://github.com/lua/lua.git
-[submodule "sqlite/sqlite"]
-	path = sqlite/sqlite
-	url = https://github.com/sqlite/sqlite.git
-[submodule "glm/glm"]
-	path = glm/glm
-	url = https://github.com/g-truc/glm.git
