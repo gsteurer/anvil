@@ -97,6 +97,9 @@
     <ClInclude Include="include\anvil\chess\bitboard.h">
       <Filter>include\chess</Filter>
     </ClInclude>
+    <ClInclude Include="include\anvil\containers\priorityqueue.h">
+      <Filter>include\containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\anvil\string\string.cpp">

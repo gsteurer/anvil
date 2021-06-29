@@ -33,6 +33,7 @@
     <ClInclude Include="include\anvil\containers\hash.h" />
     <ClInclude Include="include\anvil\containers\list.h" />
     <ClInclude Include="include\anvil\containers\map.h" />
+    <ClInclude Include="include\anvil\containers\priorityqueue.h" />
     <ClInclude Include="include\anvil\containers\redblacktree.h" />
     <ClInclude Include="include\anvil\containers\slice.h" />
     <ClInclude Include="include\anvil\math\mat.h" />
