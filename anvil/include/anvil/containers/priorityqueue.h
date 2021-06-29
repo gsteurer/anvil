@@ -3,11 +3,6 @@
 #include "anvil/containers/slice.h"
 #include "anvil/option.h"
 #include "anvil/types.h"
-// https://en.wikipedia.org/wiki/Binary_heap
-// https://en.wikipedia.org/wiki/Heap_(data_structure)
-// https://en.wikipedia.org/wiki/Priority_queue
-
-// slice
 
 namespace anvil {
 namespace containers {
@@ -34,7 +29,7 @@ struct QueueType<MinPriorityQueue, T> {
     }
 };
 
-template <typename T>
+template <typename M, typename T>
 struct PriorityQueue {
     PriorityQueue();
     ~PriorityQueue();
@@ -47,34 +42,34 @@ struct PriorityQueue {
     Slice<T> m_data;
 };
 
-template <typename T>
-PriorityQueue<T>::PriorityQueue() {
+template <typename M, typename T>
+PriorityQueue<M, T>::PriorityQueue() {
 }
 
-template <typename T>
-PriorityQueue<T>::~PriorityQueue() {
+template <typename M, typename T>
+PriorityQueue<M, T>::~PriorityQueue() {
 }
 
-template <typename T>
-void PriorityQueue<T>::Push(T item) {
+template <typename M, typename T>
+void PriorityQueue<M, T>::Push(T item) {
     m_data.Insert(item);
-    QueueType<MaxPriorityQueue, Slice<T>>::build_heap(m_data, m_data.Length());
+    QueueType<M, Slice<T>>::build_heap(m_data, m_data.Length());
 }
 
-template <typename T>
-Option<T> PriorityQueue<T>::Pop() {
+template <typename M, typename T>
+Option<T> PriorityQueue<M, T>::Pop() {
     Option<T> result = Peek();
     if (m_data.Length() > 0) {
         isize_t idx = m_data.Length() - 1;
         m_data[0] = m_data[idx];
         m_data.Remove(idx);
-        QueueType<MaxPriorityQueue, Slice<T>>::build_heap(m_data, m_data.Length());
+        QueueType<M, Slice<T>>::build_heap(m_data, m_data.Length());
     }
     return result;
 }
 
-template <typename T>
-Option<T> PriorityQueue<T>::Peek() {
+template <typename M, typename T>
+Option<T> PriorityQueue<M, T>::Peek() {
     Option<T> result;
     if (m_data.Length() > 0) {
         result.value = m_data[0];
@@ -83,8 +78,8 @@ Option<T> PriorityQueue<T>::Peek() {
     return result;
 }
 
-template <typename T>
-isize_t PriorityQueue<T>::Length() {
+template <typename M, typename T>
+isize_t PriorityQueue<M, T>::Length() {
     return m_data.Length();
 }
 
