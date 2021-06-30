@@ -11,8 +11,8 @@ using namespace anvil::containers;
 
 template <typename T>
 ::testing::AssertionResult verifySentinel(RBTree<T>* tree) {
-    if (tree->m_sentinel->color != BLACK) {
-        return ::testing::AssertionFailure() << "got " << str(tree->m_sentinel->color) << " expected " << str(BLACK);
+    if (tree->m_sentinel->color != RBNode<T>::BLACK) {
+        return ::testing::AssertionFailure() << "got " << str<T>(tree->m_sentinel->color) << " expected " << str<T>(RBNode<T>::BLACK);
     }
     if (tree->m_sentinel->parent != tree->m_sentinel) {
         return ::testing::AssertionFailure() << "expected tree->m_sentinel for parent got " << tree->m_sentinel->parent;
@@ -29,20 +29,20 @@ template <typename T>
 template <typename T>
 inline void checkRedBlackProperties(RBTree<T>* tree, RBNode<T>* node) {
     // every node is red or black
-    ASSERT_TRUE(node->color == RED || node->color == BLACK);
+    ASSERT_TRUE(node->color == RBNode<T>::RED || node->color == RBNode<T>::BLACK);
     // root is black
-    ASSERT_TRUE(tree->m_root->color == BLACK);
+    ASSERT_TRUE(tree->m_root->color == RBNode<T>::BLACK);
     // every leaf is black
     if (node->left == tree->m_sentinel) {
-        ASSERT_TRUE(node->left->color == BLACK);
+        ASSERT_TRUE(node->left->color == RBNode<T>::BLACK);
     }
     if (node->right == tree->m_sentinel) {
-        ASSERT_TRUE(node->right->color == BLACK);
+        ASSERT_TRUE(node->right->color == RBNode<T>::BLACK);
     }
     // if a node is red, both children are black
-    if (node->color == RED) {
-        ASSERT_TRUE(node->left->color == BLACK);
-        ASSERT_TRUE(node->right->color == BLACK);
+    if (node->color == RBNode<T>::RED) {
+        ASSERT_TRUE(node->left->color == RBNode<T>::BLACK);
+        ASSERT_TRUE(node->right->color == RBNode<T>::BLACK);
     }
 
     if (node->left != tree->m_sentinel) {
