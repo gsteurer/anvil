@@ -8,53 +8,36 @@ namespace anvil {
 namespace containers {
 
 template <typename T>
-struct RBNode {
-    enum Color { NONE = 0,
-                 BLACK = 1,
-                 RED = 2 };
-    Color color;
-    RBNode<T>* parent;
-    RBNode<T>* left;
-    RBNode<T>* right;
-    T key;
-};
-
-template <typename T>
-std::string str(typename RBNode<T>::Color c) {
-    switch (c) {
-        case RBNode<T>::BLACK:
-            return std::string("BLACK");
-            break;
-        case RBNode<T>::RED:
-            return std::string("RED");
-            break;
-        default:
-            return std::string("NONE");
-            break;
-    }
-}
-
-template <typename T>
 struct RBTree {
+    struct Node {
+        enum Color { NONE = 0,
+                     BLACK = 1,
+                     RED = 2 };
+        Color color;
+        Node* parent;
+        Node* left;
+        Node* right;
+        T key;
+    };
     RBTree();
     ~RBTree();
     void Insert(T item);
     void Delete(T item);
     void Clear();
     Option<T> Search(T item);
-    isize_t Height(RBNode<T>* node = nullptr);
+    isize_t Height();
     T Min();
     T Max();
     isize_t Size() const;
-    RBNode<T>* m_root;
-    RBNode<T>* m_sentinel;
+    Node* m_root;
+    Node* m_sentinel;
     isize_t m_size;
 };
 
 template <typename T>
 RBTree<T>::RBTree() {
-    RBNode<T>* node = new RBNode<T>();
-    node->color = RBNode<T>::BLACK;
+    Node* node = new Node();
+    node->color = Node::BLACK;
     node->parent = node;
     node->left = node;
     node->right = node;
@@ -64,114 +47,11 @@ RBTree<T>::RBTree() {
     m_size = 0;
 }
 
-template <typename T>
-RBTree<T>::~RBTree() {
-    this->Clear();
-    delete m_sentinel;
-
-    // the following delete implementation leaked memory and i dont know why
-    // insert 100000 (9158 was the first quantity I discoveRBNode<T>::RED) random numbers isize_to the tree
-    // iterating over a list of each element and calling delete directly does not leak
-    // @@@ TODO check if rbMin/rbMax function we're fucking up because last_node wasn't initialized before being used in a while loop
-    // AND MSVC++ WAS THE ONE THAT CAUGHT IT, CLANG COULD NOT BE BOTHERBNode<T>::RED EVEN WITH -wall -wextra
-    /*
-    while (m_root != m_sentinel) {
-        RBNode<T>* node = rbSearch(this, rbTreeMinimum(this->m_root, this->m_sentinel)->key);
-        rbDelete(this, node);
-        delete node;
-    }
-    delete m_sentinel;
-    */
-}
+namespace internal {
 
 template <typename T>
-void RBTree<T>::Clear() {
-    RBNode<T>* node = rbTreeMinimum(this->m_root, this->m_sentinel);
-    while (m_root != m_sentinel) {
-        rbDelete(this, node);
-        m_size--;
-        delete node;
-        node = rbTreeMinimum(this->m_root, this->m_sentinel);
-    }
-}
-
-template <typename T>
-T RBTree<T>::Min() {
-    return rbTreeMinimum(this->m_root, this->m_sentinel)->key;
-}
-
-template <typename T>
-T RBTree<T>::Max() {
-    return rbTreeMaximum(this->m_root, this->m_sentinel)->key;
-}
-
-template <typename T>
-isize_t RBTree<T>::Height(RBNode<T>* node) {
-    if (node == nullptr) {
-        node = m_root;
-    }
-    if (m_root == m_sentinel) {
-        return 0;
-    }
-    isize_t l = 0;
-    isize_t r = 0;
-    if (node->left != m_sentinel) {
-        l = Height(node->left);
-    }
-    if (node->right != m_sentinel) {
-        r = Height(node->right);
-    }
-    return (l > r ? l : r) + 1;
-}
-
-template <typename T>
-isize_t RBTree<T>::Size() const {
-    return m_size;
-}
-
-template <typename T>
-Option<T> RBTree<T>::Search(T item) {
-    RBNode<T>* node = rbSearch(this, item);
-    Option<T> result;
-    if (node != nullptr) {
-        result.result = Option<T>::Some;
-        result.value = node->key;
-        return result;  // {.result = Option<T>::Some, .value = node->key};
-    }
-    result.result = Option<T>::None;
-    return result;  // {.result = Option<T>::None};
-}
-
-template <typename T>
-void RBTree<T>::Insert(T item) {
-    RBNode<T>* node = new RBNode<T>();
-    node->color = RBNode<T>::RED;
-    node->parent = m_sentinel;
-    node->left = m_sentinel;
-    node->right = m_sentinel;
-    node->key = item;
-    if (m_root != m_sentinel) {
-        rbInsert(this, node);
-    } else {
-        node->color = RBNode<T>::BLACK;
-        m_root = node;
-    }
-    m_size++;
-}
-
-template <typename T>
-void RBTree<T>::Delete(T item) {
-    RBNode<T>* node = rbSearch(this, item);
-    if (node != nullptr) {
-        rbDelete(this, node);
-        delete node;
-        m_size--;
-    }
-}
-
-template <typename T>
-inline RBNode<T>* rbTreeMinimum(RBNode<T>* node, RBNode<T>* sentinel) {
-    RBNode<T>* last_node = node;
+inline typename RBTree<T>::Node* rbTreeMinimum(typename RBTree<T>::Node* node, typename RBTree<T>::Node* sentinel) {
+    typename RBTree<T>::Node* last_node = node;
     while (node != sentinel) {
         last_node = node;
         node = node->left;
@@ -180,8 +60,8 @@ inline RBNode<T>* rbTreeMinimum(RBNode<T>* node, RBNode<T>* sentinel) {
 }
 
 template <typename T>
-inline RBNode<T>* rbTreeMaximum(RBNode<T>* node, RBNode<T>* sentinel) {
-    RBNode<T>* last_node = node;
+inline typename RBTree<T>::Node* rbTreeMaximum(typename RBTree<T>::Node* node, typename RBTree<T>::Node* sentinel) {
+    typename RBTree<T>::Node* last_node = node;
     while (node != sentinel) {
         last_node = node;
         node = node->right;
@@ -190,8 +70,8 @@ inline RBNode<T>* rbTreeMaximum(RBNode<T>* node, RBNode<T>* sentinel) {
 }
 
 template <typename T>
-inline RBNode<T>* rbSearch(RBTree<T>* tree, T item) {
-    RBNode<T>* node = tree->m_root;
+inline typename RBTree<T>::Node* rbSearch(RBTree<T>* tree, T item) {
+    typename RBTree<T>::Node* node = tree->m_root;
     while (node != tree->m_sentinel) {
         if (node->key == item) {
             return node;
@@ -205,8 +85,21 @@ inline RBNode<T>* rbSearch(RBTree<T>* tree, T item) {
 }
 
 template <typename T>
-inline void rbLeftRotate(RBTree<T>* tree, RBNode<T>* x) {
-    RBNode<T>* y = x->right;
+isize_t rbHeight(typename RBTree<T>::Node* node, typename RBTree<T>::Node* sentinel) {
+    isize_t l = 0;
+    isize_t r = 0;
+    if (node->left != sentinel) {
+        l = rbHeight<T>(node->left, sentinel);
+    }
+    if (node->right != sentinel) {
+        r = rbHeight<T>(node->right, sentinel);
+    }
+    return (l > r ? l : r) + 1;
+}
+
+template <typename T>
+inline void rbLeftRotate(RBTree<T>* tree, typename RBTree<T>::Node* x) {
+    typename RBTree<T>::Node* y = x->right;
     x->right = y->left;
     if (y->left != tree->m_sentinel) {
         y->left->parent = x;
@@ -224,8 +117,8 @@ inline void rbLeftRotate(RBTree<T>* tree, RBNode<T>* x) {
 }
 
 template <typename T>
-inline void rbRightRotate(RBTree<T>* tree, RBNode<T>* x) {
-    RBNode<T>* y = x->left;
+inline void rbRightRotate(RBTree<T>* tree, typename RBTree<T>::Node* x) {
+    typename RBTree<T>::Node* y = x->left;
     x->left = y->right;
     if (y->right != tree->m_sentinel) {
         y->right->parent = x;
@@ -243,9 +136,61 @@ inline void rbRightRotate(RBTree<T>* tree, RBNode<T>* x) {
 }
 
 template <typename T>
-inline void rbInsert(RBTree<T>* tree, RBNode<T>* z) {
-    RBNode<T>* y = tree->m_sentinel;
-    RBNode<T>* x = tree->m_root;
+inline void rbInsertFixup(RBTree<T>* tree, typename RBTree<T>::Node* z) {
+    while (z->parent->color == RBTree<T>::Node::RED) {
+        if (z->parent == z->parent->parent->left) {
+            typename RBTree<T>::Node* y = z->parent->parent->right;
+            if (y->color == RBTree<T>::Node::RED) {
+                z->parent->color = RBTree<T>::Node::BLACK;
+                y->color = RBTree<T>::Node::BLACK;
+                z->parent->parent->color = RBTree<T>::Node::RED;
+                z = z->parent->parent;
+            } else {
+                if (z == z->parent->right) {
+                    z = z->parent;
+                    rbLeftRotate(tree, z);
+                }
+                z->parent->color = RBTree<T>::Node::BLACK;
+                z->parent->parent->color = RBTree<T>::Node::RED;
+                rbRightRotate(tree, z->parent->parent);
+            }
+        } else {
+            typename RBTree<T>::Node* y = z->parent->parent->left;
+            if (y->color == RBTree<T>::Node::RED) {
+                z->parent->color = RBTree<T>::Node::BLACK;
+                y->color = RBTree<T>::Node::BLACK;
+                z->parent->parent->color = RBTree<T>::Node::RED;
+                z = z->parent->parent;
+            } else {
+                if (z == z->parent->left) {
+                    z = z->parent;
+                    rbRightRotate(tree, z);
+                }
+                z->parent->color = RBTree<T>::Node::BLACK;
+                z->parent->parent->color = RBTree<T>::Node::RED;
+                rbLeftRotate(tree, z->parent->parent);
+            }
+        }
+    }
+    tree->m_root->color = RBTree<T>::Node::BLACK;
+}
+
+template <typename T>
+inline void rbTransplant(RBTree<T>* tree, typename RBTree<T>::Node* u, typename RBTree<T>::Node* v) {
+    if (u->parent == tree->m_sentinel) {
+        tree->m_root = v;
+    } else if (u == u->parent->left) {
+        u->parent->left = v;
+    } else {
+        u->parent->right = v;
+    }
+    v->parent = u->parent;
+}
+
+template <typename T>
+inline void rbInsert(RBTree<T>* tree, typename RBTree<T>::Node* z) {
+    typename RBTree<T>::Node* y = tree->m_sentinel;
+    typename RBTree<T>::Node* x = tree->m_root;
     while (x != tree->m_sentinel) {
         y = x;
         if (z->key < x->key) {
@@ -264,123 +209,71 @@ inline void rbInsert(RBTree<T>* tree, RBNode<T>* z) {
     }
     z->left = tree->m_sentinel;
     z->right = tree->m_sentinel;
-    z->color = RBNode<T>::RED;
+    z->color = RBTree<T>::Node::RED;
     rbInsertFixup(tree, z);
 }
 
 template <typename T>
-inline void rbInsertFixup(RBTree<T>* tree, RBNode<T>* z) {
-    while (z->parent->color == RBNode<T>::RED) {
-        if (z->parent == z->parent->parent->left) {
-            RBNode<T>* y = z->parent->parent->right;
-            if (y->color == RBNode<T>::RED) {
-                z->parent->color = RBNode<T>::BLACK;
-                y->color = RBNode<T>::BLACK;
-                z->parent->parent->color = RBNode<T>::RED;
-                z = z->parent->parent;
-            } else {
-                if (z == z->parent->right) {
-                    z = z->parent;
-                    rbLeftRotate(tree, z);
-                }
-                z->parent->color = RBNode<T>::BLACK;
-                z->parent->parent->color = RBNode<T>::RED;
-                rbRightRotate(tree, z->parent->parent);
-            }
-        } else {
-            RBNode<T>* y = z->parent->parent->left;
-            if (y->color == RBNode<T>::RED) {
-                z->parent->color = RBNode<T>::BLACK;
-                y->color = RBNode<T>::BLACK;
-                z->parent->parent->color = RBNode<T>::RED;
-                z = z->parent->parent;
-            } else {
-                if (z == z->parent->left) {
-                    z = z->parent;
-                    rbRightRotate(tree, z);
-                }
-                z->parent->color = RBNode<T>::BLACK;
-                z->parent->parent->color = RBNode<T>::RED;
-                rbLeftRotate(tree, z->parent->parent);
-            }
-        }
-    }
-    tree->m_root->color = RBNode<T>::BLACK;
-}
-
-template <typename T>
-inline void rbTransplant(RBTree<T>* tree, RBNode<T>* u, RBNode<T>* v) {
-    if (u->parent == tree->m_sentinel) {
-        tree->m_root = v;
-    } else if (u == u->parent->left) {
-        u->parent->left = v;
-    } else {
-        u->parent->right = v;
-    }
-    v->parent = u->parent;
-}
-
-template <typename T>
-inline void rbDeleteFixup(RBTree<T>* tree, RBNode<T>* x) {
-    while (x != tree->m_root && x->color == RBNode<T>::BLACK) {
+inline void rbDeleteFixup(RBTree<T>* tree, typename RBTree<T>::Node* x) {
+    while (x != tree->m_root && x->color == RBTree<T>::Node::BLACK) {
         if (x == x->parent->left) {
-            RBNode<T>* w = x->parent->right;
-            if (w->color == RBNode<T>::RED) {
-                w->color = RBNode<T>::BLACK;
-                x->parent->color = RBNode<T>::RED;
+            typename RBTree<T>::Node* w = x->parent->right;
+            if (w->color == RBTree<T>::Node::RED) {
+                w->color = RBTree<T>::Node::BLACK;
+                x->parent->color = RBTree<T>::Node::RED;
                 rbLeftRotate(tree, x->parent);
                 w = x->parent->right;
             }
-            if (w->left->color == RBNode<T>::BLACK && w->right->color == RBNode<T>::BLACK) {
-                w->color = RBNode<T>::RED;
+            if (w->left->color == RBTree<T>::Node::BLACK && w->right->color == RBTree<T>::Node::BLACK) {
+                w->color = RBTree<T>::Node::RED;
                 x = x->parent;
             } else {
-                if (w->right->color == RBNode<T>::BLACK) {
-                    w->left->color = RBNode<T>::BLACK;
-                    w->color = RBNode<T>::RED;
+                if (w->right->color == RBTree<T>::Node::BLACK) {
+                    w->left->color = RBTree<T>::Node::BLACK;
+                    w->color = RBTree<T>::Node::RED;
                     rbRightRotate(tree, w);
                     w = x->parent->right;
                 }
                 w->color = x->parent->color;
-                x->parent->color = RBNode<T>::BLACK;
-                w->right->color = RBNode<T>::BLACK;
+                x->parent->color = RBTree<T>::Node::BLACK;
+                w->right->color = RBTree<T>::Node::BLACK;
                 rbLeftRotate(tree, x->parent);
                 x = tree->m_root;
             }
         } else {
-            RBNode<T>* w = x->parent->left;
-            if (w->color == RBNode<T>::RED) {
-                w->color = RBNode<T>::BLACK;
-                x->parent->color = RBNode<T>::RED;
+            typename RBTree<T>::Node* w = x->parent->left;
+            if (w->color == RBTree<T>::Node::RED) {
+                w->color = RBTree<T>::Node::BLACK;
+                x->parent->color = RBTree<T>::Node::RED;
                 rbRightRotate(tree, x->parent);
                 w = x->parent->left;
             }
-            if (w->left->color == RBNode<T>::BLACK && w->right->color == RBNode<T>::BLACK) {
-                w->color = RBNode<T>::RED;
+            if (w->left->color == RBTree<T>::Node::BLACK && w->right->color == RBTree<T>::Node::BLACK) {
+                w->color = RBTree<T>::Node::RED;
                 x = x->parent;
             } else {
-                if (w->left->color == RBNode<T>::BLACK) {
-                    w->right->color = RBNode<T>::BLACK;
-                    w->color = RBNode<T>::RED;
+                if (w->left->color == RBTree<T>::Node::BLACK) {
+                    w->right->color = RBTree<T>::Node::BLACK;
+                    w->color = RBTree<T>::Node::RED;
                     rbLeftRotate(tree, w);
                     w = x->parent->left;
                 }
                 w->color = x->parent->color;
-                x->parent->color = RBNode<T>::BLACK;
-                w->left->color = RBNode<T>::BLACK;
+                x->parent->color = RBTree<T>::Node::BLACK;
+                w->left->color = RBTree<T>::Node::BLACK;
                 rbRightRotate(tree, x->parent);
                 x = tree->m_root;
             }
         }
     }
-    x->color = RBNode<T>::BLACK;
+    x->color = RBTree<T>::Node::BLACK;
 }
 
 template <typename T>
-inline void rbDelete(RBTree<T>* tree, RBNode<T>* z) {
-    RBNode<T>* y = z;
-    RBNode<T>* x;
-    typename RBNode<T>::Color y_original_color = y->color;
+inline void rbDelete(RBTree<T>* tree, typename RBTree<T>::Node* z) {
+    typename RBTree<T>::Node* y = z;
+    typename RBTree<T>::Node* x;
+    typename RBTree<T>::Node::Color y_original_color = y->color;
     if (z->left == tree->m_sentinel) {
         x = z->right;
         rbTransplant(tree, z, z->right);
@@ -388,7 +281,7 @@ inline void rbDelete(RBTree<T>* tree, RBNode<T>* z) {
         x = z->left;
         rbTransplant(tree, z, z->left);
     } else {
-        y = rbTreeMinimum(z->right, tree->m_sentinel);
+        y = rbTreeMinimum<T>(z->right, tree->m_sentinel);
         y_original_color = y->color;
         x = y->right;
         if (x->parent == z) {
@@ -404,8 +297,119 @@ inline void rbDelete(RBTree<T>* tree, RBNode<T>* z) {
         y->color = z->color;
     }
 
-    if (y_original_color == RBNode<T>::BLACK) {
+    if (y_original_color == RBTree<T>::Node::BLACK) {
         rbDeleteFixup(tree, x);
+    }
+}
+
+template <typename T>
+::std::string str(typename RBTree<T>::Node::Color c) {
+    switch (c) {
+        case RBTree<T>::Node::BLACK:
+            return ::std::string("BLACK");
+            break;
+        case RBTree<T>::Node::RED:
+            return ::std::string("RED");
+            break;
+        default:
+            return ::std::string("NONE");
+            break;
+    }
+}
+
+}  // namespace internal
+
+template <typename T>
+RBTree<T>::~RBTree() {
+    this->Clear();
+    delete m_sentinel;
+
+    // the following delete implementation leaked memory and i dont know why
+    // insert 100000 (9158 was the first quantity I discoveRBTree<T>::Node::RED) random numbers isize_to the tree
+    // iterating over a list of each element and calling delete directly does not leak
+    // @@@ TODO check if rbMin/rbMax function we're fucking up because last_node wasn't initialized before being used in a while loop
+    // AND MSVC++ WAS THE ONE THAT CAUGHT IT, CLANG COULD NOT BE BOTHERBTree<T>::Node::RED EVEN WITH -wall -wextra
+    /*
+    while (m_root != m_sentinel) {
+        typename RBTree<T>::Node* node = rbSearch(this, rbTreeMinimum(this->m_root, this->m_sentinel)->key);
+        rbDelete(this, node);
+        delete node;
+    }
+    delete m_sentinel;
+    */
+}
+
+template <typename T>
+void RBTree<T>::Clear() {
+    Node* node = internal::rbTreeMinimum<T>(this->m_root, this->m_sentinel);
+    while (m_root != m_sentinel) {
+        internal::rbDelete(this, node);
+        m_size--;
+        delete node;
+        node = internal::rbTreeMinimum<T>(this->m_root, this->m_sentinel);
+    }
+}
+
+template <typename T>
+T RBTree<T>::Min() {
+    return internal::rbTreeMinimum<T>(this->m_root, this->m_sentinel)->key;
+}
+
+template <typename T>
+T RBTree<T>::Max() {
+    return internal::rbTreeMaximum<T>(this->m_root, this->m_sentinel)->key;
+}
+
+template <typename T>
+isize_t RBTree<T>::Height() {
+    if (m_root == m_sentinel || m_root == nullptr) {
+        return 0;
+    }
+    return internal::rbHeight<T>(m_root, m_sentinel);
+}
+
+template <typename T>
+isize_t RBTree<T>::Size() const {
+    return m_size;
+}
+
+template <typename T>
+Option<T> RBTree<T>::Search(T item) {
+    Node* node = internal::rbSearch(this, item);
+    Option<T> result;
+    if (node != nullptr) {
+        result.result = Option<T>::Some;
+        result.value = node->key;
+        return result;  // @@@ {.result = Option<T>::Some, .value = node->key};
+    }
+    result.result = Option<T>::None;
+    return result;  // @@@ {.result = Option<T>::None};
+}
+
+template <typename T>
+void RBTree<T>::Insert(T item) {
+    Node* node = new Node();
+    node->color = Node::RED;
+    node->parent = m_sentinel;
+    node->left = m_sentinel;
+    node->right = m_sentinel;
+    node->key = item;
+    if (m_root != m_sentinel) {
+        internal::rbInsert(this, node);
+    } else {
+        node->color = Node::BLACK;
+        m_root = node;
+    }
+    m_size++;
+}
+
+template <typename T>
+void RBTree<T>::Delete(T item) {
+    Node* node = internal::rbSearch(this, item);
+    if (node != nullptr) {
+        internal::rbDelete(this, node);
+        delete node;
+        m_size--;
     }
 }
 

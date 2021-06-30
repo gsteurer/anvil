@@ -11,8 +11,8 @@ using namespace anvil::containers;
 
 template <typename T>
 ::testing::AssertionResult verifySentinel(RBTree<T>* tree) {
-    if (tree->m_sentinel->color != RBNode<T>::BLACK) {
-        return ::testing::AssertionFailure() << "got " << str<T>(tree->m_sentinel->color) << " expected " << str<T>(RBNode<T>::BLACK);
+    if (tree->m_sentinel->color != RBTree<T>::Node::BLACK) {
+        return ::testing::AssertionFailure() << "got " << internal::str<T>(tree->m_sentinel->color) << " expected " << internal::str<T>(RBTree<T>::Node::BLACK);
     }
     if (tree->m_sentinel->parent != tree->m_sentinel) {
         return ::testing::AssertionFailure() << "expected tree->m_sentinel for parent got " << tree->m_sentinel->parent;
@@ -27,22 +27,22 @@ template <typename T>
 }
 
 template <typename T>
-inline void checkRedBlackProperties(RBTree<T>* tree, RBNode<T>* node) {
+inline void checkRedBlackProperties(RBTree<T>* tree, typename RBTree<T>::Node* node) {
     // every node is red or black
-    ASSERT_TRUE(node->color == RBNode<T>::RED || node->color == RBNode<T>::BLACK);
+    ASSERT_TRUE(node->color == RBTree<T>::Node::RED || node->color == RBTree<T>::Node::BLACK);
     // root is black
-    ASSERT_TRUE(tree->m_root->color == RBNode<T>::BLACK);
+    ASSERT_TRUE(tree->m_root->color == RBTree<T>::Node::BLACK);
     // every leaf is black
     if (node->left == tree->m_sentinel) {
-        ASSERT_TRUE(node->left->color == RBNode<T>::BLACK);
+        ASSERT_TRUE(node->left->color == RBTree<T>::Node::BLACK);
     }
     if (node->right == tree->m_sentinel) {
-        ASSERT_TRUE(node->right->color == RBNode<T>::BLACK);
+        ASSERT_TRUE(node->right->color == RBTree<T>::Node::BLACK);
     }
     // if a node is red, both children are black
-    if (node->color == RBNode<T>::RED) {
-        ASSERT_TRUE(node->left->color == RBNode<T>::BLACK);
-        ASSERT_TRUE(node->right->color == RBNode<T>::BLACK);
+    if (node->color == RBTree<T>::Node::RED) {
+        ASSERT_TRUE(node->left->color == RBTree<T>::Node::BLACK);
+        ASSERT_TRUE(node->right->color == RBTree<T>::Node::BLACK);
     }
 
     if (node->left != tree->m_sentinel) {
@@ -73,8 +73,8 @@ TEST(RedBlackTreeTest, InsertOneCompound) {
 
 TEST(RedBlackTreeTest, InsertMulti) {
     RBTree<int>* tree = new RBTree<int>();
-    RBNode<int>* node;
-    RBNode<int>* sentinel = tree->m_sentinel;
+    typename RBTree<int>::Node* node;
+    typename RBTree<int>::Node* sentinel = tree->m_sentinel;
     EXPECT_TRUE(verifySentinel(tree));
     tree->Insert(1);
     EXPECT_TRUE(verifySentinel(tree));
