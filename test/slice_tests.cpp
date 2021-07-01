@@ -165,3 +165,18 @@ TEST(SliceTests, Remove) {
 
     delete[] elements;
 }
+
+TEST(SliceTests, GetSlice) {
+    isize_t size = 10;
+
+    Slice<i64_t> test;
+
+    for (isize_t idx = 0; idx < size; idx++) {
+        test.Insert(anvil::math::rand());
+    }
+    Slice<i64_t> s = test.GetSlice(5, 8);
+    EXPECT_EQ(3, s.Length());
+    EXPECT_EQ(s[0], test[5]);
+    EXPECT_EQ(s[1], test[6]);
+    EXPECT_EQ(s[2], test[7]);
+}

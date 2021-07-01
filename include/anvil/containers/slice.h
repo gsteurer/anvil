@@ -22,6 +22,7 @@ struct Slice {
     isize_t Length();
     isize_t Capacity();
     Option<isize_t> IndexOf(T item);
+    Slice<T> GetSlice(isize_t start, isize_t end);
 
    private:
     void Resize(isize_t size);
@@ -134,6 +135,16 @@ void Slice<T>::Clear() {
 template <typename T>
 Option<isize_t> Slice<T>::IndexOf(T item) {
     return search<Slice<T>, T>(*this, Length(), item);
+}
+
+template <typename T>
+Slice<T> Slice<T>::GetSlice(isize_t start, isize_t end) {
+    Slice<T> ret;
+    for (int idx = start; idx < end && idx < m_size && idx > 0; idx++) {
+        const T val = *m_data[idx];
+        ret.Insert(val);
+    }
+    return ret;
 }
 
 /*
