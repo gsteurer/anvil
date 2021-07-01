@@ -47,7 +47,6 @@ struct Map {
     // a chained hash table with 1000 slots and 10,000 stored keys (load factor 10) is five to ten times slower than a 10,000-slot table (load factor 1); but still 1000 times faster than a plain sequential list.
     Proxy operator[](const K& key);
     Option<V> operator[](const K& key) const;
-    isize_t IndexOf(K key) const;
     // https://stackoverflow.com/questions/18670530/properly-overloading-bracket-operator-for-hashtable-get-and-set
     bool Insert(K key, V value);
     Option<V> Remove(K key);
@@ -68,11 +67,12 @@ struct Map {
         bool operator!=(const Node& rhs) const;
     };
 
-    List<Node>* m_data;  // @@@ make this an array of poisize_ters to Lists to reduce size
-    void Tick();
+    List<Node>* m_data;                     // @@@ make this an array of poisize_ters to Lists to reduce size
     isize_t m_size;                         // number of items
     isize_t m_capacity;                     // number of buckets
     f64_t m_load_factor_threshold = 0.75f;  // when the threshold is passed, we need to resize the map
+    void Tick();
+    isize_t IndexOf(K key) const;
 };
 
 // As the load factor grows larger, the hash table becomes slower,
@@ -157,12 +157,6 @@ Option<V> Map<K, V>::operator[](const K& key) const {
 }
 
 template <typename K, typename V>
-isize_t Map<K, V>::IndexOf(K key) const {
-    long hash = Hashable<K>::Hash(key);
-    return hash & m_capacity - 1;
-}
-
-template <typename K, typename V>
 bool Map<K, V>::Insert(K key, V value) {
     isize_t index = IndexOf(key);
     Node node(key, value);
@@ -210,13 +204,6 @@ void Map<K, V>::Clear() {
 }
 
 template <typename K, typename V>
-void Map<K, V>::Tick() {
-    if (this->LoadFactor() > this->Threshold()) {
-        this->Rehash(m_capacity * 2);
-    }
-}
-
-template <typename K, typename V>
 Map<K, V>::Node::Node(K key, V value) : key(key), value(value) {
 }
 
@@ -245,6 +232,19 @@ template <typename K, typename V>
 typename Map<K, V>::Proxy& Map<K, V>::Proxy::operator=(V const& opt) {
     map.Insert(key, opt);
     return *this;
+}
+
+template <typename K, typename V>
+isize_t Map<K, V>::IndexOf(K key) const {
+    long hash = Hashable<K>::Hash(key);
+    return hash & m_capacity - 1;
+}
+
+template <typename K, typename V>
+void Map<K, V>::Tick() {
+    if (this->LoadFactor() > this->Threshold()) {
+        this->Rehash(m_capacity * 2);
+    }
 }
 
 }  // namespace containers

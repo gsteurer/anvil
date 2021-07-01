@@ -5,70 +5,40 @@
 template <typename T>
 struct Foo {
     int* m_id;
-    Foo();
-    Foo(int id);
-    Foo(const Foo<T>& rhs);
-    Foo(const Foo<T>* rhs);
-    ~Foo();
-    Foo<T>& operator=(const Foo<T>& rhs);
-    bool operator==(const Foo<T>& rhs) const;
-    bool operator==(int id) const;
-    bool operator<(const Foo<T>& rhs) const;
-    int ID() const;
+    Foo() : m_id(new int(-1)) {}
+    Foo(int id) {
+        m_id = new int(id);
+    }
+    Foo(const Foo<T>& rhs) {
+        m_id = new int(*rhs.m_id);
+    }
+    Foo(const Foo<T>* rhs) {
+        m_id = new int(*rhs->m_id);
+    }
+    ~Foo() {
+        if (m_id != nullptr) {
+            delete m_id;
+        }
+    }
+    Foo<T>& operator=(const Foo<T>& rhs) {
+        *this->m_id = *rhs.m_id;
+        return *this;
+    }
+    bool operator==(const Foo<T>& rhs) const {
+        return *m_id == *rhs.m_id;
+    }
+    bool operator==(int id) const {
+        return *m_id == id;
+    }
+    bool operator<(const Foo<T>& rhs) const {
+        return this->ID() < rhs.ID();
+    }
+    int ID() const {
+        return *m_id;
+    }
 };
 
 template <typename T>
-Foo<T>::Foo() : m_id(new int(-1)) {}
-
-template <typename T>
-Foo<T>::Foo(int id) {
-    m_id = new int(id);
-}
-
-template <typename T>
-Foo<T>::Foo(const Foo<T>& rhs) {
-    m_id = new int(*rhs.m_id);
-}
-
-template <typename T>
-Foo<T>::Foo(const Foo<T>* rhs) {
-    m_id = new int(*rhs->m_id);
-}
-
-template <typename T>
-Foo<T>::~Foo() {
-    if (m_id != nullptr) {
-        delete m_id;
-    }
-}
-
-template <typename T>
-Foo<T>& Foo<T>::operator=(const Foo<T>& rhs) {
-    *this->m_id = *rhs.m_id;
-    return *this;
-}
-
-template <typename T>
-bool Foo<T>::operator==(const Foo<T>& rhs) const {
-    return *m_id == *rhs.m_id;
-}
-
-template <typename T>
-bool Foo<T>::operator==(int id) const {
-    return *m_id == id;
-}
-
-template <typename T>
-bool Foo<T>::operator<(const Foo<T>& rhs) const {
-    return this->ID() < rhs.ID();
-}
-
-template <typename T>
-int Foo<T>::ID() const {
-    return *m_id;
-}
-
-template <typename T>
-bool operator==(int id, const Foo<T>& rhs) {
+inline bool operator==(int id, const Foo<T>& rhs) {
     return *rhs.m_id == id;
 }

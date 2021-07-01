@@ -22,12 +22,12 @@ struct RBTree {
     RBTree();
     ~RBTree();
     void Insert(T item);
-    void Delete(T item);
+    Option<T> Delete(T item);
     void Clear();
-    Option<T> Search(T item);
-    isize_t Height();
-    T Min();
-    T Max();
+    Option<T> Search(T item) const;
+    isize_t Height() const;
+    Option<T> Min() const;
+    Option<T> Max() const;
     isize_t Size() const;
     Node* m_root;
     Node* m_sentinel;
@@ -70,7 +70,7 @@ inline typename RBTree<T>::Node* rbTreeMaximum(typename RBTree<T>::Node* node, t
 }
 
 template <typename T>
-inline typename RBTree<T>::Node* rbSearch(RBTree<T>* tree, T item) {
+inline typename RBTree<T>::Node* rbSearch(const RBTree<T>* tree, T item) {
     typename RBTree<T>::Node* node = tree->m_root;
     while (node != tree->m_sentinel) {
         if (node->key == item) {
@@ -357,17 +357,33 @@ void RBTree<T>::Clear() {
 }
 
 template <typename T>
-T RBTree<T>::Min() {
-    return internal::rbTreeMinimum<T>(this->m_root, this->m_sentinel)->key;
+Option<T> RBTree<T>::Min() const {
+    Option<T> result;
+    Node* node = internal::rbTreeMinimum<T>(this->m_root, this->m_sentinel);
+    if (node != nullptr && node != m_sentinel) {
+        result.result = Option<T>::Some;
+        result.value = node->key;
+    }
+
+    result.result = Option<T>::None;
+    return result;
 }
 
 template <typename T>
-T RBTree<T>::Max() {
-    return internal::rbTreeMaximum<T>(this->m_root, this->m_sentinel)->key;
+Option<T> RBTree<T>::Max() const {
+    Option<T> result;
+    Node* node = internal::rbTreeMaximum<T>(this->m_root, this->m_sentinel);
+    if (node != nullptr && node != m_sentinel) {
+        result.result = Option<T>::Some;
+        result.value = node->key;
+    }
+
+    result.result = Option<T>::None;
+    return result;
 }
 
 template <typename T>
-isize_t RBTree<T>::Height() {
+isize_t RBTree<T>::Height() const {
     if (m_root == m_sentinel || m_root == nullptr) {
         return 0;
     }
@@ -380,10 +396,10 @@ isize_t RBTree<T>::Size() const {
 }
 
 template <typename T>
-Option<T> RBTree<T>::Search(T item) {
+Option<T> RBTree<T>::Search(T item) const {
     Node* node = internal::rbSearch(this, item);
     Option<T> result;
-    if (node != nullptr) {
+    if (node != nullptr && node != m_sentinel) {
         result.result = Option<T>::Some;
         result.value = node->key;
         return result;  // @@@ {.result = Option<T>::Some, .value = node->key};
@@ -410,13 +426,18 @@ void RBTree<T>::Insert(T item) {
 }
 
 template <typename T>
-void RBTree<T>::Delete(T item) {
+Option<T> RBTree<T>::Delete(T item) {
+    Option<T> result;
     Node* node = internal::rbSearch(this, item);
     if (node != nullptr) {
+        result.result = Option<T>::Some;
+        result.value = node->key;
         internal::rbDelete(this, node);
         delete node;
         m_size--;
     }
+
+    return result;
 }
 
 }  // namespace containers

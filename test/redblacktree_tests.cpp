@@ -117,8 +117,8 @@ TEST(RedBlackTreeTests, InsertLarge) {
     // https://www.cs.auckland.ac.nz/software/AlgAnim/red_black.html
     EXPECT_TRUE(tree->Height() <= 2 * (std::log(size + 1) / std::log(2)));
     checkRedBlackProperties(tree, tree->m_root);
-    EXPECT_EQ(tree->Min(), Foo<int>(1));
-    EXPECT_EQ(tree->Max(), Foo<int>(size));
+    EXPECT_EQ(tree->Min().value, Foo<int>(1));
+    EXPECT_EQ(tree->Max().value, Foo<int>(size));
 
     delete tree;
 }
