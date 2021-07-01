@@ -11,17 +11,21 @@ template <typename T>
 struct Slice {
     Slice();
     ~Slice();
+    Slice(const Slice<T>& slice);
+    Slice<T>& operator=(const Slice<T>& slice);
     // length -> number of items in the Slice
     // capacity -> total number of items the Slice can contain before it is resized
     // @@@ TODO Slice(isize_t length, isize_t capacity);
+
+    isize_t Length() const;
+    isize_t Capacity() const;
+    Option<isize_t> IndexOf(T item)const;
+    const T operator[](isize_t index) const;
+    
+    T& operator[](isize_t index);
     void Insert(T);
     T Remove(isize_t index);
     void Clear();
-    const T operator[](isize_t index) const;
-    T& operator[](isize_t index);
-    isize_t Length();
-    isize_t Capacity();
-    Option<isize_t> IndexOf(T item);
     Slice<T> GetSlice(isize_t start, isize_t end);
 
    private:
@@ -30,16 +34,6 @@ struct Slice {
     isize_t m_size;
     T** m_data;
 };
-
-template <typename T>
-isize_t Slice<T>::Length() {
-    return m_size;
-}
-
-template <typename T>
-isize_t Slice<T>::Capacity() {
-    return m_capacity;
-}
 
 template <typename T>
 Slice<T>::Slice() {
@@ -51,18 +45,6 @@ Slice<T>::Slice() {
     }
 }
 
-/*
-// @@@ TODO
-template <typename T>
-Slice<T>::Slice(isize_t length, isize_t capacity) {
-    m_capacity = capacity;
-    m_size = 0;
-    m_data = new T*[m_capacity];
-    for (isize_t idx = 0; idx < m_capacity; idx++) {
-        m_data[idx] = new T();
-    }
-}
-*/
 template <typename T>
 Slice<T>::~Slice() {
     if (m_data != nullptr) {
@@ -74,8 +56,42 @@ Slice<T>::~Slice() {
 }
 
 template <typename T>
+Slice<T>::Slice(const Slice<T>& slice) : Slice() {
+    for (isize_t idx = 0; idx < slice.Length(); idx++) {
+        const T val = slice[idx];
+        this->Insert(val);
+    }
+}
+template <typename T>
+Slice<T>& Slice<T>::operator=(const Slice<T>& slice) {
+    
+    this->Clear();
+    for (isize_t idx = 0; idx < slice.Length(); idx++) {
+        const T val = slice[idx];
+        this->Insert(val);
+    }
+
+    return *this;
+}
+
+template <typename T>
+isize_t Slice<T>::Length() const {
+    return m_size;
+}
+
+template <typename T>
+isize_t Slice<T>::Capacity() const {
+    return m_capacity;
+}
+
+template <typename T>
 const T Slice<T>::operator[](isize_t index) const {
     return *(m_data[index]);
+}
+
+template <typename T>
+Option<isize_t> Slice<T>::IndexOf(T item) const {
+    return search<Slice<T>, T>(*this, Length(), item);
 }
 
 template <typename T>
@@ -132,15 +148,11 @@ void Slice<T>::Clear() {
     m_size = 0;
 }
 
-template <typename T>
-Option<isize_t> Slice<T>::IndexOf(T item) {
-    return search<Slice<T>, T>(*this, Length(), item);
-}
 
 template <typename T>
 Slice<T> Slice<T>::GetSlice(isize_t start, isize_t end) {
     Slice<T> ret;
-    for (int idx = start; idx < end && idx < m_size && idx > 0; idx++) {
+    for (isize_t idx = start; idx < end && idx < m_size && idx > 0; idx++) {
         const T val = *m_data[idx];
         ret.Insert(val);
     }

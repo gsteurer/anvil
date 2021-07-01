@@ -139,7 +139,7 @@ TEST(SliceTests, RemoveSimple) {
     test.Insert(9);
     test.Insert(12);
     EXPECT_EQ(12, test.Remove(2));
-    EXPECT_EQ(test.Length(), 2);
+    EXPECT_EQ(test.Length(), 2L);
 }
 
 TEST(SliceTests, Remove) {

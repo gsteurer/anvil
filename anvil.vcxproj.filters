@@ -100,6 +100,12 @@
     <ClInclude Include="include\anvil\types.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\anvil\containers\set.h">
+      <Filter>include\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\anvil\containers\sortedmap.h">
+      <Filter>include\containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\anvil\math\mat4x4f.cpp">

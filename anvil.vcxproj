@@ -35,7 +35,9 @@
     <ClInclude Include="include\anvil\containers\map.h" />
     <ClInclude Include="include\anvil\containers\priorityqueue.h" />
     <ClInclude Include="include\anvil\containers\redblacktree.h" />
+    <ClInclude Include="include\anvil\containers\set.h" />
     <ClInclude Include="include\anvil\containers\slice.h" />
+    <ClInclude Include="include\anvil\containers\sortedmap.h" />
     <ClInclude Include="include\anvil\math\mat.h" />
     <ClInclude Include="include\anvil\math\mat2x2f.h" />
     <ClInclude Include="include\anvil\math\mat3x3f.h" />

@@ -128,7 +128,7 @@ inline void quicksort(T& array, isize_t lo, isize_t hi) {
 }
 
 template <typename T, typename U>
-inline Option<isize_t> search(T& array, isize_t size, U item) {
+inline Option<isize_t> search(const T& array, isize_t size, U item) {
     Option<isize_t> result;
     for (isize_t idx = 0; idx < size; idx++) {
         if (array[idx] == item) {

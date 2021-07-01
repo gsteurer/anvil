@@ -6,6 +6,18 @@
 namespace anvil {
 namespace containers {
 
+/*
+* @@@ DOZE is bitching about:
+2>C:\Users\jsteurer\Code\cpp_workbench\anvil\include\anvil\containers\hash.h(51,1): warning C4293: '>>': shift count negative or too big, undefined behavior
+2>C:\Users\jsteurer\Code\cpp_workbench\anvil\include\anvil\containers\hash.h(66,24): warning C4293: '>>': shift count negative or too big, undefined behavior
+2>C:\Users\jsteurer\Code\cpp_workbench\anvil\include\anvil\containers\hash.h(67,31): warning C4305: '*=': truncation from 'unsigned __int64' to 'unsigned long'
+2>C:\Users\jsteurer\Code\cpp_workbench\anvil\include\anvil\containers\hash.h(68,24): warning C4293: '>>': shift count negative or too big, undefined behavior
+2>C:\Users\jsteurer\Code\cpp_workbench\anvil\include\anvil\containers\hash.h(69,31): warning C4305: '*=': truncation from 'unsigned __int64' to 'unsigned long'
+2>C:\Users\jsteurer\Code\cpp_workbench\anvil\include\anvil\containers\hash.h(70,24): warning C4293: '>>': shift count negative or too big, undefined behavior
+2>C:\Users\jsteurer\Code\cpp_workbench\anvil\include\anvil\containers\hash.h(84,28): warning C4244: 'argument': conversion from 'u64_t' to 'long', possible loss of data
+2>C:\Users\jsteurer\Code\cpp_workbench\anvil\include\anvil\containers\hash.h(91,28): warning C4244: 'argument': conversion from 'i64_t' to 'long', possible loss of data
+*/
+
 template <typename T>
 struct Hashable {
     static long Hash(T key) {

@@ -51,7 +51,9 @@
     <ClCompile Include="mat_tests.cpp" />
     <ClCompile Include="priorityqueue_tests.cpp" />
     <ClCompile Include="redblacktree_tests.cpp" />
+    <ClCompile Include="set_tests.cpp" />
     <ClCompile Include="slice_tests.cpp" />
+    <ClCompile Include="sortedmap_tests.cpp" />
     <ClCompile Include="string_tests.cpp" />
     <ClCompile Include="time_tests.cpp" />
     <ClCompile Include="type_tests.cpp" />
