@@ -53,25 +53,25 @@ inline void checkRedBlackProperties(RBTree<T>* tree, typename RBTree<T>::Node* n
     }
 }
 
-TEST(RedBlackTreeTest, Ctor) {
+TEST(RedBlackTreeTests, Ctor) {
     RBTree<int>* tree = new RBTree<int>();
 
     delete tree;
 }
 
-TEST(RedBlackTreeTest, InsertOne) {
+TEST(RedBlackTreeTests, InsertOne) {
     RBTree<int>* tree = new RBTree<int>();
     tree->Insert(1);
     delete tree;
 }
 
-TEST(RedBlackTreeTest, InsertOneCompound) {
+TEST(RedBlackTreeTests, InsertOneCompound) {
     RBTree<Foo<int>>* tree = new RBTree<Foo<int>>();
     tree->Insert(1);
     delete tree;
 }
 
-TEST(RedBlackTreeTest, InsertMulti) {
+TEST(RedBlackTreeTests, InsertMulti) {
     RBTree<int>* tree = new RBTree<int>();
     typename RBTree<int>::Node* node;
     typename RBTree<int>::Node* sentinel = tree->m_sentinel;
@@ -95,7 +95,7 @@ TEST(RedBlackTreeTest, InsertMulti) {
     delete tree;
 }
 
-TEST(RedBlackTreeTest, InsertLarge) {
+TEST(RedBlackTreeTests, InsertLarge) {
     RBTree<Foo<int>>* tree = new RBTree<Foo<int>>();
     int size = 1000;
     // adding seventh leaks
@@ -123,7 +123,7 @@ TEST(RedBlackTreeTest, InsertLarge) {
     delete tree;
 }
 
-TEST(RedBlackTreeTest, Delete) {
+TEST(RedBlackTreeTests, Delete) {
     RBTree<Foo<int>>* tree = new RBTree<Foo<int>>();
     int size = 1000;
 
@@ -133,11 +133,48 @@ TEST(RedBlackTreeTest, Delete) {
 
     EXPECT_EQ(tree->Size(), size);
     for (int idx = 0; idx < size; idx++) {
-        tree->Delete(idx + 1);
+        tree->Delete(Foo<int>(idx + 1));
         Option<Foo<int>> result = tree->Search(Foo<int>(idx + 1));
         EXPECT_EQ(result.result, Option<Foo<int>>::None);
     }
     EXPECT_EQ(tree->Size(), 0);
 
+    delete tree;
+}
+
+TEST(RedBlackTreeTests, InsertDuplicates) {
+    RBTree<Foo<int>>* tree = new RBTree<Foo<int>>();
+    int size = 1000;
+
+    for (int idx = 0; idx < size; idx++) {
+        tree->Insert(Foo<int>(69));
+    }
+
+    EXPECT_EQ(tree->Size(), size);
+
+    for (int idx = 0; idx < size; idx++) {
+        tree->Delete(Foo<int>(69));
+    }
+
+    EXPECT_EQ(tree->Size(), 0);
+    delete tree;
+}
+
+// default ctor for foo<int> sets id to -1, which means you cant tell sentinel and root apart by key
+TEST(RedBlackTreeTests, InsertMatchesSentinelKey) {
+    RBTree<Foo<int>>* tree = new RBTree<Foo<int>>();
+    int size = 1000;
+
+    for (int idx = 0; idx < size; idx++) {
+        tree->Insert(Foo<int>(-1));
+    }
+
+    EXPECT_EQ(tree->Size(), size);
+
+    for (int idx = 0; idx < size; idx++) {
+        tree->Delete(Foo<int>(-1));
+    }
+
+    EXPECT_EQ(tree->Size(), 0);
     delete tree;
 }

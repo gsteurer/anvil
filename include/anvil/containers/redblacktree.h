@@ -74,7 +74,13 @@ inline typename RBTree<T>::Node* rbSearch(RBTree<T>* tree, T item) {
     typename RBTree<T>::Node* node = tree->m_root;
     while (node != tree->m_sentinel) {
         if (node->key == item) {
-            return node;
+            if (node->left->key == item && node->left != tree->m_sentinel) {
+                node = node->left;
+            } else if (node->right->key == item && node->right != tree->m_sentinel) {
+                node = node->right;
+            } else {
+                return node;
+            }
         } else if (node->key < item) {
             node = node->right;
         } else {
@@ -325,10 +331,10 @@ RBTree<T>::~RBTree() {
     delete m_sentinel;
 
     // the following delete implementation leaked memory and i dont know why
-    // insert 100000 (9158 was the first quantity I discoveRBTree<T>::Node::RED) random numbers isize_to the tree
+    // the first time I noticed it: insert 100000 (9158 was the first quantity I discoveRBTree<T>::Node::RED) random numbers isize_to the tree
     // iterating over a list of each element and calling delete directly does not leak
-    // @@@ TODO check if rbMin/rbMax function we're fucking up because last_node wasn't initialized before being used in a while loop
-    // AND MSVC++ WAS THE ONE THAT CAUGHT IT, CLANG COULD NOT BE BOTHERBTree<T>::Node::RED EVEN WITH -wall -wextra
+    // then MSVC++ caught uninitialized values tripping up search, so they were initialized.
+    // next, adding a duplicate test revelead nodes with identical keys were getting leaked.
     /*
     while (m_root != m_sentinel) {
         typename RBTree<T>::Node* node = rbSearch(this, rbTreeMinimum(this->m_root, this->m_sentinel)->key);

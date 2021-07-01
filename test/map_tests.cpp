@@ -87,3 +87,14 @@ TEST(MapTests, Resize) {
     EXPECT_LT(test.Size(), test.Capacity());
     EXPECT_EQ(test.Size(), size);
 }
+
+TEST(MapTests, InsertDuplicates) {
+    Map<std::string, Foo<int>> test;
+    test.Insert("foo", Foo<int>(5));
+    EXPECT_EQ(test.Size(), 1);
+    test.Insert("foo", Foo<int>(6));
+    EXPECT_EQ(test.Size(), 1);
+    Option<Foo<int>> result = test["foo"];
+    EXPECT_EQ(result.result, Option<Foo<int>>::Some);
+    EXPECT_EQ(result.value, Foo<int>(5));
+}
