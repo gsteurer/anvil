@@ -9,19 +9,14 @@ namespace containers {
 
 typedef i64_t GRAPH_VERTEX_KEY;
 
-struct GraphVertex {
-    GRAPH_VERTEX_KEY key;
-};
-
-template <>
-struct Hashable<GraphVertex> {  // knuth
-    static long Hash(GraphVertex vert) {
+/*
+template <typename T>
+struct Hashable<Vertex> {
+    static long Hash(Vertex vert) {
         return Hashable<GRAPH_VERTEX_KEY>::Hash(vert.key);
     }
 };
-
-struct GraphEdge {
-};
+*/
 
 /*
     adjacent(G, x, y): tests whether there is an edge from the vertex x to the vertex y;
@@ -33,76 +28,71 @@ struct GraphEdge {
     get_vertex_value(G, x): returns the value associated with the vertex x;
     set_vertex_value(G, x, v): sets the value associated with the vertex x to v.
 */
+template <typename T>
 struct Graph {
-    Graph();
-    ~Graph();
+   public:
+    struct Vertex {
+        Vertex(){};
+        Vertex(GRAPH_VERTEX_KEY key, T data) : key(key), data(data) {}
+        ~Vertex() {}
+        Vertex(const Vertex& v) {
+            key = v.key;
+            data = v.data;
+        }
+        Vertex& operator=(const Vertex& v) {
+            key = v.key;
+            data = v.data;
+            return *this;
+        }
+        GRAPH_VERTEX_KEY key;
+        T data;
+    };
+    struct Edge {
+    };
+    Graph() {
+    }
 
-    Option<GraphVertex> GetVertex(GraphVertex x) const;
-    Option<GraphVertex*> SetVertex(GraphVertex x);
+    ~Graph() {
+        m_verticies.Clear();
+    }
+
+    Option<Vertex> GetVertex(GRAPH_VERTEX_KEY key) const {
+        return m_verticies[key];
+    }
+
+    bool AddVertex(Vertex x) {
+        return m_verticies.Insert(x.key, x);
+    }
+
+    Option<Vertex> RemoveVertex(GRAPH_VERTEX_KEY key) {
+        return m_verticies.Remove(key);
+    }
+
     /*
-    bool AddVertex(GraphVertex x);
-    bool RemoveVertex(GraphVertex x);
-    bool AddEdge(const GraphVertex& x, const GraphVertex& y);
-    bool RemoveEdge(const GraphVertex& x, const GraphVertex& y);
-    bool Adjacent(const GraphVertex& x, const GraphVertex& y);
-    List<GraphVertex&> Neighbors(const GraphVertex& x);
+    bool AddEdge(const Vertex& x, const Vertex& y);
+    bool RemoveEdge(const Vertex& x, const Vertex& y);
+    bool Adjacent(const Vertex& x, const Vertex& y);
+    List<Vertex&> Neighbors(const Vertex& x);
     */
 
    private:
-    isize_t m_size;
-    Map<GraphVertex*, List<GraphEdge>> m_verticies;
-    Map<GRAPH_VERTEX_KEY, GraphVertex*> m_keys_to_verticies;
+    Map<GRAPH_VERTEX_KEY, Vertex> m_verticies;
 };
 
-Graph::Graph() {
-    m_size = 0;
-}
-
-Graph::~Graph() {
-}
-
-Option<GraphVertex> Graph::GetVertex(GraphVertex x) const {
-    Option<GraphVertex> result;
-    Option<GraphVertex*> vert = m_keys_to_verticies[x.key];
-
-    result.result = Option<GraphVertex>::None;
-
-    if (vert.result == Option<GraphVertex*>::Some) {
-        result.result = Option<GraphVertex>::Some;
-        result.value = *vert.value;
-    }
-
-    return result;
-}
-
-Option<GraphVertex*> Graph::SetVertex(GraphVertex x) {
-    return m_keys_to_verticies[x.key];
-}
-
 /*
-bool Graph::AddVertex(GraphVertex x) {
-    //m_verticies.Insert(new GraphVertex(x), List<GraphEdge>());
-    //m_keys_to_verticies.Insert(x.key, new GraphVertex(x));
+bool Graph::AddEdge(const Vertex& x, const Vertex& y) {
     return false;
 }
 
-bool Graph::RemoveVertex(GraphVertex x) {
+bool Graph::RemoveEdge(const Vertex& x, const Vertex& y) {
     return false;
 }
 
-bool Graph::AddEdge(const GraphVertex& x, const GraphVertex& y) {
+bool Graph::Adjacent(const Vertex& x, const Vertex& y) {
     return false;
 }
 
-bool Graph::RemoveEdge(const GraphVertex& x, const GraphVertex& y) {
-    return false;
-}
-
-bool Graph::Adjacent(const GraphVertex& x, const GraphVertex& y) {
-    return false;
-}
-
-List<GraphVertex&> Graph::Neighbors(const GraphVertex& x) {
+List<Vertex&> Graph::Neighbors(const Vertex& x) {
 }
 */
 
