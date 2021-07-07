@@ -2,13 +2,13 @@
 
 Anvil is a library of selected algorithms, data structures, and utilities existing for the sole purpose of discovering implementation details of staples commonly found in standard libraries. 
 
-Anvil aims, first and foremost, to provide easier-to-grok-and-test implementations of support commonly provided by standard libraries. While Anvil tries to provide the "best" implementation possible though sacrifices are made to preserve readability. No guarantee is made, however, that this has actually been accomplished. Anvil is written to be read by people before computers. 
+Anvil aims, first and foremost, to provide easier-to-grok-and-test implementations of amenities commonly provided by standard libraries. While Anvil tries to provide the "best" implementation possible though sacrifices are made to preserve readability. No guarantee is made, however, that this has actually been accomplished. Anvil is written to be read by people before computers. 
 
 Anvil is not reccomended for use outside of hobby projects as superior, optimized, idiomatic implementations exist elsewhere. 
 
-Implementations of the algorithims, data structures, and functions within are derived from commonly used sources and texts and the terms and conditions of the original authors naturally supplant the license placed on top of this library. 
+Implementations of the algorithims, data structures, and functions within are derived from commonly used sources and texts. The terms, conditions, and restrictions of the original authors naturally supplant any license placed on top of this library. Swift action will be taken to strike copyrighted material from this project. In other words, all code is original although I don't know who owns the pen-and-paper details of thigns like the red black tree or hashing algorithims, or how to properly cite them. 
 
-Review and feedback is affably welcome though feedback shrouded in ego or tainted by smug condescension is cordially invited to seek audience elsewhere.  
+Review and feedback is affably welcome though feedback shrouded in ego or tainted by smug condescension is cordially invited to seek audience elsewhere. This clause exists optimistically to challenge toxicity before it infects the project. 
 
 ## Header Only
 Anvil currently requires static linking for some functionality. This is considered tech debt and anvil should eventually migrate to a header only implementation. 

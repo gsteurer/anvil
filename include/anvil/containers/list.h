@@ -102,7 +102,7 @@ List<T>::List() {
 
 template <typename T>
 List<T>::List(const List<T>& list) : List() {
-    for (List<isize_t>::Iterator it = list.Begin(); it != list.End(); it++) {
+    for (List<T>::Iterator it = list.Begin(); it != list.End(); it++) {
         this->PushBack(*it);
     }
     this->PushBack(*(list.End()));
@@ -111,7 +111,7 @@ List<T>::List(const List<T>& list) : List() {
 template <typename T>
 List<T>& List<T>::operator=(const List<T>& list) {
     this->Clear();
-    for (List<isize_t>::Iterator it = list.Begin(); it != list.End(); it++) {
+    for (List<T>::Iterator it = list.Begin(); it != list.End(); it++) {
         this->PushBack(*it);
     }
     this->PushBack(*(list.End()));
