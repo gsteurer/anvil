@@ -1,8 +1,39 @@
-#### Structure
-A solution contains multiple projects. Each project contains code.
+# Anvil
 
-#### Dependencies
+Anvil is a library of selected algorithms, data structures, and utilities existing for the sole purpose of discovering implementation details of staples commonly found in standard libraries. 
 
+Anvil aims, first and foremost, to provide easier-to-grok-and-test implementations of support commonly provided by standard libraries. While Anvil tries to provide the "best" implementation possible though sacrifices are made to preserve readability. No guarantee is made, however, that this has actually been accomplished. Anvil is written to be read by people before computers. 
+
+Anvil is not reccomended for use outside of hobby projects as superior, optimized, idiomatic implementations exist elsewhere. 
+
+Implementations of the algorithims, data structures, and functions within are derived from commonly used sources and texts and the terms and conditions of the original authors naturally supplant the license placed on top of this library. 
+
+Review and feedback is affably welcome though feedback shrouded in ego or tainted by smug condescension is cordially invited to seek audience elsewhere.  
+
+## Header Only
+Anvil currently requires static linking for some functionality. This is considered tech debt and anvil should eventually migrate to a header only implementation. 
+
+## Overview
+### Utilities
+- Smart Pointer
+- Optional/Nullable
+### Containers
+- Hash Map
+- Linked List
+- Dynamic Array
+- Graph
+### Math
+- Vectors
+- Matricies
+### Strings
+- Object Oriented C String Wrapper
+
+## Notes
+
+### Visual Studio 2019 Project Structure
+A `solution` contains multiple `project`s. Each `project` contains code.
+
+### These notes belong elsewhere:
 lua - pull down the git submodule
 sqlite - requires tcl installation
 
