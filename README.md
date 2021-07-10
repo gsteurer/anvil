@@ -1,17 +1,18 @@
 # Anvil
 
-Anvil is a library of selected algorithms, data structures, and utilities existing for the sole purpose of discovering implementation details of staples commonly found in standard libraries. 
+Anvil is a collection of algorithms, data structures, and utilities commonly found in standard libraries.  
 
-Anvil aims, first and foremost, to provide easier-to-grok-and-test implementations of amenities commonly provided by standard libraries. While Anvil tries to provide the "best" implementation possible though sacrifices are made to preserve readability. No guarantee is made, however, that this has actually been accomplished. Anvil is written to be read by people before computers. 
+Anvil pprovides easier-to-grok-and-test implementations of amenities commonly provided by standard libraries. While Anvil tries to provide the "best" implementation possible, sacrifices are made to preserve readability. Anvil is written to promote human readbility of its code. No guarantee is made, however, that any of this has actually been accomplished. 
 
-Anvil is not reccomended for use outside of hobby projects as superior, optimized, idiomatic implementations exist elsewhere. 
+Anvil is not reccomended for use outside of hobby projects as more optimized and idiomatic implementations exist elsewhere. 
 
-Implementations of the algorithims, data structures, and functions within are derived from commonly used sources and texts. The terms, conditions, and restrictions of the original authors naturally supplant any license placed on top of this library. Swift action will be taken to strike copyrighted material from this project. In other words, all code is original although I don't know who owns the pen-and-paper details of thigns like the red black tree or hashing algorithims, or how to properly cite them. 
+I do not own any of the actual math and science the library implements unless it is original work. The license this library uses applies to the interfaces provided and original code. The license also provides a warranty which to my understanding effectively means "use this library at your own peril". If you are the original author of any of the pen-and-paper theory used within I am happy to cite your work and apply whatever licensing you desire. I have no financial stake in this project. 
 
-Review and feedback is affably welcome though feedback shrouded in ego or tainted by smug condescension is cordially invited to seek audience elsewhere. This clause exists optimistically to challenge toxicity before it infects the project. 
+Should any contributors join this project the expectation of the community is that all communication is cordial and dispassionate. Please be kind to anyone that participates. 
 
 ## Header Only
 Anvil currently requires static linking for some functionality. This is considered tech debt and anvil should eventually migrate to a header only implementation. 
+
 
 ## Overview
 ### Utilities
