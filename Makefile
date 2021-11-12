@@ -2,27 +2,39 @@ INCLUDES=-Iinclude
 
 #https://stackoverflow.com/questions/7815400/how-do-i-make-makefile-to-recompile-only-changed-files
 
-OBJDIR=-o .obj/$@
+OBJDIR=./obj
 CC=clang++ -g -O0 -std=c++17
 CFLAGS=-Wall -Wextra $(INCLUDES)
 
 default:
-	$(MAKE) dirs lib
+	$(MAKE) dirs libanvil
+	
+all:
+	$(MAKE) dirs libanvil
 	
 dirs:
-	mkdir -p .obj lib
+	mkdir -p $(OBJDIR) lib
 
-mat4x4f.o: 
-	$(CC) $(CFLAGS) -c -o .obj/$@ src/anvil/math/mat4x4f.cpp
+mat4x4f.o: src/anvil/math/mat4x4f.cpp
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/$@ $<
 
-vec4f.o: 
-	$(CC) $(CFLAGS) -c -o .obj/$@ src/anvil/math/vec4f.cpp
+vec4f.o: src/anvil/math/vec4f.cpp
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/$@ $<
 
-string.o: 
-	$(CC) $(CFLAGS) -c -o .obj/$@ src/anvil/string/string.cpp
+cstring.o: src/anvil/string/cstring.cpp
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/$@ $<
 
-lib: mat4x4f.o vec4f.o string.o
-	ar rvs lib/libanvil.a .obj/*.o
+string.o: src/anvil/string/string.cpp
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/$@ $<
+
+stlutils.o: src/anvil/string/stlutils.cpp
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/$@ $<
+
+wavefront.o: src/anvil/file/wavefront.cpp
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/$@ $<
+
+libanvil: mat4x4f.o vec4f.o cstring.o string.o stlutils.o wavefront.o
+	ar rvs lib/$@.a $(OBJDIR)/*.o
 
 clean:
-	rm -rf lib .obj
+	rm -rf lib $(OBJDIR)

@@ -8,6 +8,8 @@
 namespace anvil {
 namespace math {
 
+// https://stackoverflow.com/questions/3837490/initializing-a-static-variable-in-header
+// "if you have a static int in a header file and include it from two separate .c files, you will have two discrete copies of that int, which is most likely not at all what you want."
 static u64_t next = 1;
 
 inline u64_t rand(void) {

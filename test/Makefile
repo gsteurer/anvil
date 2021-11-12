@@ -7,18 +7,25 @@ TEST_LIBS=-lgtest -lgtest_main -lpthread -lanvil
 # https://www.osc.edu/resources/getting_started/howto/howto_use_address_sanitizer
 OBJDIR=-o .obj/$@
 CC=clang++ -g -O0 -std=c++17
-CFLAGS=-Wall -Wextra $(INCLUDES)
+CPPFLAGS=-Wall -Wextra $(INCLUDES)
 SRC_FILES := $(wildcard *.cpp)
 OBJ_FILES := $(patsubst %.cpp,%.o,$(SRC_FILES))
+
+SRC_DIR := ./
+OBJ_DIR := ./.obj
+SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
+OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
 
 default:
 	$(MAKE) dirs tests
 
+all: 
+	$(MAKE) dirs tests
 dirs:
 	mkdir -p .obj bin
 
-%.o: %.cpp
-	$(CC) $(CFLAGS) -c -o .obj/$@ $<
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CC) $(CPPFLAGS) -c -o $@ $<
 
 tests: $(OBJ_FILES)
 	$(CC) $(CFLAGS) $(LIB_LOCATIONS) $(TEST_LIBS) .obj/*.o -o bin/tests 

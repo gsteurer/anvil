@@ -126,5 +126,10 @@ std::string str(const Vec4f& vec, isize_t precision) {
     return stream.str();
 }
 
+// @@@ implementing data(); info on packing
+// https://gcc.gnu.org/onlinedocs/gcc/Structure-Layout-Pragmas.html
+// https://stackoverflow.com/questions/45898184/can-i-safely-convert-struct-of-floats-into-float-array-in-c
+// https://stackoverflow.com/questions/3318410/pragma-pack-effect
+
 }  // namespace math
 }  // namespace anvil

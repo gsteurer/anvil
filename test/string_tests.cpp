@@ -1,6 +1,7 @@
-#include "gtest/gtest.h"
-#include "anvil/string/string.h"
+#include "anvil/string/cstring.h"
+#include "anvil/string/stlutils.h"
 #include "anvil/types.h"
+#include "gtest/gtest.h"
 
 using namespace anvil::string;
 
@@ -74,4 +75,80 @@ TEST(StringTests, CtorCppString) {
     String s(expected);
     EXPECT_STREQ(expected, s.cstr());
     EXPECT_TRUE(streq(expected, s.cstr()));
+}
+
+TEST(StringTests, STLUtilsStrip) {
+    const char* expected = "foo bar baz qux quux";
+    std::string sample = "foo bar baz qux quux";
+    auto result = anvil::string::stlutils::strip(sample);
+    EXPECT_STREQ(expected, result.c_str());
+
+    sample = " foo bar baz qux quux ";
+    result = anvil::string::stlutils::strip(sample);
+    EXPECT_STREQ(expected, result.c_str());
+
+    sample = " foo bar baz qux quux";
+    result = anvil::string::stlutils::strip(sample);
+    EXPECT_STREQ(expected, result.c_str());
+
+    sample = "foo bar baz qux quux ";
+    result = anvil::string::stlutils::strip(sample);
+    EXPECT_STREQ(expected, result.c_str());
+
+    sample = " \t\nfoo bar baz qux quux\v ";
+    result = anvil::string::stlutils::strip(sample);
+    EXPECT_STREQ(expected, result.c_str());
+
+    sample = "\n\n\nfoo bar baz qux quux";
+    result = anvil::string::stlutils::strip(sample);
+    EXPECT_STREQ(expected, result.c_str());
+
+    sample = " ";
+    result = anvil::string::stlutils::strip(sample);
+    EXPECT_STREQ("", result.c_str());
+
+    sample = " \t\n\v\f";
+    result = anvil::string::stlutils::strip(sample);
+    EXPECT_STREQ("", result.c_str());
+
+    sample = "";
+    result = anvil::string::stlutils::strip(sample);
+    EXPECT_STREQ("", result.c_str());
+}
+
+TEST(StringTests, STLUtilsSplit) {
+    std::string sample = "foo bar baz qux quux";
+    std::string delim = " ";
+    auto result = anvil::string::stlutils::split(sample, delim);
+    EXPECT_EQ(static_cast<size_t>(5), result.size());
+    EXPECT_STREQ("foo", result[0].c_str());
+    EXPECT_STREQ("bar", result[1].c_str());
+    EXPECT_STREQ("baz", result[2].c_str());
+    EXPECT_STREQ("qux", result[3].c_str());
+    EXPECT_STREQ("quux", result[4].c_str());
+
+    sample = "afoobfoocfoofoofoo";
+    delim = "foo";
+    result = anvil::string::stlutils::split(sample, delim);
+    EXPECT_EQ(static_cast<size_t>(6), result.size());
+    EXPECT_STREQ("a", result[0].c_str());
+    EXPECT_STREQ("b", result[1].c_str());
+    EXPECT_STREQ("c", result[2].c_str());
+    EXPECT_STREQ("", result[3].c_str());
+    EXPECT_STREQ("", result[4].c_str());
+    EXPECT_STREQ("", result[5].c_str());
+
+    sample = "1//2";
+    delim = "/";
+    result = anvil::string::stlutils::split(sample, delim);
+    EXPECT_EQ(static_cast<size_t>(3), result.size());
+    EXPECT_STREQ("1", result[0].c_str());
+    EXPECT_STREQ("", result[1].c_str());
+    EXPECT_STREQ("2", result[2].c_str());
+
+    sample = "1";
+    delim = "/";
+    result = anvil::string::stlutils::split(sample, delim);
+    EXPECT_EQ(static_cast<size_t>(1), result.size());
+    EXPECT_STREQ("1", result[0].c_str());
 }

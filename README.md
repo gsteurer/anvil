@@ -38,6 +38,11 @@ A `solution` contains multiple `project`s. Each `project` contains code.
 lua - pull down the git submodule
 sqlite - requires tcl installation
 
+download tcl from https://www.tcl.tk/software/tcltk/
+`cd <platform>`
+make
+
+
 must wrap include in `extern c`
 sqlite requires
 
@@ -81,6 +86,9 @@ https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html
 https://stackoverflow.com/questions/275004/timer-function-to-provide-time-in-nano-seconds-using-c high resolution timestamps
 #### SDK Includes
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0
+
+#### Debugging
+`lldb -- bin/tests  --gtest_filter=RedBlackTreeTests.InsertDuplicatesKey`
 
 #### Leak Finding
 `leaks -atExit -- bin/tests --gtest_filter=SliceTests.InsertPrimitive`

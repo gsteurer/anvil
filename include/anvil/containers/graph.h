@@ -2,6 +2,7 @@
 #include "anvil/containers/list.h"
 #include "anvil/containers/map.h"
 #include "anvil/option.h"
+#include "anvil/pair.h"
 #include "anvil/types.h"
 
 namespace anvil {
@@ -28,6 +29,7 @@ struct Hashable<Vertex> {
     get_vertex_value(G, x): returns the value associated with the vertex x;
     set_vertex_value(G, x, v): sets the value associated with the vertex x to v.
 */
+
 template <typename T>
 struct Graph {
    public:
@@ -57,26 +59,52 @@ struct Graph {
     }
 
     Option<Vertex> GetVertex(GRAPH_VERTEX_KEY key) const {
-        return m_verticies[key];
+        Option<Vertex> v;
+        Option<Pair<Vertex, List<Edge>>> item = m_verticies[key];
+        if (item.result == Option<Pair<Vertex, List<Edge>>>::Some) {
+            v.result = Option<Vertex>::Some;
+            v.value = item.value.first;
+        }
+
+        return v;
     }
 
     bool AddVertex(Vertex x) {
-        return m_verticies.Insert(x.key, x);
+        Pair<Vertex, List<Edge>> p;
+        p.first = x;
+
+        return m_verticies.Insert(x.key, p);
     }
 
     Option<Vertex> RemoveVertex(GRAPH_VERTEX_KEY key) {
-        return m_verticies.Remove(key);
+        Option<Vertex> v;
+        Option<Pair<Vertex, List<Edge>>> item = m_verticies.Remove(key);
+
+        if (item.result == Option<Pair<Vertex, List<Edge>>>::Some) {
+            v.result = Option<Vertex>::Some;
+            v.value = item.value.first;
+        }
+
+        return v;
     }
 
+    bool AddEdge(GRAPH_VERTEX_KEY x, GRAPH_VERTEX_KEY y) {
+        Option<Pair<Vertex, List<Edge>>> item = m_verticies[x];
+        if (item.result == Option<Pair<Vertex, List<Edge>>>::Some) {
+            m_verticies[x].second.Insert(Edge());
+        }
+
+        return false;
+    }
     /*
-    bool AddEdge(const Vertex& x, const Vertex& y);
     bool RemoveEdge(const Vertex& x, const Vertex& y);
-    bool Adjacent(const Vertex& x, const Vertex& y);
+    
+    bool Adjacent(const Vertex& x, const Vertex& y) const;
     List<Vertex&> Neighbors(const Vertex& x);
     */
 
    private:
-    Map<GRAPH_VERTEX_KEY, Vertex> m_verticies;
+    Map<GRAPH_VERTEX_KEY, Pair<Vertex, List<Edge>>> m_verticies;
 };
 
 /*
