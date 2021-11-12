@@ -15,6 +15,23 @@
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "macos-clang-x64"
+        },
+        {
+            "name": "Win32",
+            "windowsSdkVersion": "10.0.19041.0",
+            "includePath": [
+                "${workspaceFolder}\\*",
+                "${workspaceFolder}\\include\\*",
+                "C:\\Users\\jsteurer\\Code\\cpp_workbench\\public\\googletest\\googletest\\include"
+            ],
+            "defines": [],
+            "compilerPath": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.30.30705\\bin\\Hostx64\\x64\\cl.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "windows-msvc-x64",
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true
+            }
         }
     ],
     "version": 4

@@ -1,0 +1,14 @@
+INCLUDES = /I%userprofile%\Code\cpp_workbench\public\googletest\googletest\include
+
+CC = cl /MD /O2 /c /EHsc
+OBJDIR = build\.obj
+OBJOUT = /Fo$(OBJDIR)\$(@)
+
+all:
+    echo $(INCLUDES)
+
+dirs:
+	mkdir build\.obj build\exe build\lib
+
+clean:
+	rmdir /S /Q build

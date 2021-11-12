@@ -1,0 +1,31 @@
+CC = cl /MD /O2 /c /EHsc
+INCLUDES = /Iinclude
+OBJDIR = build\.obj
+OBJOUT = /Fo$(OBJDIR)\$(@)
+
+dirs:
+	mkdir build\.obj build\exe build\lib
+
+clean:
+	rmdir /S /Q build
+
+wavefront.o: src/anvil/file/wavefront.cpp
+	$(CC) $(INCLUDES) $(OBJOUT) $(?)
+
+mat4x4f.o: src/anvil/math/mat4x4f.cpp
+	$(CC) $(INCLUDES) $(OBJOUT) $(?)
+
+vec4f.o: src/anvil/math/vec4f.cpp
+	$(CC) $(INCLUDES) $(OBJOUT) $(?)
+
+cstring.o: src/anvil/string/cstring.cpp
+	$(CC) $(INCLUDES) $(OBJOUT) $(?)
+
+string.o: src/anvil/string/string.cpp
+	$(CC) $(INCLUDES) $(OBJOUT) $(?)
+
+stlutils.o: src/anvil/string/stlutils.cpp
+	$(CC) $(INCLUDES) $(OBJOUT) $(?)
+
+libanvil: mat4x4f.o vec4f.o cstring.o string.o stlutils.o wavefront.o
+	lib /OUT:build\lib\anvil-static.lib $(OBJDIR)\*.o
