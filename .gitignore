@@ -363,3 +363,5 @@ FodyWeavers.xsd
 bin
 lib
 .obj
+
+test/build

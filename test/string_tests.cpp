@@ -1,4 +1,5 @@
 #include "anvil/string/cstring.h"
+#include "anvil/string/string.h"
 #include "anvil/string/stlutils.h"
 #include "anvil/types.h"
 #include "gtest/gtest.h"

@@ -1,14 +1,23 @@
-INCLUDES = /I%userprofile%\Code\cpp_workbench\public\googletest\googletest\include
+CC = cl /MT /Od /c /EHsc /std:c++17 /Zi
 
-CC = cl /MD /O2 /c /EHsc
-OBJDIR = build\.obj
+INCLUDES = /I..\include /I%userprofile%\Code\cpp_workbench\public\googletest\googletest\include
+LIBPATHS = /LIBPATH:..\build\lib\ /LIBPATH:%userprofile%\Code\cpp_workbench\public\googletest\build\lib\Release
+OBJDIR = build\obj
 OBJOUT = /Fo$(OBJDIR)\$(@)
-
-all:
-    echo $(INCLUDES)
+DBGDIR = build\dbg
+DBGOUT = /Fd:$(DBGDIR)\$(*).pdb
+# despite what the doc says, nmake doesnt actually support patsubst. so instead of doing something like SRCFILES=*.cpp and OBJFILES = $(patsubst %.obj,%.cpp,$(SRCFILES)) listing this shit manually is necessary:
+OBJFILES = file_tests.obj foo_tests.obj graph_tests.obj list_tests.obj map_tests.obj mat_tests.obj priorityqueue_tests.obj redblacktree_tests.obj set_tests.obj slice_tests.obj smartpointer_tests.obj sortedmap_tests.obj string_tests.obj time_tests.obj type_tests.obj vec_tests.obj
+LINKLIBS = anvil-static.lib gtest.lib gtest_main.lib
 
 dirs:
-	mkdir build\.obj build\exe build\lib
+	mkdir build\obj build\exe build\dbg
 
 clean:
 	rmdir /S /Q build
+
+.cpp.obj:
+	$(CC) $(INCLUDES) $(OBJOUT) $(DBGOUT) $<
+
+test: $(OBJFILES)
+	link /SUBSYSTEM:CONSOLE /OUT:build\exe\test.exe $(LIBPATHS) $(OBJDIR)\*.obj $(LINKLIBS)
