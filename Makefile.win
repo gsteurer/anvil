@@ -1,4 +1,4 @@
-CC = cl /MT /Od /c /EHsc /std:c++17 /Zi
+CC = cl /MTd /Od /c /EHsc /std:c++17 /Zi
 INCLUDES = /Iinclude
 OBJDIR = build\obj
 OBJOUT = /Fo$(OBJDIR)\$(@)
