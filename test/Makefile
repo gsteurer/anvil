@@ -1,5 +1,5 @@
 INCLUDES=-I../include -I../../googletest/googletest/include
-LIB_LOCATIONS=-L../../googletest/build/lib -L../lib
+LIB_LOCATIONS=-L../../googletest/build/lib -L../build/lib
 TEST_LIBS=-lgtest -lgtest_main -lpthread -lanvil
 
 # https://stackoverflow.com/questions/7815400/how-do-i-make-makefile-to-recompile-only-changed-files
@@ -12,7 +12,7 @@ SRC_FILES := $(wildcard *.cpp)
 OBJ_FILES := $(patsubst %.cpp,%.o,$(SRC_FILES))
 
 SRC_DIR := ./
-OBJ_DIR := ./.obj
+OBJ_DIR := build/obj
 SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
 
@@ -22,13 +22,13 @@ default:
 all: 
 	$(MAKE) dirs tests
 dirs:
-	mkdir -p .obj bin
+	mkdir -p build/obj build/bin
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CC) $(CPPFLAGS) -c -o $@ $<
 
 tests: $(OBJ_FILES)
-	$(CC) $(CFLAGS) $(LIB_LOCATIONS) $(TEST_LIBS) .obj/*.o -o bin/tests 
+	$(CC) $(CFLAGS) $(LIB_LOCATIONS) $(TEST_LIBS) build/obj/*.o -o build/bin/tests 
 
 clean:
-	rm -rf bin .obj
+	rm -rf build
