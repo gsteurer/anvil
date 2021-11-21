@@ -5,7 +5,7 @@
 
 namespace anvil {
 namespace math {
-inline bool floateq(f64_t lhs, f64_t rhs) {
+inline bool floateq(f32_t lhs, f32_t rhs) {
     return std::fabs(lhs - rhs) < std::numeric_limits<float>::epsilon();
 }
 /*

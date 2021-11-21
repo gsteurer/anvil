@@ -25,7 +25,7 @@ Mat4x4f::Mat4x4f(const Mat4x4f& m) {
     }
 }
 
-Mat4x4f::Mat4x4f(f64_t* data) {
+Mat4x4f::Mat4x4f(f32_t* data) {
     for (isize_t idx = 0; idx < 16; idx++) {
         m_elements[idx] = data[idx];
     }
@@ -40,24 +40,24 @@ Mat4x4f Identity() {
     return m;
 }
 
-f64_t& Mat4x4f::operator[](isize_t idx) {
+f32_t& Mat4x4f::operator[](isize_t idx) {
     return this->m_elements[idx];
 }
 
-f64_t Mat4x4f::operator[](isize_t idx) const {
+f32_t Mat4x4f::operator[](isize_t idx) const {
     return this->m_elements[idx];
 }
 
-f64_t& Mat4x4f::operator()(isize_t row, isize_t col) {
+f32_t& Mat4x4f::operator()(isize_t row, isize_t col) {
     return this->m_elements[(4 * row) + col];
 }
 
-f64_t Mat4x4f::operator()(isize_t row, isize_t col) const {
+f32_t Mat4x4f::operator()(isize_t row, isize_t col) const {
     return this->m_elements[(4 * row) + col];
 }
 
 Mat4x4f& Mat4x4f::operator=(const Mat4x4f& m) {
-    std::memcpy(this->m_elements, m.m_elements, sizeof(f64_t) * 16);
+    std::memcpy(this->m_elements, m.m_elements, sizeof(f32_t) * 16);
     return *this;
 }
 
@@ -84,7 +84,7 @@ Mat4x4f mul(const Mat4x4f& lhs, const Mat4x4f& rhs) {
 }
 
 Vec4f mul(const Mat4x4f& mat, const Vec4f& vec) {
-    f64_t r[4];
+    f32_t r[4];
     for (isize_t row = 0; row < 4; row++) {
         Vec4f a(mat(row, 0), mat(row, 1), mat(row, 2), mat(row, 3));
         r[row] = dot(a, vec);
@@ -92,7 +92,7 @@ Vec4f mul(const Mat4x4f& mat, const Vec4f& vec) {
     return Vec4f(r[0], r[1], r[2], r[3]);
 }
 
-Mat4x4f mul(const Mat4x4f& mat, f64_t scale) {
+Mat4x4f mul(const Mat4x4f& mat, f32_t scale) {
     Mat4x4f m;
     for (isize_t row = 0; row < 4; row++) {
         for (isize_t col = 0; col < 4; col++) {
@@ -103,16 +103,16 @@ Mat4x4f mul(const Mat4x4f& mat, f64_t scale) {
 }
 
 //row, col is top 0,0 of a 2x2 matrix
-f64_t determinant2x2(const Mat4x4f& mat, isize_t row, isize_t col) {
-    f64_t a = mat(row, col);
-    f64_t b = mat(row, col + 1);
-    f64_t c = mat(row + 1, col);
-    f64_t d = mat(row + 1, col + 1);
+f32_t determinant2x2(const Mat4x4f& mat, isize_t row, isize_t col) {
+    f32_t a = mat(row, col);
+    f32_t b = mat(row, col + 1);
+    f32_t c = mat(row + 1, col);
+    f32_t d = mat(row + 1, col + 1);
     return a * d - b * c;
 }
 
-f64_t minor3x3(const Mat4x4f& mat, isize_t row, isize_t col) {
-    f64_t data[4];
+f32_t minor3x3(const Mat4x4f& mat, isize_t row, isize_t col) {
+    f32_t data[4];
     isize_t idx = 0;
     for (isize_t r = 0; r < 3; r++) {
         for (isize_t c = 0; c < 3; c++) {
@@ -125,29 +125,29 @@ f64_t minor3x3(const Mat4x4f& mat, isize_t row, isize_t col) {
     return data[0] * data[3] - data[1] * data[2];
 }
 
-f64_t cofactor3x3(const Mat4x4f& mat, isize_t row, isize_t col) {
+f32_t cofactor3x3(const Mat4x4f& mat, isize_t row, isize_t col) {
     return ((row + col) & 1) ? -1 * minor3x3(mat, row, col) : minor3x3(mat, row, col);
 }
 
-f64_t determinant3x3(const Mat4x4f& mat, isize_t row) {
-    f64_t a = cofactor3x3(mat, row, 0);
-    f64_t b = cofactor3x3(mat, row, 1);
-    f64_t c = cofactor3x3(mat, row, 2);
+f32_t determinant3x3(const Mat4x4f& mat, isize_t row) {
+    f32_t a = cofactor3x3(mat, row, 0);
+    f32_t b = cofactor3x3(mat, row, 1);
+    f32_t c = cofactor3x3(mat, row, 2);
 
     return mat(row, 0) * a + mat(row, 1) * b + mat(row, 2) * c;
 }
 
-f64_t minor4x4(const Mat4x4f& mat, isize_t row, isize_t col) {
+f32_t minor4x4(const Mat4x4f& mat, isize_t row, isize_t col) {
     Mat4x4f m = submatrix<Mat4x4f>(mat, row, col);
     return determinant3x3(m);  // it doesnt matter which row we choose to calculate the determinant from
 }
 
-f64_t cofactor4x4(const Mat4x4f& mat, isize_t row, isize_t col) {
+f32_t cofactor4x4(const Mat4x4f& mat, isize_t row, isize_t col) {
     return ((row + col) & 1) ? -1 * minor4x4(mat, row, col) : minor4x4(mat, row, col);
 }
 
-f64_t determinant4x4(const Mat4x4f& mat, isize_t row) {
-    f64_t det = 0.0;
+f32_t determinant4x4(const Mat4x4f& mat, isize_t row) {
+    f32_t det = 0.0;
     for (isize_t c = 0; c < 4; c++) {
         det = det + mat(row, c) * cofactor4x4(mat, row, c);
     }
@@ -161,7 +161,7 @@ Mat4x4f inverse(const Mat4x4f& mat) {
     // create a matrix of cofactors
     // transpose the cofactor matrix
     // divide the transposed matrix by the determinant of the original
-    f64_t d = determinant4x4(mat);
+    f32_t d = determinant4x4(mat);
     Mat4x4f cofactors;
     for (isize_t row = 0; row < 4; row++) {
         for (isize_t col = 0; col < 4; col++) {

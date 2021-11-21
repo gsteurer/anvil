@@ -18,7 +18,7 @@ Vec4f& Vec4f::operator=(const Vec4f& v) {
     this->w = v.w;
     return *this;
 }
-Vec4f::Vec4f(f64_t x, f64_t y, f64_t z, f64_t w) : x(x), y(y), z(z), w(w){};
+Vec4f::Vec4f(f32_t x, f32_t y, f32_t z, f32_t w) : x(x), y(y), z(z), w(w){};
 
 bool point(const Vec4f& vec) {
     return floateq(1.0, vec.w);
@@ -55,7 +55,7 @@ Vec4f sub(const Vec4f& lhs, const Vec4f& rhs) {
         lhs.w - rhs.w);
 }
 
-Vec4f mul(f64_t scale, const Vec4f& vec) {
+Vec4f mul(f32_t scale, const Vec4f& vec) {
     return Vec4f(
         scale * vec.x,
         scale * vec.y,
@@ -63,7 +63,7 @@ Vec4f mul(f64_t scale, const Vec4f& vec) {
         scale * vec.w);
 }
 
-Vec4f div(f64_t scale, const Vec4f& vec) {
+Vec4f div(f32_t scale, const Vec4f& vec) {
     return Vec4f(
         vec.x / scale,
         vec.y / scale,
@@ -71,7 +71,7 @@ Vec4f div(f64_t scale, const Vec4f& vec) {
         vec.w / scale);
 }
 
-f64_t mag(const Vec4f& vec) {
+f32_t mag(const Vec4f& vec) {
     return std::sqrt(
         (vec.x * vec.x) +
         (vec.y * vec.y) +
@@ -80,7 +80,7 @@ f64_t mag(const Vec4f& vec) {
 }
 
 Vec4f norm(const Vec4f& vec) {
-    f64_t m = mag(vec);
+    f32_t m = mag(vec);
     return Vec4f(
         vec.x / m,
         vec.y / m,
@@ -88,7 +88,7 @@ Vec4f norm(const Vec4f& vec) {
         vec.w / m);
 }
 
-f64_t dot(const Vec4f& lhs, const Vec4f& rhs) {
+f32_t dot(const Vec4f& lhs, const Vec4f& rhs) {
     return (lhs.x * rhs.x) +
            (lhs.y * rhs.y) +
            (lhs.z * rhs.z) +
@@ -107,11 +107,11 @@ Vec4f operator+(const Vec4f& lhs, const Vec4f& rhs) { return add(lhs, rhs); }
 Vec4f operator-(const Vec4f& lhs, const Vec4f& rhs) { return sub(lhs, rhs); }
 bool operator==(const Vec4f& lhs, const Vec4f& rhs) { return floateq(lhs, rhs); }
 
-Vec4f mul(const Vec4f& vec, f64_t scale) {
+Vec4f mul(const Vec4f& vec, f32_t scale) {
     return mul(scale, vec);
 }
 
-Vec4f div(const Vec4f& vec, f64_t scale) {
+Vec4f div(const Vec4f& vec, f32_t scale) {
     return div(scale, vec);
 }
 

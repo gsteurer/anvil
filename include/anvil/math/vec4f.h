@@ -10,11 +10,11 @@ struct Vec4f {
     Vec4f();
     Vec4f(const Vec4f& v);
     Vec4f& operator=(const Vec4f& v);
-    Vec4f(f64_t x, f64_t y, f64_t z, f64_t w);
-    f64_t x;
-    f64_t y;
-    f64_t z;
-    f64_t w;
+    Vec4f(f32_t x, f32_t y, f32_t z, f32_t w);
+    f32_t x;
+    f32_t y;
+    f32_t z;
+    f32_t w;
 };
 
 bool point(const Vec4f& vec);
@@ -28,17 +28,17 @@ Vec4f add(const Vec4f& lhs, const Vec4f& rhs);
 
 Vec4f sub(const Vec4f& lhs, const Vec4f& rhs);
 
-Vec4f mul(f64_t scale, const Vec4f& vec);
-Vec4f mul(const Vec4f& vec, f64_t scale);
+Vec4f mul(f32_t scale, const Vec4f& vec);
+Vec4f mul(const Vec4f& vec, f32_t scale);
 
-Vec4f div(f64_t scale, const Vec4f& vec);
-Vec4f div(const Vec4f& vec, f64_t scale);
+Vec4f div(f32_t scale, const Vec4f& vec);
+Vec4f div(const Vec4f& vec, f32_t scale);
 
-f64_t mag(const Vec4f& vec);
+f32_t mag(const Vec4f& vec);
 
 Vec4f norm(const Vec4f& vec);
 
-f64_t dot(const Vec4f& lhs, const Vec4f& rhs);
+f32_t dot(const Vec4f& lhs, const Vec4f& rhs);
 
 Vec4f cross(const Vec4f& lhs, const Vec4f& rhs);
 
