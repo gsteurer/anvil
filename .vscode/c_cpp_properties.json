@@ -5,7 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/include",
-                "../googletest/googletest/include"
+                "~/Code/cpp_workbench/external/googletest/googletest/include"
             ],
             "defines": [],
             "macFrameworkPath": [

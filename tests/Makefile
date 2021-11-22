@@ -1,5 +1,5 @@
-INCLUDES=-I../include -I../../googletest/googletest/include
-LIB_LOCATIONS=-L../../googletest/build/lib -L../build/lib
+INCLUDES=-I../include -I$${HOME}/Code/cpp_workbench/external/googletest/googletest/include
+LIB_LOCATIONS=-L$${HOME}/Code/cpp_workbench/external/googletest/build/lib -L../build/lib
 TEST_LIBS=-lgtest -lgtest_main -lpthread -lanvil
 
 # https://stackoverflow.com/questions/7815400/how-do-i-make-makefile-to-recompile-only-changed-files
