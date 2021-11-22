@@ -364,4 +364,4 @@ bin
 lib
 .obj
 
-test/build
+tests/build
