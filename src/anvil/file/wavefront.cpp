@@ -1,7 +1,9 @@
 #include "anvil/file/wavefront.h"
 
+// @@@ todo remove these
 #include <fstream>
 #include <string>
+#include <vector>
 
 #include "anvil/file/mesh.h"
 #include "anvil/math/vec4f.h"
@@ -60,19 +62,22 @@ face_index parse_face_index_element(std::string line) {
     return index;
 }
 
-void parse_face_indicies(std::vector<std::string> line) {
+face_index parse_face_indicies(std::vector<std::string> line) {
     if (line.size() > 4) {
         throw std::runtime_error("no support for more than three indicies per face");
     }
+    face_index index;
     if (line.size() >= 1) {
-        face_index index = parse_face_index_element(line[1]);
+        index = parse_face_index_element(line[1]);
     }
     if (line.size() >= 2) {
-        face_index index = parse_face_index_element(line[2]);
+        index = parse_face_index_element(line[2]);
     }
     if (line.size() >= 3) {
-        face_index index = parse_face_index_element(line[3]);
+        index = parse_face_index_element(line[3]);
     }
+
+    return index;
 }
 
 Mesh parse(std::string filename) {
@@ -91,6 +96,7 @@ Mesh parse(std::string filename) {
 
         if (element.compare("v") == 0) {  // vertex
             avec::Vec4f vert = parse_vertex(result);
+            mesh.verts.Insert(vert);
         } else if (element.compare("vt") == 0) {  // texture coords
 
         } else if (element.compare("vn") == 0) {  // vertex normal
@@ -98,7 +104,8 @@ Mesh parse(std::string filename) {
         } else if (element.compare("vp") == 0) {  // parameter space verts
 
         } else if (element.compare("f") == 0) {  // face element
-
+            auto indices = parse_face_indicies(result);
+            mesh.vertIndices.Insert(indices.vertex);
         } else if (element.compare("l") == 0) {  // line element
         }
     }

@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include "anvil/math/mat.h"
 #include "anvil/math/mat4x4f.h"
 #include "anvil/math/util.h"
@@ -274,4 +276,96 @@ TEST(Mat4x4fTest, UndoMul) {
     auto C = A * B;
     EXPECT_EQ(A, matround(C * inverse(B)));
     EXPECT_EQ(str(A), str(C * inverse(B)));
+}
+
+TEST(Mat4x4fTest, Translation) {
+    Mat4x4f t = Translate(5, -3, 2);
+    Vec4f p = Point(-3, 4, 5);
+    EXPECT_EQ(Point(2, 1, 7), t * p);
+    Mat4x4f inv = inverse(t);
+    EXPECT_EQ(Point(-8, 7, 3), inv * p);
+    Vec4f v = Vector(-3, 4, 5);
+    // does not affect vectors
+    EXPECT_EQ(v, t * v);
+}
+
+TEST(Mat4x4fTest, Scale) {
+    Mat4x4f s = Scale(2, 3, 4);
+    Vec4f p = Point(-4, 6, 8);
+    EXPECT_EQ(Point(-8, 18, 32), s * p);
+    Vec4f v = Vector(-4, 6, 8);
+    EXPECT_EQ(Vector(-8, 18, 32), s * v);
+    Mat4x4f inv = inverse(s);
+    EXPECT_EQ(Vector(-2, 2, 2), inv * v);
+    // reflection is scaling by a negative value
+    s = Scale(-1, 1, 1);
+    p = Point(2, 3, 4);
+    EXPECT_EQ(Point(-2, 3, 4), s * p);
+}
+
+TEST(Mat4x4fTest, RotateX) {
+    Vec4f p = Point(0, 1, 0);
+    Mat4x4f halfquarter = RotateX(radians(45));
+    Mat4x4f fullquarter = RotateX(radians(90));
+
+    EXPECT_EQ(halfquarter * p, Point(0, sqrt(2) / 2, sqrt(2) / 2));
+    EXPECT_EQ(fullquarter * p, Point(0, 0, 1.0f));
+}
+
+TEST(Mat4x4fTest, RotateY) {
+    Vec4f p = Point(0, 0, 1);
+    Mat4x4f halfquarter = RotateY(radians(45));
+    Mat4x4f fullquarter = RotateY(radians(90));
+
+    EXPECT_EQ(halfquarter * p, Point(sqrt(2) / 2, 0, sqrt(2) / 2));
+    EXPECT_EQ(fullquarter * p, Point(1.0f, 0, 0));
+}
+
+TEST(Mat4x4fTest, RotateZ) {
+    Vec4f p = Point(0, 1, 0);
+    Mat4x4f halfquarter = RotateZ(radians(45));
+    Mat4x4f fullquarter = RotateZ(radians(90));
+
+    EXPECT_EQ(halfquarter * p, Point(-1 * sqrt(2) / 2, sqrt(2) / 2, 0));
+    EXPECT_EQ(fullquarter * p, Point(-1.0f, 0, 0));
+}
+
+TEST(Mat4x4fTest, Shear) {
+    Vec4f p = Point(2, 3, 4);
+    Mat4x4f s = Shear(1, 0, 0, 0, 0, 0);
+    EXPECT_EQ(s * p, Point(5, 3, 4));
+
+    s = Shear(0, 1, 0, 0, 0, 0);
+    EXPECT_EQ(s * p, Point(6, 3, 4));
+
+    s = Shear(0, 0, 1, 0, 0, 0);
+    EXPECT_EQ(s * p, Point(2, 5, 4));
+
+    s = Shear(0, 0, 0, 1, 0, 0);
+    EXPECT_EQ(s * p, Point(2, 7, 4));
+
+    s = Shear(0, 0, 0, 0, 1, 0);
+    EXPECT_EQ(s * p, Point(2, 3, 6));
+
+    s = Shear(0, 0, 0, 0, 0, 1);
+    EXPECT_EQ(s * p, Point(2, 3, 7));
+}
+
+// matrix multiplication is not commutative; A x B != B x A
+// transformations must be applied in reverse order of the desired outcome
+// desired: rotate, scale, translate; expected: translate, scale, rotate
+TEST(Mat4x4fTest, Transform) {
+    Vec4f p = Point(1, 0, 1);
+    Mat4x4f A = RotateX(radians(90));
+    Mat4x4f B = Scale(5, 5, 5);
+    Mat4x4f C = Translate(10, 5, 7);
+
+    Vec4f p2 = A * p;
+    EXPECT_EQ(p2, Point(1, -1, 0));
+    Vec4f p3 = B * Point(1, -1, 0);  // @@@ TODO: deal with floating point error accumulation
+    EXPECT_EQ(p3, Point(5, -5, 0));
+    Vec4f p4 = C * p3;
+    EXPECT_EQ(p4, Point(15, 0, 7));
+
+    EXPECT_EQ(Translate(10, 5, 7) * Scale(5, 5, 5) * RotateX(radians(90)) * Point(1, 0, 1), Point(15, 0, 7));
 }

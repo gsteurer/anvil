@@ -9,7 +9,12 @@ namespace anvil {
 namespace math {
 
 struct Mat4x4f {
-    f32_t m_elements[16];
+    union {
+        f32_t m_elements[16];
+        struct {
+            Vec4f a, b, c, d;
+        };
+    };
     Mat4x4f();
     Mat4x4f(f32_t* data);
     Mat4x4f(const Mat4x4f& m);
@@ -21,6 +26,12 @@ struct Mat4x4f {
 };
 
 Mat4x4f Identity();
+Mat4x4f Translate(f32_t x, f32_t y, f32_t z);
+Mat4x4f Scale(f32_t x, f32_t y, f32_t z);
+Mat4x4f RotateX(f32_t radians);
+Mat4x4f RotateY(f32_t radians);
+Mat4x4f RotateZ(f32_t radians);
+Mat4x4f Shear(f32_t xy, f32_t xz, f32_t yx, f32_t yz, f32_t zx, f32_t zy);
 bool mateq(const Mat4x4f& lhs, const Mat4x4f& rhs);
 Mat4x4f mul(const Mat4x4f& mat, f32_t scale);
 Mat4x4f mul(const Mat4x4f& lhs, const Mat4x4f& rhs);

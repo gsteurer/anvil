@@ -20,11 +20,14 @@ Vec4f& Vec4f::operator=(const Vec4f& v) {
 }
 Vec4f::Vec4f(f32_t x, f32_t y, f32_t z, f32_t w) : x(x), y(y), z(z), w(w){};
 
-bool point(const Vec4f& vec) {
+Vec4f Point(f32_t x, f32_t y, f32_t z) { return Vec4f(x, y, z, 1.0); }
+Vec4f Vector(f32_t x, f32_t y, f32_t z) { return Vec4f(x, y, z, 0.0); }
+
+bool isPoint(const Vec4f& vec) {
     return floateq(1.0, vec.w);
 }
 
-bool vector(const Vec4f& vec) {
+bool isVector(const Vec4f& vec) {
     return floateq(0.0, vec.w);
 }
 
@@ -105,6 +108,8 @@ Vec4f cross(const Vec4f& lhs, const Vec4f& rhs) {
 
 Vec4f operator+(const Vec4f& lhs, const Vec4f& rhs) { return add(lhs, rhs); }
 Vec4f operator-(const Vec4f& lhs, const Vec4f& rhs) { return sub(lhs, rhs); }
+Vec4f operator*(const Vec4f& lhs, f32_t rhs) { return Vec4f(rhs * lhs.x, rhs * lhs.y, rhs * lhs.z, rhs * lhs.w); }
+Vec4f operator*(f32_t lhs, const Vec4f& rhs) { return rhs * lhs; }
 bool operator==(const Vec4f& lhs, const Vec4f& rhs) { return floateq(lhs, rhs); }
 
 Vec4f mul(const Vec4f& vec, f32_t scale) {

@@ -7,7 +7,7 @@ namespace anvil {
 namespace containers {
 
 /*
-* @@@ DOZE is bitching about:
+* @@@ winDOZE is complaining about:
 2>C:\Users\jsteurer\Code\cpp_workbench\anvil\include\anvil\containers\hash.h(51,1): warning C4293: '>>': shift count negative or too big, undefined behavior
 2>C:\Users\jsteurer\Code\cpp_workbench\anvil\include\anvil\containers\hash.h(66,24): warning C4293: '>>': shift count negative or too big, undefined behavior
 2>C:\Users\jsteurer\Code\cpp_workbench\anvil\include\anvil\containers\hash.h(67,31): warning C4305: '*=': truncation from 'unsigned __int64' to 'unsigned long'

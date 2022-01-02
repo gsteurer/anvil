@@ -87,7 +87,7 @@ struct Graph {
 
         return v;
     }
-
+    /*
     bool AddEdge(GRAPH_VERTEX_KEY x, GRAPH_VERTEX_KEY y) {
         Option<Pair<Vertex, List<Edge>>> item = m_verticies[x];
         if (item.result == Option<Pair<Vertex, List<Edge>>>::Some) {
@@ -96,6 +96,7 @@ struct Graph {
 
         return false;
     }
+    */
     /*
     bool RemoveEdge(const Vertex& x, const Vertex& y);
     

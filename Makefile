@@ -33,7 +33,10 @@ stlutils.o: src/anvil/string/stlutils.cpp
 wavefront.o: src/anvil/file/wavefront.cpp
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/$@ $<
 
-libanvil: mat4x4f.o vec4f.o cstring.o string.o stlutils.o wavefront.o
+tga.o: src/anvil/file/tga.cpp
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/$@ $<
+
+libanvil: mat4x4f.o vec4f.o cstring.o string.o stlutils.o wavefront.o tga.o
 	ar rvs build/lib/$@.a $(OBJDIR)/*.o
 
 clean:

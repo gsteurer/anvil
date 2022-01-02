@@ -5,6 +5,13 @@
 
 namespace anvil {
 namespace math {
+
+#define PI 3.14159265358979323846f
+
+inline f32_t radians(f32_t degrees) {
+    return degrees / 180.0 * PI;
+}
+
 inline bool floateq(f32_t lhs, f32_t rhs) {
     return std::fabs(lhs - rhs) < std::numeric_limits<float>::epsilon();
 }

@@ -23,8 +23,18 @@ TEST(Vec4fTest, Ctor) {
     EXPECT_FLOAT_EQ(v.y, 3.0);
     EXPECT_FLOAT_EQ(v.z, 2.0);
     EXPECT_FLOAT_EQ(v.w, 1.0);
-    EXPECT_TRUE(point(v));
-    EXPECT_FALSE(vector(v));
+    EXPECT_TRUE(isPoint(v));
+    EXPECT_FALSE(isVector(v));
+}
+
+TEST(Vec4fTest, Ctor2) {
+    Vec4f v = {4.0, 3.0, 2.0, 1.0};
+    EXPECT_FLOAT_EQ(v.r, 4.0);
+    EXPECT_FLOAT_EQ(v.g, 3.0);
+    EXPECT_FLOAT_EQ(v.b, 2.0);
+    EXPECT_FLOAT_EQ(v.a, 1.0);
+    EXPECT_TRUE(isPoint(v));
+    EXPECT_FALSE(isVector(v));
 }
 
 TEST(Vec4fTest, Vec4f) {

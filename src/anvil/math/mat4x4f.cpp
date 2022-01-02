@@ -40,6 +40,78 @@ Mat4x4f Identity() {
     return m;
 }
 
+Mat4x4f Translate(f32_t x, f32_t y, f32_t z) {
+    Mat4x4f m;
+    m.m_elements[0] = 1.0;
+    m.m_elements[3] = x;
+    m.m_elements[5] = 1.0;
+    m.m_elements[7] = y;
+    m.m_elements[10] = 1.0;
+    m.m_elements[11] = z;
+    m.m_elements[15] = 1.0;
+    return m;
+}
+
+Mat4x4f Scale(f32_t x, f32_t y, f32_t z) {
+    Mat4x4f m;
+    m.m_elements[0] = x;
+    m.m_elements[5] = y;
+    m.m_elements[10] = z;
+    m.m_elements[15] = 1.0;
+    return m;
+}
+
+Mat4x4f RotateX(f32_t radians) {
+    Mat4x4f m;
+    m.m_elements[0] = 1.0;
+    m.m_elements[5] = cos(radians);
+    m.m_elements[6] = -1 * sin(radians);
+    m.m_elements[9] = sin(radians);
+    m.m_elements[10] = cos(radians);
+    m.m_elements[15] = 1.0;
+    return m;
+}
+
+Mat4x4f RotateY(f32_t radians) {
+    Mat4x4f m;
+    m.m_elements[0] = cos(radians);
+    m.m_elements[2] = sin(radians);
+    m.m_elements[5] = 1.0;
+    m.m_elements[8] = -1.0 * sin(radians);
+    m.m_elements[10] = cos(radians);
+    m.m_elements[15] = 1.0;
+    return m;
+}
+
+Mat4x4f RotateZ(f32_t radians) {
+    Mat4x4f m;
+    m.m_elements[0] = cos(radians);
+    m.m_elements[1] = -1.0 * sin(radians);
+    m.m_elements[4] = sin(radians);
+    m.m_elements[5] = cos(radians);
+    m.m_elements[10] = 1.0;
+    m.m_elements[15] = 1.0;
+    return m;
+}
+
+Mat4x4f Shear(f32_t xy, f32_t xz, f32_t yx, f32_t yz, f32_t zx, f32_t zy) {
+    Mat4x4f m;
+    m.m_elements[0] = 1.0;
+    m.m_elements[1] = xy;
+    m.m_elements[2] = xz;
+
+    m.m_elements[4] = yx;
+    m.m_elements[5] = 1.0;
+    m.m_elements[6] = yz;
+
+    m.m_elements[8] = zx;
+    m.m_elements[9] = zy;
+    m.m_elements[10] = 1.0;
+
+    m.m_elements[15] = 1.0;
+    return m;
+}
+
 f32_t& Mat4x4f::operator[](isize_t idx) {
     return this->m_elements[idx];
 }

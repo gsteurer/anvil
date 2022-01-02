@@ -19,9 +19,9 @@ struct Slice {
 
     isize_t Length() const;
     isize_t Capacity() const;
-    Option<isize_t> IndexOf(T item)const;
+    Option<isize_t> IndexOf(T item) const;
     const T operator[](isize_t index) const;
-    
+
     T& operator[](isize_t index);
     void Insert(T);
     T Remove(isize_t index);
@@ -64,7 +64,6 @@ Slice<T>::Slice(const Slice<T>& slice) : Slice() {
 }
 template <typename T>
 Slice<T>& Slice<T>::operator=(const Slice<T>& slice) {
-    
     this->Clear();
     for (isize_t idx = 0; idx < slice.Length(); idx++) {
         const T val = slice[idx];
@@ -147,7 +146,6 @@ template <typename T>
 void Slice<T>::Clear() {
     m_size = 0;
 }
-
 
 template <typename T>
 Slice<T> Slice<T>::GetSlice(isize_t start, isize_t end) {

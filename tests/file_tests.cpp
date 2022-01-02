@@ -5,5 +5,5 @@
 TEST(FileTests, Ctor) {
     anvil::file::Mesh test;
 
-    EXPECT_EQ(static_cast<unsigned long>(0), test.verts.size());
+    EXPECT_EQ(static_cast<isize_t>(0), test.verts.Length());
 }
