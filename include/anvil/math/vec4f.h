@@ -6,6 +6,8 @@
 namespace anvil {
 namespace math {
 
+// CREDIT: The Ray Tracer Challenge - by Jamis Buck
+
 struct Vec4f {
     Vec4f();
     Vec4f(const Vec4f& v);

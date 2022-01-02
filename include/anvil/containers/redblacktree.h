@@ -7,6 +7,8 @@
 namespace anvil {
 namespace containers {
 
+// CREDIT: Introduction to Algorithms, 3rd Edition
+
 template <typename T>
 struct RBTree {
     struct Node {

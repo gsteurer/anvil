@@ -8,6 +8,8 @@
 namespace anvil {
 namespace math {
 
+// CREDIT: The Ray Tracer Challenge - by Jamis Buck
+
 struct Mat4x4f {
     union {
         f32_t m_elements[16];

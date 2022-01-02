@@ -29,6 +29,7 @@ struct Hashable {
 };
 
 // hash a struct:
+// CREDIT:
 // https://stackoverflow.com/questions/19195183/how-to-properly-hash-the-custom-struct
 // https://stackoverflow.com/questions/4948780/magic-number-in-boosthash-combine
 

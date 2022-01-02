@@ -8,6 +8,8 @@ namespace containers {
 
 namespace internal {
 
+// CREDIT: Introduction to Algorithms, 3rd Edition
+
 inline isize_t _parent(isize_t idx) { return idx / 2; }
 inline isize_t _left(isize_t idx) { return 2 * idx + 1; }
 inline isize_t _right(isize_t idx) { return 2 * idx + 2; }

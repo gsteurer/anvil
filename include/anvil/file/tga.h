@@ -10,6 +10,8 @@ namespace anvil {
 namespace file {
 namespace tga {
 
+// CREDIT: https://github.com/ssloy/tinyrenderer/blob/909fe20934ba5334144d2c748805690a1fa4c89f/tgaimage.cpp
+
 #pragma pack(push, 1)
 // https://en.wikipedia.org/wiki/Truevision_TGA#Header
 struct TGAHeader {
