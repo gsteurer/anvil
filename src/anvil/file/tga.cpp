@@ -88,7 +88,7 @@ bool Image::Set(size_t x, size_t y, Color c) {
     return true;
 }
 
-Color Image::Get(size_t x, size_t y) {
+Color Image::Get(size_t x, size_t y) const {
     if (data == nullptr || x < 0 || y < 0 || x >= width || y >= height)
         return Color(0, 0, 0, 0);
 
@@ -100,6 +100,13 @@ void Image::Clear(Color c) {
     for (size_t idx = 0; idx < width; idx++)
         for (size_t jdx = 0; jdx < height; jdx++)
             Set(idx, jdx, c);
+}
+
+size_t Image::Width() const {
+    return width;
+}
+size_t Image::Height() const {
+    return height;
 }
 
 }  // namespace tga

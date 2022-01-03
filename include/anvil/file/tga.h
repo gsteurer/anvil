@@ -54,8 +54,10 @@ class Image {
     ~Image();
     bool WriteTGA(std::string filename);
     bool Set(size_t x, size_t y, Color c);
-    Color Get(size_t x, size_t y);
+    Color Get(size_t x, size_t y) const;
     void Clear(Color c);
+    size_t Width() const;
+    size_t Height() const;
 
    private:
     size_t width;
