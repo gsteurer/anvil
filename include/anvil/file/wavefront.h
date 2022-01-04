@@ -8,7 +8,7 @@ namespace anvil {
 namespace file {
 namespace wavefront {
 
-Mesh parse(std::string filename);
+Mesh Parse(std::string filename);
 
 };  // namespace wavefront
 };  // namespace file

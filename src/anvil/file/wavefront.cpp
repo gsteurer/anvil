@@ -18,7 +18,7 @@ namespace wavefront {
 
 // @@@ consider adding exception handling https://stackoverflow.com/questions/2512931/catch-multiple-custom-exceptions-c
 avec::Vec4f parse_vertex(std::vector<std::string> line) {
-    avec::Vec4f result(0.0, 0.0, 0.0, 1.0);
+    avec::Vec4f result = avec::Point(0.0, 0.0, 0.0);
     if (line.size() >= 1) {
         double x = std::atof(line[1].c_str());  // can throw an exception
         result.x = x;
@@ -30,10 +30,6 @@ avec::Vec4f parse_vertex(std::vector<std::string> line) {
     if (line.size() >= 3) {
         double z = std::atof(line[3].c_str());
         result.z = z;
-    }
-    if (line.size() >= 4) {
-        double w = std::atof(line[4].c_str());
-        result.w = w;
     }
 
     return result;
@@ -48,39 +44,36 @@ face_index parse_face_index_element(std::string line) {
     face_index index;
     std::vector<std::string> indicies = astl::split(line, "/");
     if (indicies.size() >= 1) {
-        int vertex = std::atoi(indicies[1].c_str());  // can throw an exception
+        int vertex = std::atoi(indicies[0].c_str()) - 1;  // can throw an exception
         index.vertex = vertex;
     }
     if (indicies.size() >= 2) {
-        int texture = std::atoi(indicies[2].c_str());  // can throw an exception
+        int texture = std::atoi(indicies[1].c_str()) - 1;  // can throw an exception
         index.texture = texture;
     }
     if (indicies.size() >= 3) {
-        int normal = std::atoi(indicies[3].c_str());  // can throw an exception
+        int normal = std::atoi(indicies[2].c_str()) - 1;  // can throw an exception
         index.normal = normal;
     }
     return index;
 }
 
-face_index parse_face_indicies(std::vector<std::string> line) {
-    if (line.size() > 4) {
+std::vector<face_index> parse_face_indicies(std::vector<std::string> line) {
+    if (line.size() != 4) {
         throw std::runtime_error("no support for more than three indicies per face");
     }
-    face_index index;
-    if (line.size() >= 1) {
-        index = parse_face_index_element(line[1]);
-    }
-    if (line.size() >= 2) {
-        index = parse_face_index_element(line[2]);
-    }
-    if (line.size() >= 3) {
-        index = parse_face_index_element(line[3]);
-    }
+    std::vector<face_index> indices;
 
-    return index;
+    indices.push_back(parse_face_index_element(line[1]));
+
+    indices.push_back(parse_face_index_element(line[2]));
+
+    indices.push_back(parse_face_index_element(line[3]));
+
+    return indices;
 }
 
-Mesh parse(std::string filename) {
+Mesh Parse(std::string filename) {
     Mesh mesh;
     std::ifstream file(filename);
     if (!file.is_open()) {
@@ -105,7 +98,11 @@ Mesh parse(std::string filename) {
 
         } else if (element.compare("f") == 0) {  // face element
             auto indices = parse_face_indicies(result);
-            mesh.vertIndices.Insert(indices.vertex);
+            std::array<uint32_t, 3> face;
+            face[0] = indices[0].vertex;
+            face[1] = indices[1].vertex;
+            face[2] = indices[2].vertex;
+            mesh.faces.Insert(face);
         } else if (element.compare("l") == 0) {  // line element
         }
     }
