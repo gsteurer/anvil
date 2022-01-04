@@ -1,10 +1,10 @@
 #pragma once
 
-#include <stddef.h>  // size_t
-#include <stdint.h>  // intn_t
 #include <string.h>  // memset
 
 #include <string>
+
+#include "anvil/types.h"
 
 namespace anvil {
 namespace file {
@@ -50,19 +50,19 @@ class Color {
 
 class Image {
    public:
-    Image(size_t width, size_t height, size_t bytesPerPixel);
+    Image(isize_t width, isize_t height, isize_t bytesPerPixel);
     ~Image();
     bool WriteTGA(std::string filename);
-    bool Set(size_t x, size_t y, Color c);
-    Color Get(size_t x, size_t y) const;
+    bool Set(isize_t x, isize_t y, Color c);
+    Color Get(isize_t x, isize_t y) const;
     void Clear(Color c);
-    size_t Width() const;
-    size_t Height() const;
+    isize_t Width() const;
+    isize_t Height() const;
 
    private:
-    size_t width;
-    size_t height;
-    size_t bytesPerPixel;
+    isize_t width;
+    isize_t height;
+    isize_t bytesPerPixel;
     uint8_t *data;
     Image();
 };

@@ -11,12 +11,12 @@ Color::Color(float r, float g, float b, float a) : b(b * 255), g(g * 255), r(r *
 Color::Color() {}
 Color::~Color() {}
 
-Image::Image(size_t width, size_t height, size_t bytesPerPixel) {
+Image::Image(isize_t width, isize_t height, isize_t bytesPerPixel) {
     this->bytesPerPixel = bytesPerPixel;
     this->width = width;
     this->height = height;
-    size_t numBytes = width * height * bytesPerPixel;
-    data = new uint8_t[numBytes];
+    isize_t numBytes = width * height * bytesPerPixel;
+    data = new u8_t[numBytes];
     memset(data, 0, numBytes);
 }
 
@@ -81,14 +81,14 @@ bool Image::WriteTGA(std::string filename) {
     return true;
 }
 
-bool Image::Set(size_t x, size_t y, Color c) {
+bool Image::Set(isize_t x, isize_t y, Color c) {
     if (data == nullptr || x < 0 || y < 0 || x >= width || y >= height)
         return false;
     memcpy(data + (x + y * width) * bytesPerPixel, c.raw, bytesPerPixel);
     return true;
 }
 
-Color Image::Get(size_t x, size_t y) const {
+Color Image::Get(isize_t x, isize_t y) const {
     if (data == nullptr || x < 0 || y < 0 || x >= width || y >= height)
         return Color(0, 0, 0, 0);
 
@@ -97,15 +97,15 @@ Color Image::Get(size_t x, size_t y) const {
 }
 
 void Image::Clear(Color c) {
-    for (size_t idx = 0; idx < width; idx++)
-        for (size_t jdx = 0; jdx < height; jdx++)
+    for (isize_t idx = 0; idx < width; idx++)
+        for (isize_t jdx = 0; jdx < height; jdx++)
             Set(idx, jdx, c);
 }
 
-size_t Image::Width() const {
+isize_t Image::Width() const {
     return width;
 }
-size_t Image::Height() const {
+isize_t Image::Height() const {
     return height;
 }
 

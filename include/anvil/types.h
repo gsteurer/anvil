@@ -1,5 +1,11 @@
 #pragma once
 
+typedef unsigned char u8_t;
+typedef char i8_t;
+
+typedef unsigned short u16_t;
+typedef short i16_t;
+
 typedef unsigned long long usize_t;
 typedef long long isize_t;
 typedef unsigned char byte_t;
@@ -11,6 +17,11 @@ typedef long long i64_t;
 
 typedef float f32_t;
 typedef double f64_t;
+
+typedef u8_t byte;
+typedef u16_t word;
+typedef u32_t doubleword;
+typedef u64_t quadword;
 
 template <typename T>
 struct limit {
