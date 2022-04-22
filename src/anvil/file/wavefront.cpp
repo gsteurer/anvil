@@ -34,43 +34,37 @@ avec::Vec4f parse_vertex(std::vector<std::string> line) {
 
     return result;
 }
-struct face_index {
-    int vertex;
-    int texture;
-    int normal;
-};
 
-face_index parse_face_index_element(std::string line) {
-    face_index index;
+Face parse_face_index_element(std::string line) {
+    Face face;
     std::vector<std::string> indicies = astl::split(line, "/");
     if (indicies.size() >= 1) {
         int vertex = std::atoi(indicies[0].c_str()) - 1;  // can throw an exception
-        index.vertex = vertex;
+        face.vertex = vertex;
     }
     if (indicies.size() >= 2) {
         int texture = std::atoi(indicies[1].c_str()) - 1;  // can throw an exception
-        index.texture = texture;
+        face.texture = texture;
     }
     if (indicies.size() >= 3) {
         int normal = std::atoi(indicies[2].c_str()) - 1;  // can throw an exception
-        index.normal = normal;
+        face.normal = normal;
     }
-    return index;
+    return face;
 }
 
-std::vector<face_index> parse_face_indicies(std::vector<std::string> line) {
+std::array<Face, 3> parse_face_indicies(std::vector<std::string> line) {
     if (line.size() != 4) {
         throw std::runtime_error("no support for more than three indicies per face");
     }
-    std::vector<face_index> indices;
 
-    indices.push_back(parse_face_index_element(line[1]));
+    std::array<Face, 3> faces;
 
-    indices.push_back(parse_face_index_element(line[2]));
+    faces[0] = parse_face_index_element(line[1]);
+    faces[1] = parse_face_index_element(line[2]);
+    faces[2] = parse_face_index_element(line[3]);
 
-    indices.push_back(parse_face_index_element(line[3]));
-
-    return indices;
+    return faces;
 }
 
 Mesh Parse(std::string filename) {
@@ -91,18 +85,18 @@ Mesh Parse(std::string filename) {
             avec::Vec4f vert = parse_vertex(result);
             mesh.verts.Insert(vert);
         } else if (element.compare("vt") == 0) {  // texture coords
-
+            avec::Vec4f vert = parse_vertex(result);
+            vert.z = 0.0f;
+            mesh.textures.Insert(vert);
         } else if (element.compare("vn") == 0) {  // vertex normal
-
+            avec::Vec4f vert = parse_vertex(result);
+            vert.z = 0.0f;
+            mesh.normals.Insert(vert);
         } else if (element.compare("vp") == 0) {  // parameter space verts
 
         } else if (element.compare("f") == 0) {  // face element
-            auto indices = parse_face_indicies(result);
-            std::array<uint32_t, 3> face;
-            face[0] = indices[0].vertex;
-            face[1] = indices[1].vertex;
-            face[2] = indices[2].vertex;
-            mesh.faces.Insert(face);
+            auto faces = parse_face_indicies(result);
+            mesh.faces.Insert(faces);
         } else if (element.compare("l") == 0) {  // line element
         }
     }

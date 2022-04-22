@@ -8,9 +8,17 @@
 namespace anvil {
 namespace file {
 
+struct Face {
+    uint32_t vertex;
+    uint32_t texture;
+    uint32_t normal;
+};
+
 struct Mesh {
     anvil::containers::Slice<anvil::math::Vec4f> verts;
-    anvil::containers::Slice<std::array<uint32_t, 3>> faces;
+    anvil::containers::Slice<anvil::math::Vec4f> textures;
+    anvil::containers::Slice<anvil::math::Vec4f> normals;
+    anvil::containers::Slice<std::array<Face, 3>> faces;
 };
 
 };  // namespace file

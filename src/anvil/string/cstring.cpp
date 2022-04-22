@@ -116,10 +116,10 @@ char* ftoa(f64_t num, isize_t precision) {
 
     char* e = itoa(exponent);
 
-    //if (precision > 0) {
+    // if (precision > 0) {
     //'.';
-    //}
-    // @@@ impl strcat
+    // }
+    //  @@@ impl strcat
     char* f = itoa(fraction);
     delete[] e;
     delete[] f;
